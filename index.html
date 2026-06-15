@@ -473,6 +473,32 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 </button>
 <div class="toast" id="toast"></div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+var _fbConfig = {
+  apiKey:            "AIzaSyC9tdCm29nAUJJyHgP-ftI-A0TJX10U2FQ",
+  authDomain:        "ai-business-agent-34d16.firebaseapp.com",
+  databaseURL:       "https://ai-business-agent-34d16-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:         "ai-business-agent-34d16",
+  storageBucket:     "ai-business-agent-34d16.firebasestorage.app",
+  messagingSenderId: "51707299024",
+  appId:             "1:51707299024:web:24e423e54bc9913125cad5"
+};
+firebase.initializeApp(_fbConfig);
+var _db = firebase.database();
+
+function fbSave(key, val) {
+  return _db.ref('diya_config/' + key).set(val).catch(function(){});
+}
+function fbRead() {
+  return _db.ref('diya_config').once('value')
+    .then(function(s){ return s.val() || {}; })
+    .catch(function(){ return {}; });
+}
+</script>
+
 <script>
 // ── DEFAULTS ────────────────────────────────────────────────────────────────────
 var DEFAULT_GUARDRAILS = [
@@ -549,20 +575,29 @@ function loadConfigFromScript(silent) {
 
 // ── INIT ────────────────────────────────────────────────────────────────────────
 function init() {
-  var waUrl   = localStorage.getItem('dva_wa_script_url')   || '';
-  var callUrl = localStorage.getItem('dva_call_script_url') || '';
-  state.wa.scriptUrl   = waUrl;
-  state.call.scriptUrl = callUrl;
-  if (waUrl)   document.getElementById('wa-script-url').value   = waUrl;
-  if (waUrl)   document.getElementById('wa-interakt-webhook').value = waUrl;
-  if (callUrl) document.getElementById('call-script-url').value  = callUrl;
-  if (callUrl) document.getElementById('call-bolna-webhook').value = callUrl;
+  showLoadingOverlay('Cloud se load ho raha hai…');
+  fbRead().then(function(data) {
+    // Firebase → localStorage → empty (priority order)
+    var waUrl   = data.wa_script_url   || localStorage.getItem('dva_wa_script_url')   || '';
+    var callUrl = data.call_script_url || localStorage.getItem('dva_call_script_url') || '';
 
-  if (waUrl) {
-    loadConfigFromScript(true);
-  } else {
-    renderAll(); hideLoading();
-  }
+    // Sync back to localStorage
+    if (waUrl)   localStorage.setItem('dva_wa_script_url',   waUrl);
+    if (callUrl) localStorage.setItem('dva_call_script_url', callUrl);
+
+    state.wa.scriptUrl   = waUrl;
+    state.call.scriptUrl = callUrl;
+    if (waUrl)   { document.getElementById('wa-script-url').value        = waUrl; }
+    if (waUrl)   { document.getElementById('wa-interakt-webhook').value   = waUrl; }
+    if (callUrl) { document.getElementById('call-script-url').value      = callUrl; }
+    if (callUrl) { document.getElementById('call-bolna-webhook').value    = callUrl; }
+
+    if (waUrl) {
+      loadConfigFromScript(true);
+    } else {
+      renderAll(); hideLoading();
+    }
+  });
 }
 
 // ── RENDER ──────────────────────────────────────────────────────────────────────
@@ -635,10 +670,12 @@ function saveConnection(p) {
   if (!url) { showToast('URL daalo pehle', 'err'); return; }
   state[p].scriptUrl = url;
   localStorage.setItem('dva_'+p+'_script_url', url);
+  // Save to Firebase so any device gets this URL
+  fbSave(p === 'wa' ? 'wa_script_url' : 'call_script_url', url);
   if (p==='wa')   document.getElementById('wa-interakt-webhook').value = url;
   if (p==='call') document.getElementById('call-bolna-webhook').value  = url;
-  showToast('URL save ho gaya — ↓ Load karo config ke liye', 'ok');
-  setStatus(p, 'saved', 'URL saved — Load karo');
+  showToast('URL cloud mein save ho gaya ✓', 'ok');
+  setStatus(p, 'saved', 'URL saved (cloud) — Load karo');
 }
 function testConnection(p) {
   var url = document.getElementById(p+'-script-url').value.trim();
@@ -702,7 +739,10 @@ function saveAll(p) {
     d.callHours     = document.getElementById('call-hours').value;
   }
 
-  if (d.scriptUrl) localStorage.setItem('dva_'+p+'_script_url', d.scriptUrl);
+  if (d.scriptUrl) {
+    localStorage.setItem('dva_'+p+'_script_url', d.scriptUrl);
+    fbSave(p === 'wa' ? 'wa_script_url' : 'call_script_url', d.scriptUrl);
+  }
   markClean();
 
   if (!d.scriptUrl) { showToast('Apps Script URL daalo pehle', 'err'); return; }
