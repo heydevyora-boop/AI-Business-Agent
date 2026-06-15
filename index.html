@@ -20,9 +20,6 @@
   --green: #22c55e;
   --green-d: rgba(34,197,94,.1);
   --green-b: rgba(34,197,94,.25);
-  --blue: #3b82f6;
-  --blue-d: rgba(59,130,246,.1);
-  --blue-b: rgba(59,130,246,.25);
   --red: #ef4444;
   --red-d: rgba(239,68,68,.1);
   --text: #f0f0f0;
@@ -41,15 +38,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .nav{
   position:sticky;top:0;z-index:100;
   background:rgba(10,10,10,.97);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  padding:0 16px;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);padding:0 16px;
 }
 .nav-inner{
   max-width:900px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  height:56px;
+  display:flex;align-items:center;justify-content:space-between;height:56px;
 }
 .nav-brand{display:flex;align-items:center;gap:10px}
 .nav-logo{
@@ -62,16 +56,29 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .nav-tabs{display:flex;gap:4px}
 .nav-tab{
   display:flex;align-items:center;gap:6px;
-  padding:6px 14px;border-radius:8px;
-  font-size:12px;font-weight:500;cursor:pointer;
-  border:1px solid transparent;
-  background:transparent;color:var(--t2);
-  font-family:var(--sans);transition:all .15s;
+  padding:6px 14px;border-radius:8px;font-size:12px;font-weight:500;
+  cursor:pointer;border:1px solid transparent;
+  background:transparent;color:var(--t2);font-family:var(--sans);transition:all .15s;
 }
 .nav-tab.active{background:var(--s2);border-color:var(--border);color:var(--text)}
-.nav-tab .tab-dot{width:6px;height:6px;border-radius:50%}
+.tab-dot{width:6px;height:6px;border-radius:50%}
 .tab-dot-wa{background:var(--green)}
 .tab-dot-call{background:var(--orange)}
+
+/* ── LOADING OVERLAY ── */
+.loading-overlay{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:9999;gap:14px;transition:opacity .35s;
+}
+.loading-overlay.hidden{opacity:0;pointer-events:none}
+.loading-spinner{
+  width:30px;height:30px;border:2px solid var(--border);
+  border-top-color:var(--orange);border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:12px;color:var(--t2)}
 
 /* ── PAGES ── */
 .page{display:none;max-width:900px;margin:0 auto;padding:20px 16px 100px}
@@ -82,20 +89,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   display:flex;align-items:flex-start;justify-content:space-between;
   margin-bottom:24px;flex-wrap:wrap;gap:12px;
 }
-.page-title-wrap{}
-.page-eyebrow{
-  font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.8px;
-  margin-bottom:4px;
-}
+.page-eyebrow{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
 .page-title{font-size:22px;font-weight:700;letter-spacing:-.4px;line-height:1.1}
 .page-sub{font-size:12px;color:var(--t2);margin-top:4px;line-height:1.5}
 .save-all-btn{
   background:var(--orange);color:white;border:none;
-  border-radius:9px;padding:10px 20px;
-  font-size:13px;font-weight:600;cursor:pointer;
-  font-family:var(--sans);transition:all .15s;
-  white-space:nowrap;flex-shrink:0;
-  box-shadow:0 0 20px rgba(249,115,22,.2);
+  border-radius:9px;padding:10px 20px;font-size:13px;font-weight:600;
+  cursor:pointer;font-family:var(--sans);transition:all .15s;
+  white-space:nowrap;flex-shrink:0;box-shadow:0 0 20px rgba(249,115,22,.2);
 }
 .save-all-btn:hover{opacity:.88}
 .save-all-btn:active{transform:scale(.97)}
@@ -104,174 +105,114 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .section{margin-bottom:16px}
 .section-label{
   font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.7px;
-  color:var(--t2);margin-bottom:8px;
-  display:flex;align-items:center;gap:6px;
+  color:var(--t2);margin-bottom:8px;display:flex;align-items:center;gap:6px;
 }
-.section-label::after{
-  content:'';flex:1;height:1px;background:var(--border);
-}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
 /* ── CARDS ── */
-.card{
-  background:var(--s1);border:1px solid var(--border);
-  border-radius:var(--r);padding:16px;margin-bottom:12px;
-}
-.card-title{
-  font-size:12px;font-weight:500;color:var(--t2);
-  margin-bottom:12px;display:flex;align-items:center;gap:6px;
-}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.card-title{font-size:12px;font-weight:500;color:var(--t2);margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .card-title-icon{font-size:14px}
 
 /* ── CONNECTION CARD ── */
-.conn-card{
-  border-radius:var(--r);padding:16px;margin-bottom:12px;
-  border:1px solid var(--border);background:var(--s1);
-}
+.conn-card{border-radius:var(--r);padding:16px;margin-bottom:12px;border:1px solid var(--border);background:var(--s1)}
 .conn-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
 .conn-field{flex:1;min-width:200px;display:flex;flex-direction:column;gap:4px}
 .conn-label{font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
 .conn-input{
   background:var(--s2);border:1px solid var(--border);
   border-radius:7px;padding:9px 12px;color:var(--text);
-  font-size:12px;font-family:var(--mono);outline:none;width:100%;
-  transition:border-color .15s;
+  font-size:12px;font-family:var(--mono);outline:none;width:100%;transition:border-color .15s;
 }
 .conn-input:focus{border-color:var(--orange)}
 .conn-input::placeholder{color:var(--t3)}
 .conn-input.green:focus{border-color:var(--green)}
-.conn-status{
-  display:flex;align-items:center;gap:5px;
-  font-size:10px;margin-top:6px;
-}
+.conn-status{display:flex;align-items:center;gap:5px;font-size:10px;margin-top:6px}
 .status-dot{width:5px;height:5px;border-radius:50%;background:var(--t3)}
 .status-dot.connected{background:var(--green)}
 .status-dot.error{background:var(--red)}
 .btn-test{
-  background:var(--s2);border:1px solid var(--border);
-  border-radius:7px;padding:9px 14px;
-  font-size:12px;font-weight:500;cursor:pointer;
-  font-family:var(--sans);color:var(--t2);
+  background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:9px 14px;
+  font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--t2);
   transition:all .15s;white-space:nowrap;flex-shrink:0;
 }
 .btn-test:hover{border-color:var(--green);color:var(--green)}
+.btn-load{
+  background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:9px 14px;
+  font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--orange);
+  border-color:var(--orange-b);transition:all .15s;white-space:nowrap;flex-shrink:0;
+}
+.btn-load:hover{background:var(--orange-d)}
 .btn-save-conn{
-  background:var(--s2);border:1px solid var(--border);
-  border-radius:7px;padding:9px 14px;
-  font-size:12px;font-weight:500;cursor:pointer;
-  font-family:var(--sans);color:var(--orange);
-  border-color:var(--orange-b);
+  background:var(--s2);border:1px solid var(--orange-b);border-radius:7px;padding:9px 14px;
+  font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--orange);
   transition:all .15s;white-space:nowrap;flex-shrink:0;
 }
 .btn-save-conn:hover{background:var(--orange-d)}
 
 /* ── PROMPT EDITOR ── */
-.prompt-wrap{position:relative}
 .prompt-textarea{
-  width:100%;background:var(--s2);
-  border:1px solid var(--border);border-radius:8px;
-  padding:12px;color:var(--text);font-size:12px;
-  font-family:var(--mono);outline:none;
-  resize:vertical;min-height:220px;line-height:1.7;
-  transition:border-color .15s;
+  width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;
+  padding:12px;color:var(--text);font-size:12px;font-family:var(--mono);outline:none;
+  resize:vertical;min-height:220px;line-height:1.7;transition:border-color .15s;
 }
 .prompt-textarea:focus{border-color:var(--orange)}
-.prompt-meta{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-top:6px;flex-wrap:wrap;gap:6px;
-}
+.prompt-meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;flex-wrap:wrap;gap:6px}
 .prompt-count{font-size:10px;color:var(--t3);font-family:var(--mono)}
 .prompt-actions{display:flex;gap:6px}
 .btn-sm{
-  background:var(--s2);border:1px solid var(--border);
-  border-radius:6px;padding:5px 12px;
-  font-size:11px;cursor:pointer;font-family:var(--sans);
-  color:var(--t2);transition:all .15s;
+  background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;
+  font-size:11px;cursor:pointer;font-family:var(--sans);color:var(--t2);transition:all .15s;
 }
 .btn-sm:hover{border-color:var(--orange);color:var(--orange)}
 .btn-sm.danger:hover{border-color:var(--red);color:var(--red)}
 
 /* ── KNOWLEDGE BASE ── */
 .kb-entry{
-  display:flex;gap-8px;background:var(--s2);
-  border:1px solid var(--border);border-radius:8px;
-  padding:10px 12px;margin-bottom:8px;
-  transition:border-color .15s;
+  display:flex;background:var(--s2);border:1px solid var(--border);
+  border-radius:8px;padding:10px 12px;margin-bottom:8px;transition:border-color .15s;
 }
 .kb-entry:focus-within{border-color:var(--orange)}
-.kb-q{
-  width:100%;background:transparent;border:none;
-  color:var(--text);font-size:12px;font-family:var(--sans);
-  outline:none;padding:0;
-}
+.kb-q{width:100%;background:transparent;border:none;color:var(--text);font-size:12px;font-family:var(--sans);outline:none;padding:0}
 .kb-q::placeholder{color:var(--t3)}
 .kb-a{
-  width:100%;background:transparent;border:none;
-  border-top:1px solid var(--border);
-  color:var(--t2);font-size:12px;font-family:var(--sans);
-  outline:none;padding:8px 0 0;margin-top:8px;resize:none;
-  line-height:1.6;min-height:50px;
+  width:100%;background:transparent;border:none;border-top:1px solid var(--border);
+  color:var(--t2);font-size:12px;font-family:var(--sans);outline:none;
+  padding:8px 0 0;margin-top:8px;resize:none;line-height:1.6;min-height:50px;
 }
 .kb-a::placeholder{color:var(--t3)}
-.kb-remove{
-  background:transparent;border:none;
-  color:var(--t3);cursor:pointer;font-size:14px;
-  padding:0;flex-shrink:0;transition:color .15s;align-self:flex-start;
-}
+.kb-remove{background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:0;flex-shrink:0;transition:color .15s;align-self:flex-start}
 .kb-remove:hover{color:var(--red)}
 .btn-add-kb{
-  width:100%;background:transparent;border:1px dashed var(--border);
-  border-radius:8px;padding:10px;color:var(--t2);
-  font-size:12px;cursor:pointer;font-family:var(--sans);
+  width:100%;background:transparent;border:1px dashed var(--border);border-radius:8px;
+  padding:10px;color:var(--t2);font-size:12px;cursor:pointer;font-family:var(--sans);
   transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;
 }
 .btn-add-kb:hover{border-color:var(--orange);color:var(--orange)}
 
 /* ── UPLOAD ── */
 .upload-zone{
-  border:1.5px dashed var(--border);border-radius:8px;
-  padding:24px;text-align:center;cursor:pointer;
-  transition:all .15s;position:relative;
+  border:1.5px dashed var(--border);border-radius:8px;padding:24px;
+  text-align:center;cursor:pointer;transition:all .15s;position:relative;
 }
-.upload-zone:hover,.upload-zone.drag-over{
-  border-color:var(--orange);background:var(--orange-d);
-}
-.upload-zone input{
-  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
-}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--orange);background:var(--orange-d)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .upload-icon{font-size:28px;margin-bottom:8px;opacity:.5}
 .upload-title{font-size:13px;font-weight:500;margin-bottom:4px}
 .upload-sub{font-size:11px;color:var(--t2)}
 .uploaded-files{margin-top:10px;display:flex;flex-direction:column;gap:6px}
-.file-chip{
-  display:flex;align-items:center;justify-content:space-between;
-  background:var(--s2);border:1px solid var(--border);
-  border-radius:6px;padding:7px 10px;
-}
+.file-chip{display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:7px 10px}
 .file-name{font-size:11px;font-family:var(--mono);color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;margin-right:8px}
 .file-size{font-size:10px;color:var(--t3);flex-shrink:0;margin-right:8px}
 .file-remove{background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:12px;flex-shrink:0;transition:color .15s}
 .file-remove:hover{color:var(--red)}
 
 /* ── GUARDRAILS ── */
-.guardrail-item{
-  display:flex;align-items:flex-start;gap:10px;
-  padding:10px 12px;background:var(--s2);
-  border:1px solid var(--border);border-radius:8px;
-  margin-bottom:6px;
-}
+.guardrail-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--s2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px}
 .guardrail-toggle{flex-shrink:0;margin-top:1px}
 .toggle-input{display:none}
-.toggle-label{
-  display:block;width:36px;height:20px;
-  background:var(--s3);border-radius:10px;
-  cursor:pointer;position:relative;border:1px solid var(--border);
-  transition:all .2s;
-}
-.toggle-label::after{
-  content:'';position:absolute;top:2px;left:2px;
-  width:14px;height:14px;border-radius:50%;
-  background:var(--t3);transition:all .2s;
-}
+.toggle-label{display:block;width:36px;height:20px;background:var(--s3);border-radius:10px;cursor:pointer;position:relative;border:1px solid var(--border);transition:all .2s}
+.toggle-label::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--t3);transition:all .2s}
 .toggle-input:checked + .toggle-label{background:var(--orange);border-color:var(--orange)}
 .toggle-input:checked + .toggle-label::after{left:18px;background:white}
 .guardrail-text{flex:1}
@@ -280,36 +221,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 
 /* ── LANGUAGE PILLS ── */
 .lang-grid{display:flex;flex-wrap:wrap;gap:6px}
-.lang-pill{
-  padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;
-  cursor:pointer;border:1px solid var(--border);
-  background:var(--s2);color:var(--t2);transition:all .15s;
-  font-family:var(--sans);
-}
+.lang-pill{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--s2);color:var(--t2);transition:all .15s;font-family:var(--sans)}
 .lang-pill.active{background:var(--orange);color:white;border-color:var(--orange)}
 
 /* ── PUSH STATUS BANNER ── */
 .push-banner{
-  display:none;
-  background:var(--green-d);border:1px solid var(--green-b);
-  border-radius:8px;padding:10px 14px;
-  font-size:12px;color:var(--green);
-  margin-bottom:12px;
-  align-items:center;gap:8px;
+  display:none;background:var(--green-d);border:1px solid var(--green-b);
+  border-radius:8px;padding:10px 14px;font-size:12px;color:var(--green);
+  margin-bottom:12px;align-items:center;gap:8px;
 }
 .push-banner.show{display:flex}
 .push-banner.error{background:var(--red-d);border-color:rgba(239,68,68,.25);color:var(--red)}
 
-/* ── FLOATING SAVE ── */
+/* ── FAB ── */
 .fab-save{
   position:fixed;bottom:calc(20px + var(--safe));right:16px;
-  background:var(--orange);color:white;border:none;
-  border-radius:50px;padding:12px 20px;
-  font-size:13px;font-weight:600;cursor:pointer;
+  background:var(--orange);color:white;border:none;border-radius:50px;
+  padding:12px 20px;font-size:13px;font-weight:600;cursor:pointer;
   font-family:var(--sans);z-index:200;
   box-shadow:0 4px 20px rgba(249,115,22,.35),0 2px 8px rgba(0,0,0,.4);
-  display:flex;align-items:center;gap:8px;
-  transition:all .15s;
+  display:flex;align-items:center;gap:8px;transition:all .15s;
 }
 .fab-save:active{transform:scale(.96)}
 .fab-dot{width:8px;height:8px;border-radius:50%;background:white;animation:blink 1.5s infinite;display:none}
@@ -319,11 +250,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 /* ── TOAST ── */
 .toast{
   position:fixed;bottom:calc(76px + var(--safe));left:12px;right:12px;
-  background:var(--s2);border:1px solid var(--border);
-  color:var(--text);padding:11px 16px;border-radius:9px;
-  font-size:13px;text-align:center;
-  transform:translateY(10px);opacity:0;
-  transition:all .25s;z-index:999;
+  background:var(--s2);border:1px solid var(--border);color:var(--text);
+  padding:11px 16px;border-radius:9px;font-size:13px;text-align:center;
+  transform:translateY(10px);opacity:0;transition:all .25s;z-index:999;
   box-shadow:0 8px 32px rgba(0,0,0,.5);
 }
 .toast.show{transform:translateY(0);opacity:1}
@@ -346,6 +275,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 </head>
 <body>
 
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text" id="loading-text">Loading config from Apps Script…</div>
+</div>
+
 <!-- NAV -->
 <div class="nav">
   <div class="nav-inner">
@@ -358,24 +293,22 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     </div>
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="switchPage('wa')" id="tab-wa">
-        <span class="tab-dot tab-dot-wa"></span>
-        <span>WhatsApp</span>
+        <span class="tab-dot tab-dot-wa"></span><span>WhatsApp</span>
       </button>
       <button class="nav-tab" onclick="switchPage('call')" id="tab-call">
-        <span class="tab-dot tab-dot-call"></span>
-        <span>Calling</span>
+        <span class="tab-dot tab-dot-call"></span><span>Calling</span>
       </button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     PAGE 1 — AI BUSINESS AGENT (WhatsApp Diya)
-     ══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     PAGE 1 — WhatsApp (Diya)
+     ═══════════════════════════════════════ -->
 <div class="page active" id="page-wa">
 
   <div class="page-header">
-    <div class="page-title-wrap">
+    <div>
       <div class="page-eyebrow" style="color:var(--green)">WhatsApp · Interakt</div>
       <div class="page-title">AI Business Agent</div>
       <div class="page-sub">Controls Diya on WhatsApp — system prompt, knowledge, guardrails</div>
@@ -383,7 +316,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     <button class="save-all-btn" onclick="saveAll('wa')">Push Live →</button>
   </div>
 
-  <!-- Push status -->
   <div class="push-banner" id="wa-push-banner"></div>
 
   <!-- CONNECTION -->
@@ -394,26 +326,30 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div class="conn-row">
         <div class="conn-field">
           <div class="conn-label">Apps Script URL</div>
-          <input class="conn-input green" id="wa-script-url" placeholder="https://script.google.com/macros/s/.../exec" />
+          <input class="conn-input green" id="wa-script-url" placeholder="https://script.google.com/macros/s/.../exec" oninput="markDirty()" />
         </div>
+        <button class="btn-load" onclick="loadConfigFromScript()" title="Load saved config from Apps Script">↓ Load</button>
         <button class="btn-test" onclick="testConnection('wa')">Test</button>
-        <button class="btn-save-conn" onclick="saveConnection('wa')">Save</button>
+        <button class="btn-save-conn" onclick="saveConnection('wa')">Save URL</button>
       </div>
       <div class="conn-status">
         <div class="status-dot" id="wa-status-dot"></div>
         <span id="wa-status-text" style="font-size:10px;color:var(--t2)">Not connected</span>
       </div>
+      <div style="font-size:10px;color:var(--t3);margin-top:8px;line-height:1.6;">
+        1. Save URL → 2. Click <strong style="color:var(--orange)">↓ Load</strong> to pull saved config from Apps Script &nbsp;|&nbsp;
+        3. Edit anything → <strong style="color:var(--orange)">Push Live →</strong> to save back
+      </div>
     </div>
     <div class="conn-card">
-      <div class="card-title"><span class="card-title-icon">📲</span>Interakt Webhook (Incoming messages)</div>
+      <div class="card-title"><span class="card-title-icon">📲</span>Interakt Webhook URL</div>
       <div class="conn-row">
         <div class="conn-field">
-          <div class="conn-label">Interakt Webhook URL (paste your Apps Script URL here in Interakt)</div>
-          <input class="conn-input" id="wa-interakt-webhook" placeholder="Paste in Interakt → Workflow → Webhook" readonly style="cursor:pointer;" onclick="copyField('wa-interakt-webhook')" />
+          <div class="conn-label">Paste this URL in Interakt → Settings → Configure Webhook URL</div>
+          <input class="conn-input" id="wa-interakt-webhook" placeholder="Save your Apps Script URL above first" readonly style="cursor:pointer" onclick="copyField('wa-interakt-webhook')" />
         </div>
         <button class="btn-test" onclick="copyField('wa-interakt-webhook')" style="border-color:var(--green-b);color:var(--green)">Copy</button>
       </div>
-      <div style="font-size:10px;color:var(--t3);margin-top:6px;">This is your Apps Script URL — paste it in Interakt Workflow 1 → Settings → Webhook URL</div>
     </div>
   </div>
 
@@ -422,15 +358,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     <div class="section-label">System Prompt</div>
     <div class="card">
       <div class="card-title"><span class="card-title-icon">🧠</span>Diya's Personality & Instructions</div>
-      <div class="prompt-wrap">
-        <textarea class="prompt-textarea" id="wa-prompt" oninput="markDirty()" placeholder="Paste your full Diya system prompt here..."></textarea>
-        <div class="prompt-meta">
-          <span class="prompt-count" id="wa-prompt-count">0 characters</span>
-          <div class="prompt-actions">
-            <button class="btn-sm" onclick="copyPrompt('wa')">Copy</button>
-            <button class="btn-sm" onclick="loadDefault('wa')">Load Default</button>
-            <button class="btn-sm danger" onclick="clearPrompt('wa')">Clear</button>
-          </div>
+      <textarea class="prompt-textarea" id="wa-prompt" oninput="markDirty()" placeholder="Paste your full Diya system prompt here..."></textarea>
+      <div class="prompt-meta">
+        <span class="prompt-count" id="wa-prompt-count">0 chars</span>
+        <div class="prompt-actions">
+          <button class="btn-sm" onclick="copyPrompt('wa')">Copy</button>
+          <button class="btn-sm" onclick="loadDefault('wa')">Load Default</button>
+          <button class="btn-sm danger" onclick="clearPrompt('wa')">Clear</button>
         </div>
       </div>
     </div>
@@ -451,11 +385,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     <div class="section-label">Catalogue &amp; Documents</div>
     <div class="card">
       <div class="card-title"><span class="card-title-icon">📄</span>Upload PDFs, Catalogues, Price Lists</div>
-      <div class="upload-zone" id="wa-upload-zone">
+      <div class="upload-zone">
         <input type="file" multiple accept=".pdf,.txt,.docx" onchange="handleUpload('wa', this.files)" />
         <div class="upload-icon">📁</div>
         <div class="upload-title">Tap to upload or drag files here</div>
-        <div class="upload-sub">PDF, TXT, DOCX — max 10MB each<br>Content is extracted and added to Diya's knowledge</div>
+        <div class="upload-sub">PDF, TXT, DOCX — max 10MB each</div>
       </div>
       <div class="uploaded-files" id="wa-files"></div>
     </div>
@@ -481,13 +415,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     PAGE 2 — AI CALLING AGENT (Bolna Diya)
-     ══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     PAGE 2 — Calling (Bolna)
+     ═══════════════════════════════════════ -->
 <div class="page" id="page-call">
 
   <div class="page-header">
-    <div class="page-title-wrap">
+    <div>
       <div class="page-eyebrow" style="color:var(--orange)">Voice · Bolna AI</div>
       <div class="page-title">AI Calling Agent</div>
       <div class="page-sub">Controls Diya on phone calls — system prompt, knowledge, call behaviour</div>
@@ -495,7 +429,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     <button class="save-all-btn" onclick="saveAll('call')">Push Live →</button>
   </div>
 
-  <!-- Push status -->
   <div class="push-banner" id="call-push-banner"></div>
 
   <!-- CONNECTION -->
@@ -506,10 +439,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div class="conn-row">
         <div class="conn-field">
           <div class="conn-label">Apps Script URL</div>
-          <input class="conn-input" id="call-script-url" placeholder="https://script.google.com/macros/s/.../exec" />
+          <input class="conn-input" id="call-script-url" placeholder="https://script.google.com/macros/s/.../exec" oninput="markDirty()" />
         </div>
         <button class="btn-test" onclick="testConnection('call')">Test</button>
-        <button class="btn-save-conn" onclick="saveConnection('call')">Save</button>
+        <button class="btn-save-conn" onclick="saveConnection('call')">Save URL</button>
       </div>
       <div class="conn-status">
         <div class="status-dot" id="call-status-dot"></div>
@@ -521,25 +454,24 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div class="conn-row">
         <div class="conn-field">
           <div class="conn-label">Paste in Bolna → Agent → Analytics → Webhook URL</div>
-          <input class="conn-input" id="call-bolna-webhook" placeholder="Your Apps Script URL goes here in Bolna" readonly style="cursor:pointer;" onclick="copyField('call-bolna-webhook')" />
+          <input class="conn-input" id="call-bolna-webhook" placeholder="Save your Apps Script URL above first" readonly style="cursor:pointer" onclick="copyField('call-bolna-webhook')" />
         </div>
         <button class="btn-test" onclick="copyField('call-bolna-webhook')" style="border-color:var(--orange-b);color:var(--orange)">Copy</button>
       </div>
-      <div style="font-size:10px;color:var(--t3);margin-top:6px;">Copy this and paste in Bolna → Diya agent → Analytics tab → Webhook URL field</div>
     </div>
     <div class="conn-card">
       <div class="card-title"><span class="card-title-icon">⚙️</span>Bolna API Credentials</div>
       <div class="two-col">
         <div class="conn-field">
           <div class="conn-label">Bolna API Key</div>
-          <input class="conn-input" id="call-bolna-key" placeholder="bn-xxxxxxxxxxxxxxxx" type="password" />
+          <input class="conn-input" id="call-bolna-key" placeholder="bn-xxxxxxxxxxxxxxxx" type="password" oninput="markDirty()" />
         </div>
         <div class="conn-field">
           <div class="conn-label">Diya Agent ID</div>
-          <input class="conn-input" id="call-agent-id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+          <input class="conn-input" id="call-agent-id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" oninput="markDirty()" />
         </div>
       </div>
-      <button class="btn-save-conn" style="margin-top:10px;" onclick="saveBolnaCredentials()">Save Credentials</button>
+      <button class="btn-save-conn" style="margin-top:10px" onclick="saveBolnaCredentials()">Save Credentials</button>
     </div>
   </div>
 
@@ -548,15 +480,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     <div class="section-label">System Prompt</div>
     <div class="card">
       <div class="card-title"><span class="card-title-icon">🧠</span>Diya's Voice Personality &amp; Instructions</div>
-      <div class="prompt-wrap">
-        <textarea class="prompt-textarea" id="call-prompt" oninput="markDirty()" placeholder="Paste your full Bolna voice agent system prompt here..."></textarea>
-        <div class="prompt-meta">
-          <span class="prompt-count" id="call-prompt-count">0 characters</span>
-          <div class="prompt-actions">
-            <button class="btn-sm" onclick="copyPrompt('call')">Copy</button>
-            <button class="btn-sm" onclick="loadDefault('call')">Load Default</button>
-            <button class="btn-sm danger" onclick="clearPrompt('call')">Clear</button>
-          </div>
+      <textarea class="prompt-textarea" id="call-prompt" oninput="markDirty()" placeholder="Paste your full Bolna voice agent system prompt here..."></textarea>
+      <div class="prompt-meta">
+        <span class="prompt-count" id="call-prompt-count">0 chars</span>
+        <div class="prompt-actions">
+          <button class="btn-sm" onclick="copyPrompt('call')">Copy</button>
+          <button class="btn-sm" onclick="loadDefault('call')">Load Default</button>
+          <button class="btn-sm danger" onclick="clearPrompt('call')">Clear</button>
         </div>
       </div>
     </div>
@@ -577,11 +507,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     <div class="section-label">Reference Documents</div>
     <div class="card">
       <div class="card-title"><span class="card-title-icon">📄</span>Upload GRC Catalogue, Product Specs</div>
-      <div class="upload-zone" id="call-upload-zone">
+      <div class="upload-zone">
         <input type="file" multiple accept=".pdf,.txt,.docx" onchange="handleUpload('call', this.files)" />
         <div class="upload-icon">📁</div>
         <div class="upload-title">Tap to upload or drag files here</div>
-        <div class="upload-sub">PDF, TXT, DOCX — content added to Diya's knowledge base</div>
+        <div class="upload-sub">PDF, TXT, DOCX — content added to Diya's knowledge</div>
       </div>
       <div class="uploaded-files" id="call-files"></div>
     </div>
@@ -604,19 +534,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div class="two-col">
         <div class="conn-field">
           <div class="conn-label">Max Call Duration (seconds)</div>
-          <input class="conn-input" id="call-max-duration" value="600" type="number" />
+          <input class="conn-input" id="call-max-duration" value="600" type="number" oninput="markDirty()" />
         </div>
         <div class="conn-field">
           <div class="conn-label">Silence Hangup (seconds)</div>
-          <input class="conn-input" id="call-silence-hangup" value="15" type="number" />
+          <input class="conn-input" id="call-silence-hangup" value="15" type="number" oninput="markDirty()" />
         </div>
         <div class="conn-field">
           <div class="conn-label">Welcome Message Delay (ms)</div>
-          <input class="conn-input" id="call-welcome-delay" value="300" type="number" />
+          <input class="conn-input" id="call-welcome-delay" value="300" type="number" oninput="markDirty()" />
         </div>
         <div class="conn-field">
           <div class="conn-label">Call Hours (IST)</div>
-          <input class="conn-input" id="call-hours" value="09:00 - 19:00" />
+          <input class="conn-input" id="call-hours" value="09:00 - 19:00" oninput="markDirty()" />
         </div>
       </div>
     </div>
@@ -628,10 +558,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 
 </div>
 
-<!-- FAB Save -->
+<!-- FAB -->
 <button class="fab-save" id="fab-save" onclick="saveAll(currentPage)">
-  <div class="fab-dot" id="fab-dot"></div>
-  <span id="fab-label">Push Live</span>
+  <div class="fab-dot"></div>
+  <span>Push Live</span>
 </button>
 
 <!-- Toast -->
@@ -640,24 +570,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 <script>
 // ── STATE ──────────────────────────────────────────────────────────────────────
 var currentPage = 'wa';
-var isDirty = false;
-
-var state = {
-  wa: JSON.parse(localStorage.getItem('dva_wa') || '{}'),
-  call: JSON.parse(localStorage.getItem('dva_call') || '{}')
-};
+var isDirty     = false;
+var state       = { wa: {}, call: {} };
 
 var DEFAULT_GUARDRAILS = [
-  { id:'comp', title:'Block composition questions', desc:'Never reveal GRC mixture, ratios, fibre %, cement/sand proportions', on:true },
-  { id:'price', title:'No fixed pricing', desc:'Never quote a fixed price without design files or site visit', on:true },
-  { id:'timeline', title:'60-day minimum for custom', desc:'Never promise delivery under 60 days for custom orders', on:true },
-  { id:'install', title:'No installation method details', desc:'Never give exact installation methods — refer to technical team', on:true },
-  { id:'molds', title:'Block mold-only enquiries', desc:'Never entertain mold-only purchase requests', on:true },
-  { id:'warranty', title:'20-year warranty only', desc:'Always say 20 years — never say 25 years', on:true },
+  { id:'comp',     title:'Block composition questions',    desc:'Never reveal GRC mixture, ratios, fibre %, cement/sand proportions', on:true },
+  { id:'price',    title:'No fixed pricing',               desc:'Never quote a fixed price without design files or site visit', on:true },
+  { id:'timeline', title:'60-day minimum for custom',      desc:'Never promise delivery under 60 days for custom orders', on:true },
+  { id:'install',  title:'No installation method details', desc:'Never give exact installation methods — refer to technical team', on:true },
+  { id:'molds',    title:'Block mold-only enquiries',      desc:'Never entertain mold-only purchase requests', on:true },
+  { id:'warranty', title:'20-year warranty only',          desc:'Always say 20 years — never say 25 years', on:true },
 ];
 
-var DEFAULT_LANGS = ['Hindi','English','Gujarati','Hinglish'];
-var ALL_LANGS = ['Hindi','English','Gujarati','Hinglish','Marathi','Tamil','Telugu','Kannada','Bengali','Punjabi'];
+var DEFAULT_LANGS   = ['Hindi','English','Gujarati','Hinglish'];
+var ALL_LANGS       = ['Hindi','English','Gujarati','Hinglish','Marathi','Tamil','Telugu','Kannada','Bengali','Punjabi'];
 
 var DEFAULT_WA_PROMPT = `You are Diya, a warm GRC sales consultant for Devyora — a GRC (Glass Fibre Reinforced Concrete) manufacturing company based in Bhopal, India with 25 years of experience.
 
@@ -676,53 +602,122 @@ Start EVERY call: "Namaskar!" — then WAIT for caller to respond. After they re
 
 Speak in whatever language the caller uses. Switch instantly.`;
 
+// ── LOAD CONFIG FROM APPS SCRIPT ───────────────────────────────────────────────
+// Called on page load (if URL saved) or when user clicks "↓ Load"
+function loadConfigFromScript(silent) {
+  var url = (document.getElementById('wa-script-url').value || '').trim()
+         || localStorage.getItem('dva_wa_script_url') || '';
+
+  if (!url) {
+    if (!silent) showToast('Enter Apps Script URL first', 'err');
+    hideLoading();
+    renderAll();
+    return;
+  }
+
+  if (!silent) {
+    document.getElementById('loading-text').textContent = 'Loading config from Apps Script…';
+    document.getElementById('loading-overlay').classList.remove('hidden');
+    document.getElementById('loading-overlay').style.display = 'flex';
+  }
+
+  fetch(url + '?action=getConfig')
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(result) {
+      if (result.status === 'ok') {
+        // Merge Apps Script data into state (keep scriptUrls)
+        var waUrl   = state.wa.scriptUrl   || url;
+        var callUrl = state.call.scriptUrl || localStorage.getItem('dva_call_script_url') || '';
+
+        if (result.wa) {
+          state.wa = result.wa;
+          state.wa.scriptUrl = waUrl;
+        }
+        if (result.call) {
+          state.call = result.call;
+          state.call.scriptUrl = callUrl;
+        }
+        if (!silent) showToast('Config loaded from Apps Script', 'ok');
+      } else {
+        if (!silent) showToast('Apps Script returned error', 'err');
+      }
+      renderAll();
+      hideLoading();
+    })
+    .catch(function(err) {
+      // CORS / network error — fall back to localStorage
+      console.warn('getConfig fetch failed:', err);
+      if (!silent) showToast('Could not reach Apps Script — showing local data', 'warn');
+      renderAll();
+      hideLoading();
+    });
+}
+
 // ── INIT ───────────────────────────────────────────────────────────────────────
 function init() {
-  // Load saved data into fields
+  // Restore scriptUrls from localStorage (only persistent local value)
+  var waUrl   = localStorage.getItem('dva_wa_script_url')   || '';
+  var callUrl = localStorage.getItem('dva_call_script_url') || '';
+  state.wa.scriptUrl   = waUrl;
+  state.call.scriptUrl = callUrl;
+
+  if (waUrl) {
+    document.getElementById('wa-script-url').value        = waUrl;
+    document.getElementById('wa-interakt-webhook').value  = waUrl;
+  }
+  if (callUrl) {
+    document.getElementById('call-script-url').value      = callUrl;
+    document.getElementById('call-bolna-webhook').value   = callUrl;
+  }
+
+  if (waUrl) {
+    // Auto-load config from Apps Script
+    loadConfigFromScript(true);
+  } else {
+    // No URL saved — just render defaults
+    document.getElementById('loading-text').textContent = 'Setting up…';
+    renderAll();
+    hideLoading();
+  }
+}
+
+// ── RENDER ALL FIELDS ──────────────────────────────────────────────────────────
+function renderAll() {
   ['wa','call'].forEach(function(p) {
     var d = state[p];
 
-    // Prompts
     var promptEl = document.getElementById(p+'-prompt');
-    if (promptEl && d.prompt) { promptEl.value = d.prompt; updateCount(p); }
-    else if (promptEl) { promptEl.value = p === 'wa' ? DEFAULT_WA_PROMPT : DEFAULT_CALL_PROMPT; updateCount(p); }
-
-    // Connection URLs
-    var urlEl = document.getElementById(p+'-script-url');
-    if (urlEl && d.scriptUrl) {
-      urlEl.value = d.scriptUrl;
-      // Mirror to readonly webhook display fields
-      var waWh = document.getElementById('wa-interakt-webhook');
-      var callWh = document.getElementById('call-bolna-webhook');
-      if (p === 'wa' && waWh) waWh.value = d.scriptUrl;
-      if (p === 'call' && callWh) callWh.value = d.scriptUrl;
+    if (promptEl) {
+      promptEl.value = d.prompt || (p === 'wa' ? DEFAULT_WA_PROMPT : DEFAULT_CALL_PROMPT);
+      updateCount(p);
     }
 
-    // Bolna credentials
     if (p === 'call') {
-      if (d.bolnaKey) document.getElementById('call-bolna-key').value = d.bolnaKey;
-      if (d.agentId) document.getElementById('call-agent-id').value = d.agentId;
-      if (d.maxDuration) document.getElementById('call-max-duration').value = d.maxDuration;
+      if (d.bolnaKey)      document.getElementById('call-bolna-key').value      = d.bolnaKey;
+      if (d.agentId)       document.getElementById('call-agent-id').value       = d.agentId;
+      if (d.maxDuration)   document.getElementById('call-max-duration').value   = d.maxDuration;
       if (d.silenceHangup) document.getElementById('call-silence-hangup').value = d.silenceHangup;
-      if (d.welcomeDelay) document.getElementById('call-welcome-delay').value = d.welcomeDelay;
-      if (d.callHours) document.getElementById('call-hours').value = d.callHours;
+      if (d.welcomeDelay)  document.getElementById('call-welcome-delay').value  = d.welcomeDelay;
+      if (d.callHours)     document.getElementById('call-hours').value          = d.callHours;
     }
 
-    // Guardrails
-    renderGuardrails(p, d.guardrails || DEFAULT_GUARDRAILS.map(function(g){return Object.assign({},g)}));
-
-    // Languages
-    renderLangs(p, d.langs || DEFAULT_LANGS.slice());
-
-    // KB
+    renderGuardrails(p, (d.guardrails && d.guardrails.length) ? d.guardrails : DEFAULT_GUARDRAILS.map(function(g){ return Object.assign({},g); }));
+    renderLangs(p, (d.langs && d.langs.length) ? d.langs : DEFAULT_LANGS.slice());
     renderKB(p, d.kb || []);
-
-    // Files
     renderFiles(p, d.files || []);
 
-    // Connection status
-    if (d.scriptUrl) setStatus(p, 'saved', 'Saved — not yet tested');
+    if (d.scriptUrl) setStatus(p, 'saved', 'URL saved');
   });
+  markClean();
+}
+
+function hideLoading() {
+  var el = document.getElementById('loading-overlay');
+  el.classList.add('hidden');
+  setTimeout(function(){ el.style.display = 'none'; }, 400);
 }
 
 // ── PAGE SWITCHING ─────────────────────────────────────────────────────────────
@@ -740,16 +735,14 @@ function markDirty() {
   document.getElementById('fab-save').classList.add('dirty');
   updateCount(currentPage);
 }
-
 function markClean() {
   isDirty = false;
   document.getElementById('fab-save').classList.remove('dirty');
 }
-
 function updateCount(p) {
   var el = document.getElementById(p+'-prompt');
-  var countEl = document.getElementById(p+'-prompt-count');
-  if (el && countEl) countEl.textContent = el.value.length.toLocaleString() + ' chars';
+  var ct = document.getElementById(p+'-prompt-count');
+  if (el && ct) ct.textContent = el.value.length.toLocaleString() + ' chars';
 }
 
 // ── CONNECTION ─────────────────────────────────────────────────────────────────
@@ -757,147 +750,130 @@ function saveConnection(p) {
   var url = document.getElementById(p+'-script-url').value.trim();
   if (!url) { showToast('Enter Apps Script URL first', 'err'); return; }
   state[p].scriptUrl = url;
-  saveState(p);
-  // Mirror to webhook display
-  if (p === 'wa') document.getElementById('wa-interakt-webhook').value = url;
-  if (p === 'call') document.getElementById('call-bolna-webhook').value = url;
-  showToast('Connection URL saved', 'ok');
-  setStatus(p, 'saved', 'Saved — tap Test to verify');
+  localStorage.setItem('dva_'+p+'_script_url', url);
+  if (p === 'wa')   document.getElementById('wa-interakt-webhook').value = url;
+  if (p === 'call') document.getElementById('call-bolna-webhook').value  = url;
+  showToast('URL saved — click ↓ Load to pull config', 'ok');
+  setStatus(p, 'saved', 'URL saved — click ↓ Load');
 }
 
 function testConnection(p) {
   var url = document.getElementById(p+'-script-url').value.trim();
   if (!url) { showToast('Enter URL first', 'err'); return; }
   setStatus(p, 'testing', 'Testing...');
-  var img = new Image();
-  var done = false;
+  var img = new Image(); var done = false;
   function finish(ok) {
     if (done) return; done = true;
-    if (ok) {
-      setStatus(p, 'connected', 'Connected ✓');
-      showToast('Connection successful', 'ok');
-    } else {
-      setStatus(p, 'error', 'Could not reach — check URL');
-      showToast('Connection failed — check URL', 'err');
-    }
+    if (ok) { setStatus(p, 'connected', 'Connected ✓'); showToast('Connection successful', 'ok'); }
+    else    { setStatus(p, 'error', 'Could not reach — check URL'); showToast('Connection failed', 'err'); }
   }
-  img.onload = function(){ finish(true); };
-  img.onerror = function(){ finish(true); }; // no-cors still fires onerror but it reached
+  img.onload  = function(){ finish(true); };
+  img.onerror = function(){ finish(true); };
   img.src = url + '?action=ping&t=' + Date.now();
   setTimeout(function(){ finish(false); }, 8000);
 }
 
-function setStatus(p, state, text) {
+function setStatus(p, st, text) {
   var dot = document.getElementById(p+'-status-dot');
   var txt = document.getElementById(p+'-status-text');
   if (!dot || !txt) return;
   dot.className = 'status-dot';
-  if (state === 'connected') dot.classList.add('connected');
-  if (state === 'error') dot.classList.add('error');
+  if (st === 'connected') dot.classList.add('connected');
+  if (st === 'error')     dot.classList.add('error');
   txt.textContent = text;
 }
 
 function saveBolnaCredentials() {
   state.call.bolnaKey = document.getElementById('call-bolna-key').value;
-  state.call.agentId = document.getElementById('call-agent-id').value;
-  saveState('call');
-  showToast('Bolna credentials saved', 'ok');
+  state.call.agentId  = document.getElementById('call-agent-id').value;
+  showToast('Bolna credentials will be pushed on Push Live', 'ok');
 }
 
 function copyField(id) {
   var el = document.getElementById(id);
   if (!el || !el.value) { showToast('Nothing to copy', 'err'); return; }
-  navigator.clipboard.writeText(el.value).then(function(){
-    showToast('Copied to clipboard', 'ok');
-  }).catch(function(){
-    showToast('Copy: ' + el.value.slice(0,40) + '...', 'warn');
-  });
+  navigator.clipboard.writeText(el.value)
+    .then(function(){ showToast('Copied to clipboard', 'ok'); })
+    .catch(function(){ showToast('Copy: ' + el.value.slice(0,40) + '...', 'warn'); });
 }
 
-// ── SAVE ALL & PUSH ────────────────────────────────────────────────────────────
+// ── SAVE ALL & PUSH LIVE ───────────────────────────────────────────────────────
+// This is the ONLY way config reaches Apps Script (no other DB needed)
 function saveAll(p) {
-  // Collect all state
   var d = state[p];
-  d.prompt = document.getElementById(p+'-prompt').value;
+  d.prompt    = document.getElementById(p+'-prompt').value;
   d.scriptUrl = document.getElementById(p+'-script-url').value.trim();
 
   if (p === 'call') {
-    d.bolnaKey = document.getElementById('call-bolna-key').value;
-    d.agentId = document.getElementById('call-agent-id').value;
-    d.maxDuration = document.getElementById('call-max-duration').value;
+    d.bolnaKey      = document.getElementById('call-bolna-key').value;
+    d.agentId       = document.getElementById('call-agent-id').value;
+    d.maxDuration   = document.getElementById('call-max-duration').value;
     d.silenceHangup = document.getElementById('call-silence-hangup').value;
-    d.welcomeDelay = document.getElementById('call-welcome-delay').value;
-    d.callHours = document.getElementById('call-hours').value;
+    d.welcomeDelay  = document.getElementById('call-welcome-delay').value;
+    d.callHours     = document.getElementById('call-hours').value;
   }
 
-  saveState(p);
+  // Persist scriptUrl locally so next open auto-loads
+  if (d.scriptUrl) localStorage.setItem('dva_'+p+'_script_url', d.scriptUrl);
   markClean();
 
   if (!d.scriptUrl) {
-    showToast('Set Apps Script URL first in Connection section', 'err');
+    showToast('Set Apps Script URL first', 'err');
     return;
   }
 
-  // Push to Apps Script
   var banner = document.getElementById(p+'-push-banner');
-  banner.textContent = 'Pushing to Apps Script...';
+  banner.textContent = 'Pushing to Apps Script…';
   banner.className = 'push-banner show';
 
   var payload = {
-    source: 'agent_control_panel',
-    agent_type: p === 'wa' ? 'whatsapp' : 'calling',
-    prompt: d.prompt,
-    kb: d.kb || [],
-    guardrails: d.guardrails || [],
-    langs: d.langs || [],
+    source:      'agent_control_panel',
+    agent_type:  p === 'wa' ? 'whatsapp' : 'calling',
+    prompt:      d.prompt,
+    kb:          d.kb         || [],
+    guardrails:  d.guardrails || [],
+    langs:       d.langs      || [],
     call_settings: p === 'call' ? {
-      maxDuration: d.maxDuration,
+      maxDuration:   d.maxDuration,
       silenceHangup: d.silenceHangup,
-      welcomeDelay: d.welcomeDelay,
-      callHours: d.callHours
+      welcomeDelay:  d.welcomeDelay,
+      callHours:     d.callHours
     } : null,
     timestamp: new Date().toISOString()
   };
 
   fetch(d.scriptUrl, {
-    method: 'POST',
-    mode: 'no-cors',
+    method:  'POST',
+    mode:    'no-cors',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body:    JSON.stringify(payload)
   }).then(function() {
-    banner.textContent = '✓ Pushed live at ' + new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'});
+    banner.textContent = '✓ Pushed live at ' + new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
     banner.className = 'push-banner show';
-    showToast('Pushed live successfully', 'ok');
+    showToast('Pushed live — config saved in Apps Script', 'ok');
     setTimeout(function(){ banner.className = 'push-banner'; }, 5000);
   }).catch(function(err) {
     banner.textContent = '✗ Push failed — ' + err.message;
     banner.className = 'push-banner show error';
-    showToast('Push failed — check connection', 'err');
+    showToast('Push failed — check URL', 'err');
   });
 }
 
 // ── PROMPT ─────────────────────────────────────────────────────────────────────
 function copyPrompt(p) {
-  var val = document.getElementById(p+'-prompt').value;
-  navigator.clipboard.writeText(val).then(function(){
-    showToast('Prompt copied', 'ok');
-  });
+  navigator.clipboard.writeText(document.getElementById(p+'-prompt').value)
+    .then(function(){ showToast('Prompt copied', 'ok'); });
 }
-
 function loadDefault(p) {
   if (!confirm('Replace current prompt with default?')) return;
-  var el = document.getElementById(p+'-prompt');
-  el.value = p === 'wa' ? DEFAULT_WA_PROMPT : DEFAULT_CALL_PROMPT;
-  updateCount(p);
-  markDirty();
+  document.getElementById(p+'-prompt').value = p === 'wa' ? DEFAULT_WA_PROMPT : DEFAULT_CALL_PROMPT;
+  updateCount(p); markDirty();
   showToast('Default prompt loaded', 'ok');
 }
-
 function clearPrompt(p) {
   if (!confirm('Clear the prompt?')) return;
   document.getElementById(p+'-prompt').value = '';
-  updateCount(p);
-  markDirty();
+  updateCount(p); markDirty();
 }
 
 // ── KNOWLEDGE BASE ─────────────────────────────────────────────────────────────
@@ -908,65 +884,47 @@ function renderKB(p, entries) {
   entries.forEach(function(entry, i) {
     var div = document.createElement('div');
     div.className = 'kb-entry';
-    div.innerHTML = '<div style="flex:1;">'
-      + '<input class="kb-q" placeholder="Question / keyword" value="' + esc(entry.q||'') + '" oninput="updateKB(\'' + p + '\',' + i + ',\'q\',this.value)" />'
+    div.innerHTML = '<div style="flex:1">'
+      + '<input class="kb-q" placeholder="Question / keyword" value="' + esc(entry.q||'') + '" oninput="updateKB(\'' + p + '\',' + i + ',\'q\',this.value)">'
       + '<textarea class="kb-a" placeholder="Diya\'s exact answer" oninput="updateKB(\'' + p + '\',' + i + ',\'a\',this.value)">' + esc(entry.a||'') + '</textarea>'
       + '</div>'
       + '<button class="kb-remove" onclick="removeKB(\'' + p + '\',' + i + ')">✕</button>';
     list.appendChild(div);
   });
-  if (!state[p].kb) state[p].kb = [];
   state[p].kb = entries;
 }
-
 function addKBEntry(p) {
   if (!state[p].kb) state[p].kb = [];
-  state[p].kb.push({q:'',a:''});
-  renderKB(p, state[p].kb);
-  markDirty();
+  state[p].kb.push({q:'',a:''}); renderKB(p, state[p].kb); markDirty();
 }
-
 function updateKB(p, i, field, val) {
   if (!state[p].kb) state[p].kb = [];
   if (!state[p].kb[i]) state[p].kb[i] = {};
-  state[p].kb[i][field] = val;
-  markDirty();
+  state[p].kb[i][field] = val; markDirty();
 }
-
 function removeKB(p, i) {
-  state[p].kb.splice(i, 1);
-  renderKB(p, state[p].kb);
-  markDirty();
+  state[p].kb.splice(i,1); renderKB(p, state[p].kb); markDirty();
 }
 
 // ── UPLOAD ─────────────────────────────────────────────────────────────────────
 function handleUpload(p, files) {
   if (!state[p].files) state[p].files = [];
   Array.from(files).forEach(function(file) {
-    if (file.size > 10 * 1024 * 1024) {
-      showToast(file.name + ' is too large (max 10MB)', 'err');
-      return;
-    }
+    if (file.size > 10*1024*1024) { showToast(file.name + ' too large (max 10MB)', 'err'); return; }
     var reader = new FileReader();
     reader.onload = function(e) {
-      state[p].files.push({
-        name: file.name,
-        size: formatSize(file.size),
-        content: e.target.result.slice(0, 5000) // store first 5000 chars
-      });
-      renderFiles(p, state[p].files);
-      markDirty();
+      state[p].files.push({ name: file.name, size: fmtSize(file.size), content: e.target.result.slice(0,5000) });
+      renderFiles(p, state[p].files); markDirty();
       showToast(file.name + ' uploaded', 'ok');
     };
     reader.readAsText(file);
   });
 }
-
 function renderFiles(p, files) {
   var el = document.getElementById(p+'-files');
   if (!el) return;
   el.innerHTML = '';
-  files.forEach(function(f, i) {
+  files.forEach(function(f,i) {
     var div = document.createElement('div');
     div.className = 'file-chip';
     div.innerHTML = '<span class="file-name">' + esc(f.name) + '</span>'
@@ -975,17 +933,11 @@ function renderFiles(p, files) {
     el.appendChild(div);
   });
 }
-
-function removeFile(p, i) {
-  state[p].files.splice(i, 1);
-  renderFiles(p, state[p].files);
-  markDirty();
-}
-
-function formatSize(bytes) {
-  if (bytes < 1024) return bytes + 'B';
-  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + 'KB';
-  return (bytes/(1024*1024)).toFixed(1) + 'MB';
+function removeFile(p,i) { state[p].files.splice(i,1); renderFiles(p,state[p].files); markDirty(); }
+function fmtSize(b) {
+  if (b<1024) return b+'B';
+  if (b<1048576) return (b/1024).toFixed(1)+'KB';
+  return (b/1048576).toFixed(1)+'MB';
 }
 
 // ── GUARDRAILS ─────────────────────────────────────────────────────────────────
@@ -993,27 +945,23 @@ function renderGuardrails(p, guardrails) {
   var el = document.getElementById(p+'-guardrails');
   if (!el) return;
   el.innerHTML = '';
-  guardrails.forEach(function(g, i) {
-    var uid = p + '_g_' + i;
+  guardrails.forEach(function(g,i) {
+    var uid = p+'_g_'+i;
     var div = document.createElement('div');
     div.className = 'guardrail-item';
     div.innerHTML = '<div class="guardrail-toggle">'
-      + '<input type="checkbox" class="toggle-input" id="' + uid + '" ' + (g.on ? 'checked' : '') + ' onchange="toggleGuardrail(\'' + p + '\',' + i + ',this.checked)">'
-      + '<label class="toggle-label" for="' + uid + '"></label>'
+      + '<input type="checkbox" class="toggle-input" id="'+uid+'" '+(g.on?'checked':'')+' onchange="toggleGuardrail(\''+p+'\','+i+',this.checked)">'
+      + '<label class="toggle-label" for="'+uid+'"></label>'
       + '</div>'
       + '<div class="guardrail-text">'
-      + '<div class="guardrail-title">' + esc(g.title) + '</div>'
-      + '<div class="guardrail-desc">' + esc(g.desc) + '</div>'
+      + '<div class="guardrail-title">'+esc(g.title)+'</div>'
+      + '<div class="guardrail-desc">'+esc(g.desc)+'</div>'
       + '</div>';
     el.appendChild(div);
   });
   state[p].guardrails = guardrails;
 }
-
-function toggleGuardrail(p, i, checked) {
-  state[p].guardrails[i].on = checked;
-  markDirty();
-}
+function toggleGuardrail(p,i,checked) { state[p].guardrails[i].on = checked; markDirty(); }
 
 // ── LANGUAGES ──────────────────────────────────────────────────────────────────
 function renderLangs(p, active) {
@@ -1026,33 +974,23 @@ function renderLangs(p, active) {
     btn.textContent = lang;
     btn.onclick = function() {
       var idx = active.indexOf(lang);
-      if (idx === -1) active.push(lang);
-      else active.splice(idx, 1);
-      state[p].langs = active;
-      renderLangs(p, active);
-      markDirty();
+      if (idx===-1) active.push(lang); else active.splice(idx,1);
+      state[p].langs = active; renderLangs(p, active); markDirty();
     };
     el.appendChild(btn);
   });
   state[p].langs = active;
 }
 
-// ── STORAGE ────────────────────────────────────────────────────────────────────
-function saveState(p) {
-  localStorage.setItem('dva_'+p, JSON.stringify(state[p]));
-}
-
 // ── HELPERS ────────────────────────────────────────────────────────────────────
-function esc(str) {
-  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
 function showToast(msg, type) {
   var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show ' + (type||'');
+  t.textContent = msg; t.className = 'toast show '+(type||'');
   clearTimeout(window._tt);
-  window._tt = setTimeout(function(){ t.className = 'toast'; }, 3000);
+  window._tt = setTimeout(function(){ t.className='toast'; }, 3000);
 }
 
 // ── START ──────────────────────────────────────────────────────────────────────
