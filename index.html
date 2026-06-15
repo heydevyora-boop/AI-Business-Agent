@@ -9,121 +9,62 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0a0a;
-  --s1: #141414;
-  --s2: #1c1c1c;
-  --s3: #262626;
+  --bg: #0a0a0a; --s1: #141414; --s2: #1c1c1c; --s3: #262626;
   --border: #2c2c2c;
-  --orange: #f97316;
-  --orange-d: rgba(249,115,22,.1);
-  --orange-b: rgba(249,115,22,.25);
-  --green: #22c55e;
-  --green-d: rgba(34,197,94,.1);
-  --green-b: rgba(34,197,94,.25);
-  --red: #ef4444;
-  --red-d: rgba(239,68,68,.1);
-  --text: #f0f0f0;
-  --t2: #888;
-  --t3: #444;
-  --sans: 'Sora', sans-serif;
-  --mono: 'JetBrains Mono', monospace;
-  --r: 10px;
-  --safe: env(safe-area-inset-bottom, 0px);
+  --orange: #f97316; --orange-d: rgba(249,115,22,.1); --orange-b: rgba(249,115,22,.25);
+  --green: #22c55e;  --green-d: rgba(34,197,94,.1);   --green-b: rgba(34,197,94,.25);
+  --red: #ef4444;    --red-d: rgba(239,68,68,.1);
+  --text: #f0f0f0; --t2: #888; --t3: #444;
+  --sans: 'Sora', sans-serif; --mono: 'JetBrains Mono', monospace;
+  --r: 10px; --safe: env(safe-area-inset-bottom, 0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased}
 
-/* ── NAV ── */
-.nav{
-  position:sticky;top:0;z-index:100;
-  background:rgba(10,10,10,.97);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);padding:0 16px;
-}
-.nav-inner{
-  max-width:900px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;height:56px;
-}
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 16px}
+.nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
 .nav-brand{display:flex;align-items:center;gap:10px}
-.nav-logo{
-  width:32px;height:32px;background:var(--orange);border-radius:7px;
-  display:flex;align-items:center;justify-content:center;font-size:15px;
-  box-shadow:0 0 16px rgba(249,115,22,.2);
-}
+.nav-logo{width:32px;height:32px;background:var(--orange);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 0 16px rgba(249,115,22,.2)}
 .nav-title{font-size:15px;font-weight:600;letter-spacing:-.3px}
 .nav-sub{font-size:10px;color:var(--t2)}
 .nav-tabs{display:flex;gap:4px}
-.nav-tab{
-  display:flex;align-items:center;gap:6px;
-  padding:6px 14px;border-radius:8px;font-size:12px;font-weight:500;
-  cursor:pointer;border:1px solid transparent;
-  background:transparent;color:var(--t2);font-family:var(--sans);transition:all .15s;
-}
+.nav-tab{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid transparent;background:transparent;color:var(--t2);font-family:var(--sans);transition:all .15s}
 .nav-tab.active{background:var(--s2);border-color:var(--border);color:var(--text)}
 .tab-dot{width:6px;height:6px;border-radius:50%}
 .tab-dot-wa{background:var(--green)}
 .tab-dot-call{background:var(--orange)}
 
-/* ── LOADING OVERLAY ── */
-.loading-overlay{
-  position:fixed;inset:0;background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:9999;gap:14px;transition:opacity .35s;
-}
+.loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:14px;transition:opacity .35s}
 .loading-overlay.hidden{opacity:0;pointer-events:none}
-.loading-spinner{
-  width:30px;height:30px;border:2px solid var(--border);
-  border-top-color:var(--orange);border-radius:50%;
-  animation:spin .8s linear infinite;
-}
+.loading-spinner{width:30px;height:30px;border:2px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{font-size:12px;color:var(--t2)}
 
-/* ── PAGES ── */
 .page{display:none;max-width:900px;margin:0 auto;padding:20px 16px 100px}
 .page.active{display:block}
 
-/* ── PAGE HEADER ── */
-.page-header{
-  display:flex;align-items:flex-start;justify-content:space-between;
-  margin-bottom:24px;flex-wrap:wrap;gap:12px;
-}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
 .page-eyebrow{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
 .page-title{font-size:22px;font-weight:700;letter-spacing:-.4px;line-height:1.1}
 .page-sub{font-size:12px;color:var(--t2);margin-top:4px;line-height:1.5}
-.save-all-btn{
-  background:var(--orange);color:white;border:none;
-  border-radius:9px;padding:10px 20px;font-size:13px;font-weight:600;
-  cursor:pointer;font-family:var(--sans);transition:all .15s;
-  white-space:nowrap;flex-shrink:0;box-shadow:0 0 20px rgba(249,115,22,.2);
-}
+.save-all-btn{background:var(--orange);color:white;border:none;border-radius:9px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s;white-space:nowrap;flex-shrink:0;box-shadow:0 0 20px rgba(249,115,22,.2)}
 .save-all-btn:hover{opacity:.88}
 .save-all-btn:active{transform:scale(.97)}
 
-/* ── SECTION ── */
 .section{margin-bottom:16px}
-.section-label{
-  font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.7px;
-  color:var(--t2);margin-bottom:8px;display:flex;align-items:center;gap:6px;
-}
+.section-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.7px;color:var(--t2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* ── CARDS ── */
 .card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
 .card-title{font-size:12px;font-weight:500;color:var(--t2);margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .card-title-icon{font-size:14px}
 
-/* ── CONNECTION CARD ── */
 .conn-card{border-radius:var(--r);padding:16px;margin-bottom:12px;border:1px solid var(--border);background:var(--s1)}
 .conn-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
-.conn-field{flex:1;min-width:200px;display:flex;flex-direction:column;gap:4px}
+.conn-field{flex:1;min-width:180px;display:flex;flex-direction:column;gap:4px}
 .conn-label{font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
-.conn-input{
-  background:var(--s2);border:1px solid var(--border);
-  border-radius:7px;padding:9px 12px;color:var(--text);
-  font-size:12px;font-family:var(--mono);outline:none;width:100%;transition:border-color .15s;
-}
+.conn-input{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-size:12px;font-family:var(--mono);outline:none;width:100%;transition:border-color .15s}
 .conn-input:focus{border-color:var(--orange)}
 .conn-input::placeholder{color:var(--t3)}
 .conn-input.green:focus{border-color:var(--green)}
@@ -131,81 +72,53 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .status-dot{width:5px;height:5px;border-radius:50%;background:var(--t3)}
 .status-dot.connected{background:var(--green)}
 .status-dot.error{background:var(--red)}
-.btn-test{
-  background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:9px 14px;
-  font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--t2);
-  transition:all .15s;white-space:nowrap;flex-shrink:0;
-}
+
+.btn-test{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:9px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--t2);transition:all .15s;white-space:nowrap;flex-shrink:0}
 .btn-test:hover{border-color:var(--green);color:var(--green)}
-.btn-load{
-  background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:9px 14px;
-  font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--orange);
-  border-color:var(--orange-b);transition:all .15s;white-space:nowrap;flex-shrink:0;
-}
+.btn-load{background:var(--s2);border:1px solid var(--orange-b);border-radius:7px;padding:9px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--orange);transition:all .15s;white-space:nowrap;flex-shrink:0}
 .btn-load:hover{background:var(--orange-d)}
-.btn-save-conn{
-  background:var(--s2);border:1px solid var(--orange-b);border-radius:7px;padding:9px 14px;
-  font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--orange);
-  transition:all .15s;white-space:nowrap;flex-shrink:0;
-}
+.btn-save-conn{background:var(--s2);border:1px solid var(--orange-b);border-radius:7px;padding:9px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--orange);transition:all .15s;white-space:nowrap;flex-shrink:0}
 .btn-save-conn:hover{background:var(--orange-d)}
 
-/* ── PROMPT EDITOR ── */
-.prompt-textarea{
-  width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;
-  padding:12px;color:var(--text);font-size:12px;font-family:var(--mono);outline:none;
-  resize:vertical;min-height:220px;line-height:1.7;transition:border-color .15s;
-}
+.prompt-textarea{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:12px;font-family:var(--mono);outline:none;resize:vertical;min-height:220px;line-height:1.7;transition:border-color .15s}
 .prompt-textarea:focus{border-color:var(--orange)}
 .prompt-meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;flex-wrap:wrap;gap:6px}
 .prompt-count{font-size:10px;color:var(--t3);font-family:var(--mono)}
 .prompt-actions{display:flex;gap:6px}
-.btn-sm{
-  background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;
-  font-size:11px;cursor:pointer;font-family:var(--sans);color:var(--t2);transition:all .15s;
-}
+.btn-sm{background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:var(--sans);color:var(--t2);transition:all .15s}
 .btn-sm:hover{border-color:var(--orange);color:var(--orange)}
 .btn-sm.danger:hover{border-color:var(--red);color:var(--red)}
 
-/* ── KNOWLEDGE BASE ── */
-.kb-entry{
-  display:flex;background:var(--s2);border:1px solid var(--border);
-  border-radius:8px;padding:10px 12px;margin-bottom:8px;transition:border-color .15s;
-}
+/* ── KB ENTRIES ── */
+.kb-entry{display:flex;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;transition:border-color .15s}
 .kb-entry:focus-within{border-color:var(--orange)}
 .kb-q{width:100%;background:transparent;border:none;color:var(--text);font-size:12px;font-family:var(--sans);outline:none;padding:0}
 .kb-q::placeholder{color:var(--t3)}
-.kb-a{
-  width:100%;background:transparent;border:none;border-top:1px solid var(--border);
-  color:var(--t2);font-size:12px;font-family:var(--sans);outline:none;
-  padding:8px 0 0;margin-top:8px;resize:none;line-height:1.6;min-height:50px;
-}
+.kb-a{width:100%;background:transparent;border:none;border-top:1px solid var(--border);color:var(--t2);font-size:12px;font-family:var(--sans);outline:none;padding:8px 0 0;margin-top:8px;resize:none;line-height:1.6;min-height:50px}
 .kb-a::placeholder{color:var(--t3)}
-.kb-remove{background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:0;flex-shrink:0;transition:color .15s;align-self:flex-start}
-.kb-remove:hover{color:var(--red)}
-.btn-add-kb{
-  width:100%;background:transparent;border:1px dashed var(--border);border-radius:8px;
-  padding:10px;color:var(--t2);font-size:12px;cursor:pointer;font-family:var(--sans);
-  transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;
-}
-.btn-add-kb:hover{border-color:var(--orange);color:var(--orange)}
+.entry-remove{background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:0;flex-shrink:0;transition:color .15s;align-self:flex-start}
+.entry-remove:hover{color:var(--red)}
 
-/* ── UPLOAD ── */
-.upload-zone{
-  border:1.5px dashed var(--border);border-radius:8px;padding:24px;
-  text-align:center;cursor:pointer;transition:all .15s;position:relative;
-}
-.upload-zone:hover,.upload-zone.drag-over{border-color:var(--orange);background:var(--orange-d)}
-.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.upload-icon{font-size:28px;margin-bottom:8px;opacity:.5}
-.upload-title{font-size:13px;font-weight:500;margin-bottom:4px}
-.upload-sub{font-size:11px;color:var(--t2)}
-.uploaded-files{margin-top:10px;display:flex;flex-direction:column;gap:6px}
-.file-chip{display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:7px 10px}
-.file-name{font-size:11px;font-family:var(--mono);color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;margin-right:8px}
-.file-size{font-size:10px;color:var(--t3);flex-shrink:0;margin-right:8px}
-.file-remove{background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:12px;flex-shrink:0;transition:color .15s}
-.file-remove:hover{color:var(--red)}
+/* ── DOC LINK ENTRIES ── */
+.doc-entry{display:flex;gap:8px;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;align-items:flex-start;transition:border-color .15s}
+.doc-entry:focus-within{border-color:var(--orange)}
+.doc-fields{flex:1;display:flex;flex-direction:column;gap:6px}
+.doc-name{width:100%;background:transparent;border:none;color:var(--text);font-size:12px;font-family:var(--sans);outline:none;font-weight:500}
+.doc-name::placeholder{color:var(--t3)}
+.doc-url{width:100%;background:transparent;border:none;border-top:1px solid var(--border);color:var(--t2);font-size:11px;font-family:var(--mono);outline:none;padding:6px 0 0;margin-top:2px}
+.doc-url::placeholder{color:var(--t3)}
+
+/* ── BUSINESS SETTINGS ── */
+.settings-grid{display:flex;flex-direction:column;gap:10px}
+.settings-row{display:flex;flex-direction:column;gap:4px}
+.settings-label{font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
+.settings-input{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-size:12px;font-family:var(--sans);outline:none;width:100%;transition:border-color .15s}
+.settings-input:focus{border-color:var(--orange)}
+.settings-input::placeholder{color:var(--t3)}
+.settings-hint{font-size:10px;color:var(--t3);margin-top:3px;line-height:1.5}
+
+.btn-add{width:100%;background:transparent;border:1px dashed var(--border);border-radius:8px;padding:10px;color:var(--t2);font-size:12px;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-add:hover{border-color:var(--orange);color:var(--orange)}
 
 /* ── GUARDRAILS ── */
 .guardrail-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--s2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px}
@@ -219,69 +132,48 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .guardrail-title{font-size:12px;font-weight:500;color:var(--text);margin-bottom:2px}
 .guardrail-desc{font-size:11px;color:var(--t2);line-height:1.5}
 
-/* ── LANGUAGE PILLS ── */
+/* ── LANGUAGES ── */
 .lang-grid{display:flex;flex-wrap:wrap;gap:6px}
 .lang-pill{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--s2);color:var(--t2);transition:all .15s;font-family:var(--sans)}
 .lang-pill.active{background:var(--orange);color:white;border-color:var(--orange)}
 
-/* ── PUSH STATUS BANNER ── */
-.push-banner{
-  display:none;background:var(--green-d);border:1px solid var(--green-b);
-  border-radius:8px;padding:10px 14px;font-size:12px;color:var(--green);
-  margin-bottom:12px;align-items:center;gap:8px;
-}
+/* ── PUSH BANNER ── */
+.push-banner{display:none;background:var(--green-d);border:1px solid var(--green-b);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--green);margin-bottom:12px;align-items:center;gap:8px}
 .push-banner.show{display:flex}
 .push-banner.error{background:var(--red-d);border-color:rgba(239,68,68,.25);color:var(--red)}
 
 /* ── FAB ── */
-.fab-save{
-  position:fixed;bottom:calc(20px + var(--safe));right:16px;
-  background:var(--orange);color:white;border:none;border-radius:50px;
-  padding:12px 20px;font-size:13px;font-weight:600;cursor:pointer;
-  font-family:var(--sans);z-index:200;
-  box-shadow:0 4px 20px rgba(249,115,22,.35),0 2px 8px rgba(0,0,0,.4);
-  display:flex;align-items:center;gap:8px;transition:all .15s;
-}
+.fab-save{position:fixed;bottom:calc(20px + var(--safe));right:16px;background:var(--orange);color:white;border:none;border-radius:50px;padding:12px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);z-index:200;box-shadow:0 4px 20px rgba(249,115,22,.35),0 2px 8px rgba(0,0,0,.4);display:flex;align-items:center;gap:8px;transition:all .15s}
 .fab-save:active{transform:scale(.96)}
 .fab-dot{width:8px;height:8px;border-radius:50%;background:white;animation:blink 1.5s infinite;display:none}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .fab-save.dirty .fab-dot{display:block}
 
 /* ── TOAST ── */
-.toast{
-  position:fixed;bottom:calc(76px + var(--safe));left:12px;right:12px;
-  background:var(--s2);border:1px solid var(--border);color:var(--text);
-  padding:11px 16px;border-radius:9px;font-size:13px;text-align:center;
-  transform:translateY(10px);opacity:0;transition:all .25s;z-index:999;
-  box-shadow:0 8px 32px rgba(0,0,0,.5);
-}
+.toast{position:fixed;bottom:calc(76px + var(--safe));left:12px;right:12px;background:var(--s2);border:1px solid var(--border);color:var(--text);padding:11px 16px;border-radius:9px;font-size:13px;text-align:center;transform:translateY(10px);opacity:0;transition:all .25s;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.5)}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.ok{border-color:var(--green-b);color:var(--green)}
 .toast.err{border-color:rgba(239,68,68,.3);color:var(--red)}
 .toast.warn{border-color:var(--orange-b);color:var(--orange)}
 
-/* ── DESKTOP ── */
 @media(min-width:640px){
   .page{padding:24px 24px 80px}
   .nav-inner{height:60px}
   .page-title{font-size:26px}
   .nav-tab{padding:7px 16px;font-size:13px}
   .prompt-textarea{min-height:280px}
+  .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 }
-@media(min-width:900px){
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-}
+@media(min-width:900px){.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
 </style>
 </head>
 <body>
 
-<!-- Loading Overlay -->
 <div class="loading-overlay" id="loading-overlay">
   <div class="loading-spinner"></div>
   <div class="loading-text" id="loading-text">Loading config from Apps Script…</div>
 </div>
 
-<!-- NAV -->
 <div class="nav">
   <div class="nav-inner">
     <div class="nav-brand">
@@ -302,16 +194,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     PAGE 1 — WhatsApp (Diya)
-     ═══════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════
+     PAGE 1 — WhatsApp Agent
+     ═══════════════════════════════════════════════════ -->
 <div class="page active" id="page-wa">
 
   <div class="page-header">
     <div>
       <div class="page-eyebrow" style="color:var(--green)">WhatsApp · Interakt</div>
       <div class="page-title">AI Business Agent</div>
-      <div class="page-sub">Controls Diya on WhatsApp — system prompt, knowledge, guardrails</div>
+      <div class="page-sub">Yahan se Diya ka poora control — kuch bhi badlo, Push Live karo</div>
     </div>
     <button class="save-all-btn" onclick="saveAll('wa')">Push Live →</button>
   </div>
@@ -322,33 +214,72 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   <div class="section">
     <div class="section-label">Connection</div>
     <div class="conn-card">
-      <div class="card-title"><span class="card-title-icon">🔗</span>Apps Script Webhook</div>
+      <div class="card-title"><span class="card-title-icon">🔗</span>Apps Script URL</div>
       <div class="conn-row">
         <div class="conn-field">
-          <div class="conn-label">Apps Script URL</div>
+          <div class="conn-label">WhatsApp Agent Apps Script URL</div>
           <input class="conn-input green" id="wa-script-url" placeholder="https://script.google.com/macros/s/.../exec" oninput="markDirty()" />
         </div>
-        <button class="btn-load" onclick="loadConfigFromScript()" title="Load saved config from Apps Script">↓ Load</button>
+        <button class="btn-load" onclick="loadConfigFromScript()">↓ Load</button>
         <button class="btn-test" onclick="testConnection('wa')">Test</button>
-        <button class="btn-save-conn" onclick="saveConnection('wa')">Save URL</button>
+        <button class="btn-save-conn" onclick="saveConnection('wa')">Save</button>
       </div>
       <div class="conn-status">
         <div class="status-dot" id="wa-status-dot"></div>
         <span id="wa-status-text" style="font-size:10px;color:var(--t2)">Not connected</span>
       </div>
-      <div style="font-size:10px;color:var(--t3);margin-top:8px;line-height:1.6;">
-        1. Save URL → 2. Click <strong style="color:var(--orange)">↓ Load</strong> to pull saved config from Apps Script &nbsp;|&nbsp;
-        3. Edit anything → <strong style="color:var(--orange)">Push Live →</strong> to save back
+      <div style="font-size:10px;color:var(--t3);margin-top:8px;line-height:1.7">
+        <b style="color:var(--t2)">Pehli baar:</b> URL daalo → Save → ↓ Load (config aayega) &nbsp;·&nbsp;
+        <b style="color:var(--t2)">Changes ke baad:</b> Push Live karo
       </div>
     </div>
     <div class="conn-card">
-      <div class="card-title"><span class="card-title-icon">📲</span>Interakt Webhook URL</div>
+      <div class="card-title"><span class="card-title-icon">📲</span>Interakt Webhook</div>
       <div class="conn-row">
         <div class="conn-field">
-          <div class="conn-label">Paste this URL in Interakt → Settings → Configure Webhook URL</div>
-          <input class="conn-input" id="wa-interakt-webhook" placeholder="Save your Apps Script URL above first" readonly style="cursor:pointer" onclick="copyField('wa-interakt-webhook')" />
+          <div class="conn-label">Yeh URL Interakt mein paste karo → Settings → Configure Webhook URL</div>
+          <input class="conn-input" id="wa-interakt-webhook" placeholder="Apps Script URL save karo upar" readonly style="cursor:pointer" onclick="copyField('wa-interakt-webhook')" />
         </div>
         <button class="btn-test" onclick="copyField('wa-interakt-webhook')" style="border-color:var(--green-b);color:var(--green)">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUSINESS SETTINGS -->
+  <div class="section">
+    <div class="section-label">Business Settings</div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🏢</span>Devyora Business Info — Diya yeh use karegi</div>
+      <div class="settings-grid">
+        <div class="settings-row">
+          <div class="settings-label">WhatsApp Number (files receive karne wala)</div>
+          <input class="settings-input" id="wa-business-phone" placeholder="+91 77470 02292" oninput="markDirty()" />
+          <div class="settings-hint">Customer yahan DWG/images bhejega</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Experience Centre Location</div>
+          <input class="settings-input" id="wa-experience-center" placeholder="Bhopal, Madhya Pradesh" oninput="markDirty()" />
+          <div class="settings-hint">Diya site visit ke option mein batayegi</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Business Hours</div>
+          <input class="settings-input" id="wa-business-hours" placeholder="Mon-Sat 9:00 AM – 7:00 PM IST" oninput="markDirty()" />
+          <div class="settings-hint">Diya after-hours mein yeh batayegi</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Minimum Delivery Days (Custom Orders)</div>
+          <input class="settings-input" id="wa-delivery-days" placeholder="60" type="number" oninput="markDirty()" />
+          <div class="settings-hint">Diya yeh se kam promise nahi karegi</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Warranty (years)</div>
+          <input class="settings-input" id="wa-warranty" placeholder="20" type="number" oninput="markDirty()" />
+          <div class="settings-hint">Diya sirf yahi number bolegi</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Company Experience (years)</div>
+          <input class="settings-input" id="wa-exp-years" placeholder="25" type="number" oninput="markDirty()" />
+        </div>
       </div>
     </div>
   </div>
@@ -357,8 +288,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   <div class="section">
     <div class="section-label">System Prompt</div>
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">🧠</span>Diya's Personality & Instructions</div>
-      <textarea class="prompt-textarea" id="wa-prompt" oninput="markDirty()" placeholder="Paste your full Diya system prompt here..."></textarea>
+      <div class="card-title"><span class="card-title-icon">🧠</span>Diya ki Personality & Instructions</div>
+      <textarea class="prompt-textarea" id="wa-prompt" oninput="markDirty()" placeholder="Diya ka full system prompt yahan..."></textarea>
       <div class="prompt-meta">
         <span class="prompt-count" id="wa-prompt-count">0 chars</span>
         <div class="prompt-actions">
@@ -374,24 +305,22 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   <div class="section">
     <div class="section-label">Knowledge Base</div>
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">📚</span>Q&amp;A Pairs — Diya will answer these exactly</div>
+      <div class="card-title"><span class="card-title-icon">📚</span>Q&A Pairs — Diya exactly yahi answer degi</div>
       <div id="wa-kb-list"></div>
-      <button class="btn-add-kb" onclick="addKBEntry('wa')">+ Add Q&amp;A Pair</button>
+      <button class="btn-add" onclick="addKBEntry('wa')">+ Q&A Pair Add Karo</button>
     </div>
   </div>
 
-  <!-- CATALOGUE UPLOAD -->
+  <!-- CATALOGUES & DOCUMENTS -->
   <div class="section">
-    <div class="section-label">Catalogue &amp; Documents</div>
+    <div class="section-label">Catalogues &amp; Documents</div>
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">📄</span>Upload PDFs, Catalogues, Price Lists</div>
-      <div class="upload-zone">
-        <input type="file" multiple accept=".pdf,.txt,.docx" onchange="handleUpload('wa', this.files)" />
-        <div class="upload-icon">📁</div>
-        <div class="upload-title">Tap to upload or drag files here</div>
-        <div class="upload-sub">PDF, TXT, DOCX — max 10MB each</div>
+      <div class="card-title"><span class="card-title-icon">📄</span>Document Links — Customer maange to Diya yeh links bhejegi</div>
+      <div id="wa-docs-list"></div>
+      <button class="btn-add" onclick="addDocEntry('wa')">+ Document Link Add Karo</button>
+      <div style="font-size:10px;color:var(--t3);margin-top:10px;line-height:1.6">
+        💡 PDF Google Drive mein upload karo → Share → Anyone with link → woh link yahan paste karo
       </div>
-      <div class="uploaded-files" id="wa-files"></div>
     </div>
   </div>
 
@@ -399,7 +328,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   <div class="section">
     <div class="section-label">Guardrails</div>
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">🛡️</span>Hard Rules — Diya never breaks these</div>
+      <div class="card-title"><span class="card-title-icon">🛡️</span>Hard Rules — Diya yeh kabhi nahi todegi</div>
       <div id="wa-guardrails"></div>
     </div>
   </div>
@@ -408,41 +337,40 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   <div class="section">
     <div class="section-label">Languages</div>
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">🌐</span>Active Languages</div>
+      <div class="card-title"><span class="card-title-icon">🌐</span>Active Languages — Diya in mein reply karegi</div>
       <div class="lang-grid" id="wa-langs"></div>
     </div>
   </div>
 
 </div>
 
-<!-- ═══════════════════════════════════════
-     PAGE 2 — Calling (Bolna)
-     ═══════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════
+     PAGE 2 — Calling Agent
+     ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-call">
 
   <div class="page-header">
     <div>
       <div class="page-eyebrow" style="color:var(--orange)">Voice · Bolna AI</div>
       <div class="page-title">AI Calling Agent</div>
-      <div class="page-sub">Controls Diya on phone calls — system prompt, knowledge, call behaviour</div>
+      <div class="page-sub">Diya ka calling agent — prompt, knowledge, call behaviour</div>
     </div>
     <button class="save-all-btn" onclick="saveAll('call')">Push Live →</button>
   </div>
 
   <div class="push-banner" id="call-push-banner"></div>
 
-  <!-- CONNECTION -->
   <div class="section">
     <div class="section-label">Connection</div>
     <div class="conn-card">
-      <div class="card-title"><span class="card-title-icon">🔗</span>Bolna Apps Script Webhook</div>
+      <div class="card-title"><span class="card-title-icon">🔗</span>Bolna Apps Script URL</div>
       <div class="conn-row">
         <div class="conn-field">
           <div class="conn-label">Apps Script URL</div>
           <input class="conn-input" id="call-script-url" placeholder="https://script.google.com/macros/s/.../exec" oninput="markDirty()" />
         </div>
         <button class="btn-test" onclick="testConnection('call')">Test</button>
-        <button class="btn-save-conn" onclick="saveConnection('call')">Save URL</button>
+        <button class="btn-save-conn" onclick="saveConnection('call')">Save</button>
       </div>
       <div class="conn-status">
         <div class="status-dot" id="call-status-dot"></div>
@@ -450,11 +378,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       </div>
     </div>
     <div class="conn-card">
-      <div class="card-title"><span class="card-title-icon">🎙️</span>Bolna Post-Call Webhook</div>
+      <div class="card-title"><span class="card-title-icon">🎙️</span>Bolna Webhook</div>
       <div class="conn-row">
         <div class="conn-field">
-          <div class="conn-label">Paste in Bolna → Agent → Analytics → Webhook URL</div>
-          <input class="conn-input" id="call-bolna-webhook" placeholder="Save your Apps Script URL above first" readonly style="cursor:pointer" onclick="copyField('call-bolna-webhook')" />
+          <div class="conn-label">Bolna → Agent → Analytics → Webhook URL mein paste karo</div>
+          <input class="conn-input" id="call-bolna-webhook" readonly style="cursor:pointer" onclick="copyField('call-bolna-webhook')" />
         </div>
         <button class="btn-test" onclick="copyField('call-bolna-webhook')" style="border-color:var(--orange-b);color:var(--orange)">Copy</button>
       </div>
@@ -475,12 +403,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     </div>
   </div>
 
-  <!-- SYSTEM PROMPT -->
   <div class="section">
     <div class="section-label">System Prompt</div>
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">🧠</span>Diya's Voice Personality &amp; Instructions</div>
-      <textarea class="prompt-textarea" id="call-prompt" oninput="markDirty()" placeholder="Paste your full Bolna voice agent system prompt here..."></textarea>
+      <div class="card-title"><span class="card-title-icon">🧠</span>Diya ki Voice Personality</div>
+      <textarea class="prompt-textarea" id="call-prompt" oninput="markDirty()" placeholder="Bolna voice agent ka system prompt..."></textarea>
       <div class="prompt-meta">
         <span class="prompt-count" id="call-prompt-count">0 chars</span>
         <div class="prompt-actions">
@@ -492,41 +419,23 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     </div>
   </div>
 
-  <!-- KNOWLEDGE BASE -->
   <div class="section">
     <div class="section-label">Knowledge Base</div>
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">📚</span>Product Q&amp;A — Diya answers these on calls</div>
+      <div class="card-title"><span class="card-title-icon">📚</span>Q&A — Diya calls mein yahi bolegi</div>
       <div id="call-kb-list"></div>
-      <button class="btn-add-kb" onclick="addKBEntry('call')">+ Add Q&amp;A Pair</button>
+      <button class="btn-add" onclick="addKBEntry('call')">+ Q&A Pair Add Karo</button>
     </div>
   </div>
 
-  <!-- CATALOGUE UPLOAD -->
-  <div class="section">
-    <div class="section-label">Reference Documents</div>
-    <div class="card">
-      <div class="card-title"><span class="card-title-icon">📄</span>Upload GRC Catalogue, Product Specs</div>
-      <div class="upload-zone">
-        <input type="file" multiple accept=".pdf,.txt,.docx" onchange="handleUpload('call', this.files)" />
-        <div class="upload-icon">📁</div>
-        <div class="upload-title">Tap to upload or drag files here</div>
-        <div class="upload-sub">PDF, TXT, DOCX — content added to Diya's knowledge</div>
-      </div>
-      <div class="uploaded-files" id="call-files"></div>
-    </div>
-  </div>
-
-  <!-- GUARDRAILS -->
   <div class="section">
     <div class="section-label">Guardrails</div>
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">🛡️</span>Hard Rules — Diya never breaks on calls</div>
+      <div class="card-title"><span class="card-title-icon">🛡️</span>Hard Rules — Calls mein bhi nahi todegi</div>
       <div id="call-guardrails"></div>
     </div>
   </div>
 
-  <!-- CALL BEHAVIOUR -->
   <div class="section">
     <div class="section-label">Call Behaviour</div>
     <div class="card">
@@ -541,7 +450,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
           <input class="conn-input" id="call-silence-hangup" value="15" type="number" oninput="markDirty()" />
         </div>
         <div class="conn-field">
-          <div class="conn-label">Welcome Message Delay (ms)</div>
+          <div class="conn-label">Welcome Delay (ms)</div>
           <input class="conn-input" id="call-welcome-delay" value="300" type="number" oninput="markDirty()" />
         </div>
         <div class="conn-field">
@@ -558,143 +467,114 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 
 </div>
 
-<!-- FAB -->
 <button class="fab-save" id="fab-save" onclick="saveAll(currentPage)">
   <div class="fab-dot"></div>
   <span>Push Live</span>
 </button>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ── STATE ──────────────────────────────────────────────────────────────────────
-var currentPage = 'wa';
-var isDirty     = false;
-var state       = { wa: {}, call: {} };
-
+// ── DEFAULTS ────────────────────────────────────────────────────────────────────
 var DEFAULT_GUARDRAILS = [
   { id:'comp',     title:'Block composition questions',    desc:'Never reveal GRC mixture, ratios, fibre %, cement/sand proportions', on:true },
   { id:'price',    title:'No fixed pricing',               desc:'Never quote a fixed price without design files or site visit', on:true },
-  { id:'timeline', title:'60-day minimum for custom',      desc:'Never promise delivery under 60 days for custom orders', on:true },
+  { id:'timeline', title:'Minimum delivery days',          desc:'Never promise delivery under the set minimum days for custom orders', on:true },
   { id:'install',  title:'No installation method details', desc:'Never give exact installation methods — refer to technical team', on:true },
   { id:'molds',    title:'Block mold-only enquiries',      desc:'Never entertain mold-only purchase requests', on:true },
-  { id:'warranty', title:'20-year warranty only',          desc:'Always say 20 years — never say 25 years', on:true },
+  { id:'warranty', title:'Warranty years only',            desc:'Always state the set warranty years — never a different number', on:true },
 ];
+var DEFAULT_LANGS = ['Hindi','English','Gujarati','Hinglish'];
+var ALL_LANGS     = ['Hindi','English','Gujarati','Hinglish','Marathi','Tamil','Telugu','Kannada','Bengali','Punjabi'];
 
-var DEFAULT_LANGS   = ['Hindi','English','Gujarati','Hinglish'];
-var ALL_LANGS       = ['Hindi','English','Gujarati','Hinglish','Marathi','Tamil','Telugu','Kannada','Bengali','Punjabi'];
+var DEFAULT_BUSINESS = {
+  phone:          '+91 77470 02292',
+  experienceCenter: 'Bhopal, Madhya Pradesh',
+  hours:          'Mon-Sat 9:00 AM – 7:00 PM IST',
+  deliveryDays:   '60',
+  warranty:       '20',
+  expYears:       '25'
+};
 
-var DEFAULT_WA_PROMPT = `You are Diya, a warm GRC sales consultant for Devyora — a GRC (Glass Fibre Reinforced Concrete) manufacturing company based in Bhopal, India with 25 years of experience.
+var DEFAULT_WA_PROMPT = `You are Diya, a warm GRC sales consultant for Devyora — a GRC (Glass Fibre Reinforced Concrete) manufacturing company based in Bhopal, India.
 
-You are responding on WhatsApp. Keep replies conversational and concise — 2 to 4 sentences unless the customer needs more detail. Match the customer's language — Hindi, English, Hinglish, or Gujarati. Switch instantly when they switch.
+You are responding on WhatsApp. Keep replies conversational and concise — 2 to 4 sentences unless the customer needs more detail. Match the customer's language instantly — Hindi, English, Hinglish, or Gujarati.
 
 Guide every customer to one of three next steps:
-1. Send DWG file / images / 3D render to WhatsApp: +91 77470 02292
+1. Send DWG file / images / 3D render to WhatsApp: {BUSINESS_PHONE}
 2. Site visit — collect pincode and mobile number — say representative will connect
-3. Visit experience centre in Bhopal — collect mobile number — say representative will connect
+3. Visit experience centre in {EXPERIENCE_CENTER} — collect mobile number — say representative will connect
 
 When conversation reaches a final outcome add exactly [OUTCOME_COMPLETE] on a new line.`;
 
-var DEFAULT_CALL_PROMPT = `Your name is Diya. You are a warm, knowledgeable sales consultant for Devyora — a GRC manufacturing company with 25 years of experience. You handle inbound calls from clients interested in GRC products.
+var DEFAULT_CALL_PROMPT = `Your name is Diya. You are a warm, knowledgeable sales consultant for Devyora.
 
 Start EVERY call: "Namaskar!" — then WAIT for caller to respond. After they respond say: "Aapki G-R-C Jali, column, mouldings aur baaki GRC Products ke sambandh mein inquiry hamare paas aayi thi — hum aapki ismein kaise sahayata kar sakte hain?"
 
 Speak in whatever language the caller uses. Switch instantly.`;
 
-// ── LOAD CONFIG FROM APPS SCRIPT ───────────────────────────────────────────────
-// Called on page load (if URL saved) or when user clicks "↓ Load"
+// ── STATE ────────────────────────────────────────────────────────────────────────
+var currentPage = 'wa';
+var isDirty     = false;
+var state       = { wa: {}, call: {} };
+
+// ── LOAD FROM APPS SCRIPT ────────────────────────────────────────────────────────
 function loadConfigFromScript(silent) {
   var url = (document.getElementById('wa-script-url').value || '').trim()
          || localStorage.getItem('dva_wa_script_url') || '';
-
   if (!url) {
-    if (!silent) showToast('Enter Apps Script URL first', 'err');
-    hideLoading();
-    renderAll();
-    return;
+    if (!silent) showToast('Apps Script URL daalo pehle', 'err');
+    hideLoading(); renderAll(); return;
   }
-
-  if (!silent) {
-    document.getElementById('loading-text').textContent = 'Loading config from Apps Script…';
-    document.getElementById('loading-overlay').classList.remove('hidden');
-    document.getElementById('loading-overlay').style.display = 'flex';
-  }
+  if (!silent) showLoadingOverlay('Loading config from Apps Script…');
 
   fetch(url + '?action=getConfig')
-    .then(function(r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
     .then(function(result) {
       if (result.status === 'ok') {
-        // Merge Apps Script data into state (keep scriptUrls)
         var waUrl   = state.wa.scriptUrl   || url;
         var callUrl = state.call.scriptUrl || localStorage.getItem('dva_call_script_url') || '';
-
-        if (result.wa) {
-          state.wa = result.wa;
-          state.wa.scriptUrl = waUrl;
-        }
-        if (result.call) {
-          state.call = result.call;
-          state.call.scriptUrl = callUrl;
-        }
-        if (!silent) showToast('Config loaded from Apps Script', 'ok');
+        if (result.wa)   { state.wa   = result.wa;   state.wa.scriptUrl   = waUrl; }
+        if (result.call) { state.call = result.call; state.call.scriptUrl = callUrl; }
+        if (!silent) showToast('Config load ho gaya Apps Script se', 'ok');
       } else {
-        if (!silent) showToast('Apps Script returned error', 'err');
+        if (!silent) showToast('Apps Script se error aaya', 'err');
       }
-      renderAll();
-      hideLoading();
+      renderAll(); hideLoading();
     })
-    .catch(function(err) {
-      // CORS / network error — fall back to localStorage
-      console.warn('getConfig fetch failed:', err);
-      if (!silent) showToast('Could not reach Apps Script — showing local data', 'warn');
-      renderAll();
-      hideLoading();
+    .catch(function() {
+      if (!silent) showToast('Apps Script reach nahi hua — local data show ho raha hai', 'warn');
+      renderAll(); hideLoading();
     });
 }
 
-// ── INIT ───────────────────────────────────────────────────────────────────────
+// ── INIT ────────────────────────────────────────────────────────────────────────
 function init() {
-  // Restore scriptUrls from localStorage (only persistent local value)
   var waUrl   = localStorage.getItem('dva_wa_script_url')   || '';
   var callUrl = localStorage.getItem('dva_call_script_url') || '';
   state.wa.scriptUrl   = waUrl;
   state.call.scriptUrl = callUrl;
+  if (waUrl)   document.getElementById('wa-script-url').value   = waUrl;
+  if (waUrl)   document.getElementById('wa-interakt-webhook').value = waUrl;
+  if (callUrl) document.getElementById('call-script-url').value  = callUrl;
+  if (callUrl) document.getElementById('call-bolna-webhook').value = callUrl;
 
   if (waUrl) {
-    document.getElementById('wa-script-url').value        = waUrl;
-    document.getElementById('wa-interakt-webhook').value  = waUrl;
-  }
-  if (callUrl) {
-    document.getElementById('call-script-url').value      = callUrl;
-    document.getElementById('call-bolna-webhook').value   = callUrl;
-  }
-
-  if (waUrl) {
-    // Auto-load config from Apps Script
     loadConfigFromScript(true);
   } else {
-    // No URL saved — just render defaults
-    document.getElementById('loading-text').textContent = 'Setting up…';
-    renderAll();
-    hideLoading();
+    renderAll(); hideLoading();
   }
 }
 
-// ── RENDER ALL FIELDS ──────────────────────────────────────────────────────────
+// ── RENDER ──────────────────────────────────────────────────────────────────────
 function renderAll() {
   ['wa','call'].forEach(function(p) {
     var d = state[p];
 
-    var promptEl = document.getElementById(p+'-prompt');
-    if (promptEl) {
-      promptEl.value = d.prompt || (p === 'wa' ? DEFAULT_WA_PROMPT : DEFAULT_CALL_PROMPT);
-      updateCount(p);
-    }
+    // Prompt
+    var pe = document.getElementById(p+'-prompt');
+    if (pe) { pe.value = d.prompt || (p==='wa' ? DEFAULT_WA_PROMPT : DEFAULT_CALL_PROMPT); updateCount(p); }
 
+    // Call settings
     if (p === 'call') {
       if (d.bolnaKey)      document.getElementById('call-bolna-key').value      = d.bolnaKey;
       if (d.agentId)       document.getElementById('call-agent-id').value       = d.agentId;
@@ -704,23 +584,28 @@ function renderAll() {
       if (d.callHours)     document.getElementById('call-hours').value          = d.callHours;
     }
 
+    // Business settings (WA only)
+    if (p === 'wa') {
+      var b = d.business || DEFAULT_BUSINESS;
+      document.getElementById('wa-business-phone').value      = b.phone          || DEFAULT_BUSINESS.phone;
+      document.getElementById('wa-experience-center').value   = b.experienceCenter || DEFAULT_BUSINESS.experienceCenter;
+      document.getElementById('wa-business-hours').value      = b.hours          || DEFAULT_BUSINESS.hours;
+      document.getElementById('wa-delivery-days').value       = b.deliveryDays   || DEFAULT_BUSINESS.deliveryDays;
+      document.getElementById('wa-warranty').value            = b.warranty       || DEFAULT_BUSINESS.warranty;
+      document.getElementById('wa-exp-years').value           = b.expYears       || DEFAULT_BUSINESS.expYears;
+    }
+
     renderGuardrails(p, (d.guardrails && d.guardrails.length) ? d.guardrails : DEFAULT_GUARDRAILS.map(function(g){ return Object.assign({},g); }));
     renderLangs(p, (d.langs && d.langs.length) ? d.langs : DEFAULT_LANGS.slice());
     renderKB(p, d.kb || []);
-    renderFiles(p, d.files || []);
+    if (p === 'wa') renderDocs(d.docs || []);
 
     if (d.scriptUrl) setStatus(p, 'saved', 'URL saved');
   });
   markClean();
 }
 
-function hideLoading() {
-  var el = document.getElementById('loading-overlay');
-  el.classList.add('hidden');
-  setTimeout(function(){ el.style.display = 'none'; }, 400);
-}
-
-// ── PAGE SWITCHING ─────────────────────────────────────────────────────────────
+// ── PAGE / DIRTY / LOADING ───────────────────────────────────────────────────────
 function switchPage(p) {
   currentPage = p;
   document.querySelectorAll('.page').forEach(function(el){ el.classList.remove('active'); });
@@ -728,81 +613,85 @@ function switchPage(p) {
   document.getElementById('page-'+p).classList.add('active');
   document.getElementById('tab-'+p).classList.add('active');
 }
-
-// ── DIRTY TRACKING ─────────────────────────────────────────────────────────────
-function markDirty() {
-  isDirty = true;
-  document.getElementById('fab-save').classList.add('dirty');
-  updateCount(currentPage);
-}
-function markClean() {
-  isDirty = false;
-  document.getElementById('fab-save').classList.remove('dirty');
-}
+function markDirty() { isDirty=true; document.getElementById('fab-save').classList.add('dirty'); updateCount(currentPage); }
+function markClean() { isDirty=false; document.getElementById('fab-save').classList.remove('dirty'); }
 function updateCount(p) {
-  var el = document.getElementById(p+'-prompt');
-  var ct = document.getElementById(p+'-prompt-count');
-  if (el && ct) ct.textContent = el.value.length.toLocaleString() + ' chars';
+  var el=document.getElementById(p+'-prompt'), ct=document.getElementById(p+'-prompt-count');
+  if(el&&ct) ct.textContent=el.value.length.toLocaleString()+' chars';
+}
+function showLoadingOverlay(txt) {
+  var el=document.getElementById('loading-overlay');
+  document.getElementById('loading-text').textContent = txt||'Loading…';
+  el.classList.remove('hidden'); el.style.display='flex';
+}
+function hideLoading() {
+  var el=document.getElementById('loading-overlay');
+  el.classList.add('hidden'); setTimeout(function(){ el.style.display='none'; }, 400);
 }
 
-// ── CONNECTION ─────────────────────────────────────────────────────────────────
+// ── CONNECTION ───────────────────────────────────────────────────────────────────
 function saveConnection(p) {
   var url = document.getElementById(p+'-script-url').value.trim();
-  if (!url) { showToast('Enter Apps Script URL first', 'err'); return; }
+  if (!url) { showToast('URL daalo pehle', 'err'); return; }
   state[p].scriptUrl = url;
   localStorage.setItem('dva_'+p+'_script_url', url);
-  if (p === 'wa')   document.getElementById('wa-interakt-webhook').value = url;
-  if (p === 'call') document.getElementById('call-bolna-webhook').value  = url;
-  showToast('URL saved — click ↓ Load to pull config', 'ok');
-  setStatus(p, 'saved', 'URL saved — click ↓ Load');
+  if (p==='wa')   document.getElementById('wa-interakt-webhook').value = url;
+  if (p==='call') document.getElementById('call-bolna-webhook').value  = url;
+  showToast('URL save ho gaya — ↓ Load karo config ke liye', 'ok');
+  setStatus(p, 'saved', 'URL saved — Load karo');
 }
-
 function testConnection(p) {
   var url = document.getElementById(p+'-script-url').value.trim();
-  if (!url) { showToast('Enter URL first', 'err'); return; }
+  if (!url) { showToast('URL daalo pehle', 'err'); return; }
   setStatus(p, 'testing', 'Testing...');
-  var img = new Image(); var done = false;
+  var img=new Image(), done=false;
   function finish(ok) {
-    if (done) return; done = true;
-    if (ok) { setStatus(p, 'connected', 'Connected ✓'); showToast('Connection successful', 'ok'); }
-    else    { setStatus(p, 'error', 'Could not reach — check URL'); showToast('Connection failed', 'err'); }
+    if(done) return; done=true;
+    if(ok) { setStatus(p,'connected','Connected ✓'); showToast('Connection successful','ok'); }
+    else   { setStatus(p,'error','Reach nahi hua — URL check karo'); showToast('Connection failed','err'); }
   }
-  img.onload  = function(){ finish(true); };
-  img.onerror = function(){ finish(true); };
-  img.src = url + '?action=ping&t=' + Date.now();
+  img.onload=img.onerror=function(){ finish(true); };
+  img.src = url+'?action=ping&t='+Date.now();
   setTimeout(function(){ finish(false); }, 8000);
 }
-
-function setStatus(p, st, text) {
-  var dot = document.getElementById(p+'-status-dot');
-  var txt = document.getElementById(p+'-status-text');
-  if (!dot || !txt) return;
-  dot.className = 'status-dot';
-  if (st === 'connected') dot.classList.add('connected');
-  if (st === 'error')     dot.classList.add('error');
-  txt.textContent = text;
+function setStatus(p,st,text) {
+  var dot=document.getElementById(p+'-status-dot'), txt=document.getElementById(p+'-status-text');
+  if(!dot||!txt) return;
+  dot.className='status-dot';
+  if(st==='connected') dot.classList.add('connected');
+  if(st==='error')     dot.classList.add('error');
+  txt.textContent=text;
 }
-
 function saveBolnaCredentials() {
   state.call.bolnaKey = document.getElementById('call-bolna-key').value;
   state.call.agentId  = document.getElementById('call-agent-id').value;
-  showToast('Bolna credentials will be pushed on Push Live', 'ok');
+  showToast('Push Live karo save karne ke liye', 'warn');
 }
-
 function copyField(id) {
-  var el = document.getElementById(id);
-  if (!el || !el.value) { showToast('Nothing to copy', 'err'); return; }
+  var el=document.getElementById(id);
+  if(!el||!el.value){ showToast('Copy karne ke liye kuch nahi','err'); return; }
   navigator.clipboard.writeText(el.value)
-    .then(function(){ showToast('Copied to clipboard', 'ok'); })
-    .catch(function(){ showToast('Copy: ' + el.value.slice(0,40) + '...', 'warn'); });
+    .then(function(){ showToast('Copied to clipboard','ok'); })
+    .catch(function(){ showToast('Copy: '+el.value.slice(0,40)+'...','warn'); });
 }
 
-// ── SAVE ALL & PUSH LIVE ───────────────────────────────────────────────────────
-// This is the ONLY way config reaches Apps Script (no other DB needed)
+// ── SAVE ALL & PUSH LIVE ─────────────────────────────────────────────────────────
 function saveAll(p) {
   var d = state[p];
   d.prompt    = document.getElementById(p+'-prompt').value;
   d.scriptUrl = document.getElementById(p+'-script-url').value.trim();
+
+  // Collect business settings (WA only)
+  if (p === 'wa') {
+    d.business = {
+      phone:            document.getElementById('wa-business-phone').value.trim(),
+      experienceCenter: document.getElementById('wa-experience-center').value.trim(),
+      hours:            document.getElementById('wa-business-hours').value.trim(),
+      deliveryDays:     document.getElementById('wa-delivery-days').value.trim(),
+      warranty:         document.getElementById('wa-warranty').value.trim(),
+      expYears:         document.getElementById('wa-exp-years').value.trim()
+    };
+  }
 
   if (p === 'call') {
     d.bolnaKey      = document.getElementById('call-bolna-key').value;
@@ -813,26 +702,24 @@ function saveAll(p) {
     d.callHours     = document.getElementById('call-hours').value;
   }
 
-  // Persist scriptUrl locally so next open auto-loads
   if (d.scriptUrl) localStorage.setItem('dva_'+p+'_script_url', d.scriptUrl);
   markClean();
 
-  if (!d.scriptUrl) {
-    showToast('Set Apps Script URL first', 'err');
-    return;
-  }
+  if (!d.scriptUrl) { showToast('Apps Script URL daalo pehle', 'err'); return; }
 
   var banner = document.getElementById(p+'-push-banner');
-  banner.textContent = 'Pushing to Apps Script…';
+  banner.textContent = 'Apps Script mein push ho raha hai…';
   banner.className = 'push-banner show';
 
   var payload = {
-    source:      'agent_control_panel',
-    agent_type:  p === 'wa' ? 'whatsapp' : 'calling',
-    prompt:      d.prompt,
-    kb:          d.kb         || [],
-    guardrails:  d.guardrails || [],
-    langs:       d.langs      || [],
+    source:     'agent_control_panel',
+    agent_type: p === 'wa' ? 'whatsapp' : 'calling',
+    prompt:     d.prompt,
+    kb:         d.kb         || [],
+    guardrails: d.guardrails || [],
+    langs:      d.langs      || [],
+    docs:       d.docs       || [],
+    business:   d.business   || {},
     call_settings: p === 'call' ? {
       maxDuration:   d.maxDuration,
       silenceHangup: d.silenceHangup,
@@ -843,40 +730,37 @@ function saveAll(p) {
   };
 
   fetch(d.scriptUrl, {
-    method:  'POST',
-    mode:    'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify(payload)
+    method:'POST', mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
   }).then(function() {
-    banner.textContent = '✓ Pushed live at ' + new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
+    banner.textContent = '✓ Push ho gaya — ' + new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
     banner.className = 'push-banner show';
-    showToast('Pushed live — config saved in Apps Script', 'ok');
-    setTimeout(function(){ banner.className = 'push-banner'; }, 5000);
+    showToast('Diya update ho gayi!', 'ok');
+    setTimeout(function(){ banner.className='push-banner'; }, 5000);
   }).catch(function(err) {
-    banner.textContent = '✗ Push failed — ' + err.message;
+    banner.textContent = '✗ Push fail hua — '+err.message;
     banner.className = 'push-banner show error';
-    showToast('Push failed — check URL', 'err');
+    showToast('Push fail — URL check karo', 'err');
   });
 }
 
-// ── PROMPT ─────────────────────────────────────────────────────────────────────
+// ── PROMPT ───────────────────────────────────────────────────────────────────────
 function copyPrompt(p) {
   navigator.clipboard.writeText(document.getElementById(p+'-prompt').value)
-    .then(function(){ showToast('Prompt copied', 'ok'); });
+    .then(function(){ showToast('Prompt copied','ok'); });
 }
 function loadDefault(p) {
-  if (!confirm('Replace current prompt with default?')) return;
-  document.getElementById(p+'-prompt').value = p === 'wa' ? DEFAULT_WA_PROMPT : DEFAULT_CALL_PROMPT;
-  updateCount(p); markDirty();
-  showToast('Default prompt loaded', 'ok');
+  if(!confirm('Current prompt replace ho jayega — sure?')) return;
+  document.getElementById(p+'-prompt').value = p==='wa' ? DEFAULT_WA_PROMPT : DEFAULT_CALL_PROMPT;
+  updateCount(p); markDirty(); showToast('Default prompt load ho gaya','ok');
 }
 function clearPrompt(p) {
-  if (!confirm('Clear the prompt?')) return;
-  document.getElementById(p+'-prompt').value = '';
-  updateCount(p); markDirty();
+  if(!confirm('Prompt clear karna hai?')) return;
+  document.getElementById(p+'-prompt').value = ''; updateCount(p); markDirty();
 }
 
-// ── KNOWLEDGE BASE ─────────────────────────────────────────────────────────────
+// ── KB ───────────────────────────────────────────────────────────────────────────
 function renderKB(p, entries) {
   var list = document.getElementById(p+'-kb-list');
   if (!list) return;
@@ -885,115 +769,98 @@ function renderKB(p, entries) {
     var div = document.createElement('div');
     div.className = 'kb-entry';
     div.innerHTML = '<div style="flex:1">'
-      + '<input class="kb-q" placeholder="Question / keyword" value="' + esc(entry.q||'') + '" oninput="updateKB(\'' + p + '\',' + i + ',\'q\',this.value)">'
-      + '<textarea class="kb-a" placeholder="Diya\'s exact answer" oninput="updateKB(\'' + p + '\',' + i + ',\'a\',this.value)">' + esc(entry.a||'') + '</textarea>'
+      + '<input class="kb-q" placeholder="Question / keyword" value="'+esc(entry.q||'')+'" oninput="updateKB(\''+p+'\','+i+',\'q\',this.value)">'
+      + '<textarea class="kb-a" placeholder="Diya ka exact answer" oninput="updateKB(\''+p+'\','+i+',\'a\',this.value)">'+esc(entry.a||'')+'</textarea>'
       + '</div>'
-      + '<button class="kb-remove" onclick="removeKB(\'' + p + '\',' + i + ')">✕</button>';
+      + '<button class="entry-remove" onclick="removeKB(\''+p+'\','+i+')">✕</button>';
     list.appendChild(div);
   });
   state[p].kb = entries;
 }
 function addKBEntry(p) {
-  if (!state[p].kb) state[p].kb = [];
-  state[p].kb.push({q:'',a:''}); renderKB(p, state[p].kb); markDirty();
+  if(!state[p].kb) state[p].kb=[];
+  state[p].kb.push({q:'',a:''}); renderKB(p,state[p].kb); markDirty();
 }
-function updateKB(p, i, field, val) {
-  if (!state[p].kb) state[p].kb = [];
-  if (!state[p].kb[i]) state[p].kb[i] = {};
-  state[p].kb[i][field] = val; markDirty();
+function updateKB(p,i,field,val) {
+  if(!state[p].kb) state[p].kb=[];
+  if(!state[p].kb[i]) state[p].kb[i]={};
+  state[p].kb[i][field]=val; markDirty();
 }
-function removeKB(p, i) {
-  state[p].kb.splice(i,1); renderKB(p, state[p].kb); markDirty();
-}
+function removeKB(p,i) { state[p].kb.splice(i,1); renderKB(p,state[p].kb); markDirty(); }
 
-// ── UPLOAD ─────────────────────────────────────────────────────────────────────
-function handleUpload(p, files) {
-  if (!state[p].files) state[p].files = [];
-  Array.from(files).forEach(function(file) {
-    if (file.size > 10*1024*1024) { showToast(file.name + ' too large (max 10MB)', 'err'); return; }
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      state[p].files.push({ name: file.name, size: fmtSize(file.size), content: e.target.result.slice(0,5000) });
-      renderFiles(p, state[p].files); markDirty();
-      showToast(file.name + ' uploaded', 'ok');
-    };
-    reader.readAsText(file);
-  });
-}
-function renderFiles(p, files) {
-  var el = document.getElementById(p+'-files');
-  if (!el) return;
-  el.innerHTML = '';
-  files.forEach(function(f,i) {
+// ── DOCS (catalogue links) ───────────────────────────────────────────────────────
+function renderDocs(docs) {
+  var list = document.getElementById('wa-docs-list');
+  if (!list) return;
+  list.innerHTML = '';
+  docs.forEach(function(doc, i) {
     var div = document.createElement('div');
-    div.className = 'file-chip';
-    div.innerHTML = '<span class="file-name">' + esc(f.name) + '</span>'
-      + '<span class="file-size">' + f.size + '</span>'
-      + '<button class="file-remove" onclick="removeFile(\'' + p + '\',' + i + ')">✕</button>';
-    el.appendChild(div);
+    div.className = 'doc-entry';
+    div.innerHTML = '<div class="doc-fields">'
+      + '<input class="doc-name" placeholder="Document naam (e.g. GRC Catalogue)" value="'+esc(doc.name||'')+'" oninput="updateDoc('+i+',\'name\',this.value)">'
+      + '<input class="doc-url" placeholder="Google Drive / direct link (https://...)" value="'+esc(doc.url||'')+'" oninput="updateDoc('+i+',\'url\',this.value)">'
+      + '</div>'
+      + '<button class="entry-remove" onclick="removeDoc('+i+')" style="margin-top:2px">✕</button>';
+    list.appendChild(div);
   });
+  state.wa.docs = docs;
 }
-function removeFile(p,i) { state[p].files.splice(i,1); renderFiles(p,state[p].files); markDirty(); }
-function fmtSize(b) {
-  if (b<1024) return b+'B';
-  if (b<1048576) return (b/1024).toFixed(1)+'KB';
-  return (b/1048576).toFixed(1)+'MB';
+function addDocEntry() {
+  if(!state.wa.docs) state.wa.docs=[];
+  state.wa.docs.push({name:'',url:''}); renderDocs(state.wa.docs); markDirty();
 }
+function updateDoc(i,field,val) {
+  if(!state.wa.docs) state.wa.docs=[];
+  if(!state.wa.docs[i]) state.wa.docs[i]={};
+  state.wa.docs[i][field]=val; markDirty();
+}
+function removeDoc(i) { state.wa.docs.splice(i,1); renderDocs(state.wa.docs); markDirty(); }
 
-// ── GUARDRAILS ─────────────────────────────────────────────────────────────────
+// ── GUARDRAILS ───────────────────────────────────────────────────────────────────
 function renderGuardrails(p, guardrails) {
   var el = document.getElementById(p+'-guardrails');
   if (!el) return;
   el.innerHTML = '';
   guardrails.forEach(function(g,i) {
-    var uid = p+'_g_'+i;
-    var div = document.createElement('div');
-    div.className = 'guardrail-item';
-    div.innerHTML = '<div class="guardrail-toggle">'
-      + '<input type="checkbox" class="toggle-input" id="'+uid+'" '+(g.on?'checked':'')+' onchange="toggleGuardrail(\''+p+'\','+i+',this.checked)">'
-      + '<label class="toggle-label" for="'+uid+'"></label>'
-      + '</div>'
-      + '<div class="guardrail-text">'
-      + '<div class="guardrail-title">'+esc(g.title)+'</div>'
-      + '<div class="guardrail-desc">'+esc(g.desc)+'</div>'
-      + '</div>';
+    var uid=p+'_g_'+i;
+    var div=document.createElement('div'); div.className='guardrail-item';
+    div.innerHTML='<div class="guardrail-toggle">'
+      +'<input type="checkbox" class="toggle-input" id="'+uid+'" '+(g.on?'checked':'')+' onchange="toggleGuardrail(\''+p+'\','+i+',this.checked)">'
+      +'<label class="toggle-label" for="'+uid+'"></label></div>'
+      +'<div class="guardrail-text"><div class="guardrail-title">'+esc(g.title)+'</div>'
+      +'<div class="guardrail-desc">'+esc(g.desc)+'</div></div>';
     el.appendChild(div);
   });
   state[p].guardrails = guardrails;
 }
-function toggleGuardrail(p,i,checked) { state[p].guardrails[i].on = checked; markDirty(); }
+function toggleGuardrail(p,i,checked){ state[p].guardrails[i].on=checked; markDirty(); }
 
-// ── LANGUAGES ──────────────────────────────────────────────────────────────────
+// ── LANGUAGES ────────────────────────────────────────────────────────────────────
 function renderLangs(p, active) {
-  var el = document.getElementById(p+'-langs');
-  if (!el) return;
-  el.innerHTML = '';
+  var el=document.getElementById(p+'-langs');
+  if(!el) return; el.innerHTML='';
   ALL_LANGS.forEach(function(lang) {
-    var btn = document.createElement('button');
-    btn.className = 'lang-pill' + (active.includes(lang) ? ' active' : '');
-    btn.textContent = lang;
-    btn.onclick = function() {
-      var idx = active.indexOf(lang);
-      if (idx===-1) active.push(lang); else active.splice(idx,1);
-      state[p].langs = active; renderLangs(p, active); markDirty();
+    var btn=document.createElement('button');
+    btn.className='lang-pill'+(active.includes(lang)?' active':'');
+    btn.textContent=lang;
+    btn.onclick=function(){
+      var idx=active.indexOf(lang);
+      if(idx===-1) active.push(lang); else active.splice(idx,1);
+      state[p].langs=active; renderLangs(p,active); markDirty();
     };
     el.appendChild(btn);
   });
-  state[p].langs = active;
+  state[p].langs=active;
 }
 
-// ── HELPERS ────────────────────────────────────────────────────────────────────
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function showToast(msg, type) {
-  var t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast show '+(type||'');
-  clearTimeout(window._tt);
-  window._tt = setTimeout(function(){ t.className='toast'; }, 3000);
+// ── HELPERS ──────────────────────────────────────────────────────────────────────
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function showToast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show '+(type||'');
+  clearTimeout(window._tt); window._tt=setTimeout(function(){ t.className='toast'; },3000);
 }
 
-// ── START ──────────────────────────────────────────────────────────────────────
 init();
 </script>
 </body>
