@@ -401,6 +401,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       </div>
       <button class="btn-save-conn" style="margin-top:10px" onclick="saveBolnaCredentials()">Save Credentials</button>
     </div>
+
+    <div class="conn-card">
+      <div class="card-title"><span class="card-title-icon">📞</span>Test Bolna Call</div>
+      <div class="conn-row">
+        <div class="conn-field">
+          <div class="conn-label">Phone Number (91XXXXXXXXXX format)</div>
+          <input class="conn-input" id="test-bolna-phone" placeholder="917000464412" />
+        </div>
+        <button class="btn-test" onclick="triggerTestBolnaCall()" id="bolna-test-btn">Call Now</button>
+      </div>
+      <div id="bolna-test-status" style="margin-top:8px;font-size:11px;color:var(--t2)"></div>
+    </div>
   </div>
 
   <div class="section">
@@ -703,6 +715,46 @@ function saveBolnaCredentials() {
   state.call.bolnaKey = document.getElementById('call-bolna-key').value;
   state.call.agentId  = document.getElementById('call-agent-id').value;
   showToast('Push Live karo save karne ke liye', 'warn');
+}
+
+function triggerTestBolnaCall() {
+  var phone  = document.getElementById('test-bolna-phone').value.trim().replace(/\D/g,'');
+  var status = document.getElementById('bolna-test-status');
+  var btn    = document.getElementById('bolna-test-btn');
+
+  if (!phone || phone.length < 10) {
+    showToast('Valid phone number daalo (91XXXXXXXXXX)', 'err'); return;
+  }
+  if (phone.length === 10) phone = '91' + phone;
+
+  var scriptUrl = (state.wa && state.wa.scriptUrl) || document.getElementById('wa-script-url').value.trim();
+  if (!scriptUrl) { showToast('Apps Script URL save karo pehle', 'err'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Calling...';
+  status.textContent = '⏳ Call trigger ho rahi hai...';
+  status.style.color = 'var(--t2)';
+
+  fetch(scriptUrl + '?action=testBolnaCall&phone=' + encodeURIComponent(phone))
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.status === 'queued' || d.result === true) {
+        status.textContent = '✅ Call queued! Phone check karo (10 AM–7 PM mein aayegi)';
+        status.style.color = 'var(--green)';
+        showToast('Bolna call triggered!', 'ok');
+      } else {
+        status.textContent = '⚠️ ' + (d.message || JSON.stringify(d));
+        status.style.color = 'var(--orange)';
+      }
+    })
+    .catch(function(e){
+      status.textContent = '❌ Error: ' + e.message;
+      status.style.color = '#e74c3c';
+    })
+    .finally(function(){
+      btn.disabled = false;
+      btn.textContent = 'Call Now';
+    });
 }
 function copyField(id) {
   var el=document.getElementById(id);
