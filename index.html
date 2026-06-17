@@ -13,7 +13,8 @@
   --border: #2c2c2c;
   --orange: #f97316; --orange-d: rgba(249,115,22,.1); --orange-b: rgba(249,115,22,.25);
   --green: #22c55e;  --green-d: rgba(34,197,94,.1);   --green-b: rgba(34,197,94,.25);
-  --red: #ef4444;    --red-d: rgba(239,68,68,.1);
+  --red: #ef4444;    --red-d: rgba(239,68,68,.1);      --red-b: rgba(239,68,68,.25);
+  --blue: #3b82f6;   --blue-d: rgba(59,130,246,.1);
   --text: #f0f0f0; --t2: #888; --t3: #444;
   --sans: 'Sora', sans-serif; --mono: 'JetBrains Mono', monospace;
   --r: 10px; --safe: env(safe-area-inset-bottom, 0px);
@@ -22,8 +23,9 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased}
 
+/* ── NAV ── */
 .nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 16px}
-.nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
 .nav-brand{display:flex;align-items:center;gap:10px}
 .nav-logo{width:32px;height:32px;background:var(--orange);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 0 16px rgba(249,115,22,.2)}
 .nav-title{font-size:15px;font-weight:600;letter-spacing:-.3px}
@@ -35,15 +37,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .tab-dot-wa{background:var(--green)}
 .tab-dot-call{background:var(--orange)}
 
+/* ── LOADING ── */
 .loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:14px;transition:opacity .35s}
 .loading-overlay.hidden{opacity:0;pointer-events:none}
 .loading-spinner{width:30px;height:30px;border:2px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{font-size:12px;color:var(--t2)}
 
-.page{display:none;max-width:900px;margin:0 auto;padding:20px 16px 100px}
+/* ── LAYOUT ── */
+.page{display:none;max-width:960px;margin:0 auto;padding:20px 16px 120px}
 .page.active{display:block}
-
 .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
 .page-eyebrow{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
 .page-title{font-size:22px;font-weight:700;letter-spacing:-.4px;line-height:1.1}
@@ -52,14 +55,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .save-all-btn:hover{opacity:.88}
 .save-all-btn:active{transform:scale(.97)}
 
+/* ── SECTION ── */
 .section{margin-bottom:16px}
 .section-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.7px;color:var(--t2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
+/* ── CARD ── */
 .card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
 .card-title{font-size:12px;font-weight:500;color:var(--t2);margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .card-title-icon{font-size:14px}
+.card-subtitle{font-size:11px;color:var(--t3);margin-top:-8px;margin-bottom:12px;line-height:1.5}
 
+/* ── CONN CARD ── */
 .conn-card{border-radius:var(--r);padding:16px;margin-bottom:12px;border:1px solid var(--border);background:var(--s1)}
 .conn-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
 .conn-field{flex:1;min-width:180px;display:flex;flex-direction:column;gap:4px}
@@ -73,21 +80,42 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .status-dot.connected{background:var(--green)}
 .status-dot.error{background:var(--red)}
 
+/* ── BUTTONS ── */
 .btn-test{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:9px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--t2);transition:all .15s;white-space:nowrap;flex-shrink:0}
 .btn-test:hover{border-color:var(--green);color:var(--green)}
 .btn-load{background:var(--s2);border:1px solid var(--orange-b);border-radius:7px;padding:9px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--orange);transition:all .15s;white-space:nowrap;flex-shrink:0}
 .btn-load:hover{background:var(--orange-d)}
 .btn-save-conn{background:var(--s2);border:1px solid var(--orange-b);border-radius:7px;padding:9px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);color:var(--orange);transition:all .15s;white-space:nowrap;flex-shrink:0}
 .btn-save-conn:hover{background:var(--orange-d)}
+.btn-sm{background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:var(--sans);color:var(--t2);transition:all .15s}
+.btn-sm:hover{border-color:var(--orange);color:var(--orange)}
+.btn-sm.danger:hover{border-color:var(--red);color:var(--red)}
+.btn-add{width:100%;background:transparent;border:1px dashed var(--border);border-radius:8px;padding:10px;color:var(--t2);font-size:12px;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-add:hover{border-color:var(--orange);color:var(--orange)}
+.btn-icon{background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:4px;flex-shrink:0;transition:color .15s;line-height:1}
+.btn-icon:hover{color:var(--red)}
 
+/* ── PROMPT ── */
 .prompt-textarea{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:12px;font-family:var(--mono);outline:none;resize:vertical;min-height:220px;line-height:1.7;transition:border-color .15s}
 .prompt-textarea:focus{border-color:var(--orange)}
 .prompt-meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;flex-wrap:wrap;gap:6px}
 .prompt-count{font-size:10px;color:var(--t3);font-family:var(--mono)}
 .prompt-actions{display:flex;gap:6px}
-.btn-sm{background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:var(--sans);color:var(--t2);transition:all .15s}
-.btn-sm:hover{border-color:var(--orange);color:var(--orange)}
-.btn-sm.danger:hover{border-color:var(--red);color:var(--red)}
+
+/* ── SETTINGS GRID ── */
+.settings-grid{display:flex;flex-direction:column;gap:10px}
+.settings-row{display:flex;flex-direction:column;gap:4px}
+.settings-label{font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
+.settings-input{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-size:12px;font-family:var(--sans);outline:none;width:100%;transition:border-color .15s}
+.settings-input:focus{border-color:var(--orange)}
+.settings-input::placeholder{color:var(--t3)}
+.settings-hint{font-size:10px;color:var(--t3);margin-top:3px;line-height:1.5}
+
+/* ── PASSWORD FIELD ── */
+.pw-wrap{position:relative;display:flex;align-items:center}
+.pw-wrap .conn-input,.pw-wrap .settings-input{padding-right:40px}
+.pw-toggle{position:absolute;right:10px;background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:13px;padding:4px;line-height:1;transition:color .15s}
+.pw-toggle:hover{color:var(--t2)}
 
 /* ── KB ENTRIES ── */
 .kb-entry{display:flex;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;transition:border-color .15s}
@@ -108,17 +136,24 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .doc-url{width:100%;background:transparent;border:none;border-top:1px solid var(--border);color:var(--t2);font-size:11px;font-family:var(--mono);outline:none;padding:6px 0 0;margin-top:2px}
 .doc-url::placeholder{color:var(--t3)}
 
-/* ── BUSINESS SETTINGS ── */
-.settings-grid{display:flex;flex-direction:column;gap:10px}
-.settings-row{display:flex;flex-direction:column;gap:4px}
-.settings-label{font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
-.settings-input{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-size:12px;font-family:var(--sans);outline:none;width:100%;transition:border-color .15s}
-.settings-input:focus{border-color:var(--orange)}
-.settings-input::placeholder{color:var(--t3)}
-.settings-hint{font-size:10px;color:var(--t3);margin-top:3px;line-height:1.5}
+/* ── TABLE EDITOR (product folders, keywords) ── */
+.tbl-editor{width:100%;border-collapse:collapse;font-size:12px}
+.tbl-editor th{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--t2);padding:0 0 8px;text-align:left;font-weight:500}
+.tbl-editor td{padding:4px 4px 4px 0;vertical-align:middle}
+.tbl-editor td:last-child{width:32px;text-align:right}
+.tbl-input{background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-size:12px;font-family:var(--mono);outline:none;width:100%;transition:border-color .15s}
+.tbl-input:focus{border-color:var(--orange)}
+.tbl-input::placeholder{color:var(--t3)}
+.tbl-row-sep{height:6px}
 
-.btn-add{width:100%;background:transparent;border:1px dashed var(--border);border-radius:8px;padding:10px;color:var(--t2);font-size:12px;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-add:hover{border-color:var(--orange);color:var(--orange)}
+/* ── TAGS (stop words) ── */
+.tags-wrap{display:flex;flex-wrap:wrap;gap:6px;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px;min-height:44px;cursor:text}
+.tags-wrap:focus-within{border-color:var(--orange)}
+.tag{display:inline-flex;align-items:center;gap:4px;background:var(--s3);border:1px solid var(--border);border-radius:20px;padding:3px 10px 3px 10px;font-size:11px;color:var(--t2)}
+.tag-rm{background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:12px;padding:0;line-height:1;margin-left:2px}
+.tag-rm:hover{color:var(--red)}
+.tag-input{background:transparent;border:none;outline:none;color:var(--text);font-size:12px;font-family:var(--sans);flex:1;min-width:100px}
+.tag-input::placeholder{color:var(--t3)}
 
 /* ── GUARDRAILS ── */
 .guardrail-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--s2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px}
@@ -137,10 +172,22 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .lang-pill{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--s2);color:var(--t2);transition:all .15s;font-family:var(--sans)}
 .lang-pill.active{background:var(--orange);color:white;border-color:var(--orange)}
 
+/* ── TWO/THREE COL GRIDS ── */
+.two-col{display:flex;flex-direction:column;gap:10px}
+.three-col{display:flex;flex-direction:column;gap:10px}
+
+/* ── FOLLOWUP TIMING ── */
+.fu-grid{display:flex;flex-direction:column;gap:10px}
+.fu-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
+.fu-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:600;background:var(--orange-d);border:1px solid var(--orange-b);color:var(--orange);flex-shrink:0;margin-bottom:10px}
+.fu-msg-textarea{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:12px;font-family:var(--sans);outline:none;resize:vertical;min-height:70px;line-height:1.6;transition:border-color .15s}
+.fu-msg-textarea:focus{border-color:var(--orange)}
+.fu-msg-textarea::placeholder{color:var(--t3)}
+
 /* ── PUSH BANNER ── */
 .push-banner{display:none;background:var(--green-d);border:1px solid var(--green-b);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--green);margin-bottom:12px;align-items:center;gap:8px}
 .push-banner.show{display:flex}
-.push-banner.error{background:var(--red-d);border-color:rgba(239,68,68,.25);color:var(--red)}
+.push-banner.error{background:var(--red-d);border-color:var(--red-b);color:var(--red)}
 
 /* ── FAB ── */
 .fab-save{position:fixed;bottom:calc(20px + var(--safe));right:16px;background:var(--orange);color:white;border:none;border-radius:50px;padding:12px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);z-index:200;box-shadow:0 4px 20px rgba(249,115,22,.35),0 2px 8px rgba(0,0,0,.4);display:flex;align-items:center;gap:8px;transition:all .15s}
@@ -153,18 +200,22 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .toast{position:fixed;bottom:calc(76px + var(--safe));left:12px;right:12px;background:var(--s2);border:1px solid var(--border);color:var(--text);padding:11px 16px;border-radius:9px;font-size:13px;text-align:center;transform:translateY(10px);opacity:0;transition:all .25s;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.5)}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.ok{border-color:var(--green-b);color:var(--green)}
-.toast.err{border-color:rgba(239,68,68,.3);color:var(--red)}
+.toast.err{border-color:var(--red-b);color:var(--red)}
 .toast.warn{border-color:var(--orange-b);color:var(--orange)}
 
+/* ── RESPONSIVE ── */
 @media(min-width:640px){
-  .page{padding:24px 24px 80px}
+  .page{padding:24px 24px 100px}
   .nav-inner{height:60px}
   .page-title{font-size:26px}
   .nav-tab{padding:7px 16px;font-size:13px}
   .prompt-textarea{min-height:280px}
   .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .fu-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 }
-@media(min-width:900px){.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
+@media(min-width:900px){.four-col{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}}
 </style>
 </head>
 <body>
@@ -203,14 +254,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     <div>
       <div class="page-eyebrow" style="color:var(--green)">WhatsApp · Interakt</div>
       <div class="page-title">AI Business Agent</div>
-      <div class="page-sub">Yahan se Diya ka poora control — kuch bhi badlo, Push Live karo</div>
+      <div class="page-sub">Yahan se Diya ka poora control — sab kuch UI se manage karo, Push Live karo</div>
     </div>
     <button class="save-all-btn" onclick="saveAll('wa')">Push Live →</button>
   </div>
 
   <div class="push-banner" id="wa-push-banner"></div>
 
-  <!-- CONNECTION -->
+  <!-- ── CONNECTION ── -->
   <div class="section">
     <div class="section-label">Connection</div>
     <div class="conn-card">
@@ -229,7 +280,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <span id="wa-status-text" style="font-size:10px;color:var(--t2)">Not connected</span>
       </div>
       <div style="font-size:10px;color:var(--t3);margin-top:8px;line-height:1.7">
-        <b style="color:var(--t2)">Pehli baar:</b> URL daalo → Save → ↓ Load (config aayega) &nbsp;·&nbsp;
+        <b style="color:var(--t2)">Pehli baar:</b> URL daalo → Save → ↓ Load &nbsp;·&nbsp;
         <b style="color:var(--t2)">Changes ke baad:</b> Push Live karo
       </div>
     </div>
@@ -245,7 +296,62 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     </div>
   </div>
 
-  <!-- BUSINESS SETTINGS -->
+  <!-- ── API KEYS ── -->
+  <div class="section">
+    <div class="section-label">API Keys</div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🔑</span>Secret API Keys — yahan save hote hain Apps Script mein</div>
+      <div class="card-subtitle">Yeh UI mein dikhte hain — sirf aap dekh sakte ho. Push Live karo to update ho.</div>
+      <div class="settings-grid">
+        <div class="settings-row">
+          <div class="settings-label">Anthropic API Key (Claude)</div>
+          <div class="pw-wrap">
+            <input class="settings-input" id="cfg-anthropic-key" type="password" placeholder="sk-ant-api03-..." oninput="markDirty()" />
+            <button class="pw-toggle" onclick="togglePw('cfg-anthropic-key',this)">👁</button>
+          </div>
+          <div class="settings-hint">console.anthropic.com → API Keys</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Interakt API Key</div>
+          <div class="pw-wrap">
+            <input class="settings-input" id="cfg-interakt-key" type="password" placeholder="Y0RGUj..." oninput="markDirty()" />
+            <button class="pw-toggle" onclick="togglePw('cfg-interakt-key',this)">👁</button>
+          </div>
+          <div class="settings-hint">app.interakt.ai → Settings → Developer → API Keys</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">ImgBB API Key</div>
+          <div class="pw-wrap">
+            <input class="settings-input" id="cfg-imgbb-key" type="password" placeholder="aec0e0..." oninput="markDirty()" />
+            <button class="pw-toggle" onclick="togglePw('cfg-imgbb-key',this)">👁</button>
+          </div>
+          <div class="settings-hint">api.imgbb.com → free key (product images ke liye)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SHEET & DRIVE ── -->
+  <div class="section">
+    <div class="section-label">Sheet &amp; Drive IDs</div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🗂️</span>Google Sheet aur Drive Folder</div>
+      <div class="settings-grid">
+        <div class="settings-row">
+          <div class="settings-label">Google Sheet ID</div>
+          <input class="settings-input" id="cfg-sheet-id" placeholder="1q-sSRcKh85PO0YRe4hY1..." oninput="markDirty()" />
+          <div class="settings-hint">Sheet URL mein /d/ ke baad ki ID</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Drive Parent Folder ID</div>
+          <input class="settings-input" id="cfg-drive-folder" placeholder="1a46QydMAEcrrxLu..." oninput="markDirty()" />
+          <div class="settings-hint">drive.google.com/drive/folders/ ke baad ki ID</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BUSINESS SETTINGS ── -->
   <div class="section">
     <div class="section-label">Business Settings</div>
     <div class="card">
@@ -284,12 +390,146 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     </div>
   </div>
 
-  <!-- SYSTEM PROMPT -->
+  <!-- ── ESCALATION ── -->
+  <div class="section">
+    <div class="section-label">Escalation Alerts</div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🚨</span>Team Alert — hot lead ya urgent case mein yahan notify hoga</div>
+      <div class="settings-grid">
+        <div class="settings-row">
+          <div class="settings-label">Team WhatsApp Number</div>
+          <input class="settings-input" id="cfg-esc-phone" placeholder="917000464412" oninput="markDirty()" />
+          <div class="settings-hint">91XXXXXXXXXX format — escalation alert yahan aayega</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Team Email</div>
+          <input class="settings-input" id="cfg-esc-email" placeholder="team@devyora.com" type="email" oninput="markDirty()" />
+          <div class="settings-hint">Escalation email yahan aayegi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOLLOW-UP CONFIG ── -->
+  <div class="section">
+    <div class="section-label">Follow-up Config</div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">⏰</span>Auto Follow-up Timing</div>
+      <div class="card-subtitle">Pehle reply ke kitne ghante baad follow-up bhejne hain</div>
+      <div class="fu-grid">
+        <div class="settings-row">
+          <div class="settings-label">Follow-up #1 (hours)</div>
+          <input class="settings-input" id="cfg-fu1-hrs" type="number" placeholder="1" oninput="markDirty()" />
+          <div class="settings-hint">Pehla follow-up (default: 1 ghanta)</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Follow-up #2 (hours)</div>
+          <input class="settings-input" id="cfg-fu2-hrs" type="number" placeholder="48" oninput="markDirty()" />
+          <div class="settings-hint">Doosra follow-up (default: 48 ghante)</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Follow-up #3 (hours)</div>
+          <input class="settings-input" id="cfg-fu3-hrs" type="number" placeholder="96" oninput="markDirty()" />
+          <div class="settings-hint">Teesra follow-up (default: 96 ghante)</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🕐</span>Follow-up Business Hours (IST)</div>
+      <div class="two-col">
+        <div class="settings-row">
+          <div class="settings-label">Start Hour (24h)</div>
+          <input class="settings-input" id="cfg-fu-start" type="number" min="0" max="23" placeholder="9" oninput="markDirty()" />
+          <div class="settings-hint">Is se pehle follow-up nahi jayega (9 = 9 AM)</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">End Hour (24h)</div>
+          <input class="settings-input" id="cfg-fu-end" type="number" min="0" max="23" placeholder="19" oninput="markDirty()" />
+          <div class="settings-hint">Is ke baad follow-up nahi jayega (19 = 7 PM)</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">💬</span>Follow-up Fallback Messages</div>
+      <div class="card-subtitle">Claude personalized message banata hai — ye sirf fallback hain agar Claude fail ho</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="settings-row">
+          <div class="settings-label" style="display:flex;align-items:center;gap:6px"><span style="background:var(--orange-d);border:1px solid var(--orange-b);color:var(--orange);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">1</span>Follow-up #1 Fallback Message</div>
+          <textarea class="fu-msg-textarea" id="cfg-fu-msg1" oninput="markDirty()" placeholder="Hi! 😊 Aapne GRC products ke baare mein inquiry ki thi..."></textarea>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label" style="display:flex;align-items:center;gap:6px"><span style="background:var(--orange-d);border:1px solid var(--orange-b);color:var(--orange);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">2</span>Follow-up #2 Fallback Message</div>
+          <textarea class="fu-msg-textarea" id="cfg-fu-msg2" oninput="markDirty()" placeholder="Namaste! 🙏 Devyora ki taraf se phir se..."></textarea>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label" style="display:flex;align-items:center;gap:6px"><span style="background:var(--orange-d);border:1px solid var(--orange-b);color:var(--orange);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">3</span>Follow-up #3 Fallback Message</div>
+          <textarea class="fu-msg-textarea" id="cfg-fu-msg3" oninput="markDirty()" placeholder="Hello! Lagta hai aap busy hain..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PRODUCT FOLDERS ── -->
+  <div class="section">
+    <div class="section-label">Product Folders</div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">📁</span>Drive Folder IDs — folder naam → Google Drive folder ID</div>
+      <div class="card-subtitle">Diya customer ko product images bhejti hai — yahan Drive folder IDs daalo</div>
+      <table class="tbl-editor" id="folder-ids-table">
+        <thead><tr>
+          <th style="width:40%">Folder Name</th>
+          <th style="width:52%">Drive Folder ID</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="folder-ids-body"></tbody>
+      </table>
+      <button class="btn-add" style="margin-top:10px" onclick="addFolderRow()">+ Folder Add Karo</button>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🔤</span>Keyword Mapping — customer ka keyword → folder naam</div>
+      <div class="card-subtitle">Customer "column" likhta hai → Diya "Column I Pillar" folder ki images bhejti hai</div>
+      <table class="tbl-editor" id="keyword-map-table">
+        <thead><tr>
+          <th style="width:40%">Keyword (lowercase)</th>
+          <th style="width:52%">Maps to Folder Name (ya blank)</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="keyword-map-body"></tbody>
+      </table>
+      <button class="btn-add" style="margin-top:10px" onclick="addKeywordRow()">+ Keyword Add Karo</button>
+      <div style="font-size:10px;color:var(--t3);margin-top:10px;line-height:1.6">
+        💡 Special values: <b style="color:var(--orange)">__CATALOGUE_LINK__</b> (catalogue send hoga) · blank (koi image nahi) · exact folder name upar wale table se
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🖼️</span>Image Settings</div>
+      <div class="settings-row" style="max-width:220px">
+        <div class="settings-label">Max Images Per Keyword</div>
+        <input class="settings-input" id="cfg-max-images" type="number" min="1" max="10" placeholder="3" oninput="markDirty()" />
+        <div class="settings-hint">Customer ko ek keyword pe kitni images bheji jayein (default: 3)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BOT BEHAVIOR ── -->
+  <div class="section">
+    <div class="section-label">Bot Behavior</div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🚫</span>Stop / Not-Interested Keywords</div>
+      <div class="card-subtitle">Agar customer yeh likhta hai to follow-up band ho jaata hai</div>
+      <div class="tags-wrap" id="stop-words-wrap" onclick="document.getElementById('stop-word-input').focus()">
+        <input class="tag-input" id="stop-word-input" placeholder="Keyword type karo, Enter dabao" onkeydown="handleTagInput(event)" />
+      </div>
+      <div style="font-size:10px;color:var(--t3);margin-top:6px">Enter ya comma se add karo · ✕ se remove karo</div>
+    </div>
+  </div>
+
+  <!-- ── SYSTEM PROMPT ── -->
   <div class="section">
     <div class="section-label">System Prompt</div>
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">🧠</span>Diya ki Personality & Instructions</div>
-      <textarea class="prompt-textarea" id="wa-prompt" oninput="markDirty()" placeholder="Diya ka full system prompt yahan..."></textarea>
+      <div class="card-title"><span class="card-title-icon">🧠</span>Diya ki Personality &amp; Instructions — base prompt ke upar add hota hai</div>
+      <textarea class="prompt-textarea" id="wa-prompt" oninput="markDirty()" placeholder="Yahan aap Diya ko extra instructions de sakte ho. Base safety guardrails hamesha active rehte hain.&#10;&#10;Example:&#10;- Always mention our new GRC Jali collection&#10;- Promote the summer discount offer&#10;- Focus on premium positioning"></textarea>
       <div class="prompt-meta">
         <span class="prompt-count" id="wa-prompt-count">0 chars</span>
         <div class="prompt-actions">
@@ -301,30 +541,30 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     </div>
   </div>
 
-  <!-- KNOWLEDGE BASE -->
+  <!-- ── KNOWLEDGE BASE ── -->
   <div class="section">
     <div class="section-label">Knowledge Base</div>
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">📚</span>Q&A Pairs — Diya exactly yahi answer degi</div>
+      <div class="card-title"><span class="card-title-icon">📚</span>Q&amp;A Pairs — Diya exactly yahi answer degi</div>
       <div id="wa-kb-list"></div>
-      <button class="btn-add" onclick="addKBEntry('wa')">+ Q&A Pair Add Karo</button>
+      <button class="btn-add" onclick="addKBEntry('wa')">+ Q&amp;A Pair Add Karo</button>
     </div>
   </div>
 
-  <!-- CATALOGUES & DOCUMENTS -->
+  <!-- ── CATALOGUES & DOCUMENTS ── -->
   <div class="section">
     <div class="section-label">Catalogues &amp; Documents</div>
     <div class="card">
       <div class="card-title"><span class="card-title-icon">📄</span>Document Links — Customer maange to Diya yeh links bhejegi</div>
       <div id="wa-docs-list"></div>
-      <button class="btn-add" onclick="addDocEntry('wa')">+ Document Link Add Karo</button>
+      <button class="btn-add" onclick="addDocEntry()">+ Document Link Add Karo</button>
       <div style="font-size:10px;color:var(--t3);margin-top:10px;line-height:1.6">
         💡 PDF Google Drive mein upload karo → Share → Anyone with link → woh link yahan paste karo
       </div>
     </div>
   </div>
 
-  <!-- GUARDRAILS -->
+  <!-- ── GUARDRAILS ── -->
   <div class="section">
     <div class="section-label">Guardrails</div>
     <div class="card">
@@ -333,7 +573,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     </div>
   </div>
 
-  <!-- LANGUAGES -->
+  <!-- ── LANGUAGES ── -->
   <div class="section">
     <div class="section-label">Languages</div>
     <div class="card">
@@ -392,7 +632,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div class="two-col">
         <div class="conn-field">
           <div class="conn-label">Bolna API Key</div>
-          <input class="conn-input" id="call-bolna-key" placeholder="bn-xxxxxxxxxxxxxxxx" type="password" oninput="markDirty()" />
+          <div class="pw-wrap">
+            <input class="conn-input" id="call-bolna-key" placeholder="bn-xxxxxxxxxxxxxxxx" type="password" oninput="markDirty()" />
+            <button class="pw-toggle" onclick="togglePw('call-bolna-key',this)">👁</button>
+          </div>
         </div>
         <div class="conn-field">
           <div class="conn-label">Diya Agent ID</div>
@@ -401,7 +644,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       </div>
       <button class="btn-save-conn" style="margin-top:10px" onclick="saveBolnaCredentials()">Save Credentials</button>
     </div>
-
     <div class="conn-card">
       <div class="card-title"><span class="card-title-icon">📞</span>Test Bolna Call</div>
       <div class="conn-row">
@@ -434,9 +676,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   <div class="section">
     <div class="section-label">Knowledge Base</div>
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">📚</span>Q&A — Diya calls mein yahi bolegi</div>
+      <div class="card-title"><span class="card-title-icon">📚</span>Q&amp;A — Diya calls mein yahi bolegi</div>
       <div id="call-kb-list"></div>
-      <button class="btn-add" onclick="addKBEntry('call')">+ Q&A Pair Add Karo</button>
+      <button class="btn-add" onclick="addKBEntry('call')">+ Q&amp;A Pair Add Karo</button>
     </div>
   </div>
 
@@ -500,10 +742,7 @@ var _fbConfig = {
 };
 firebase.initializeApp(_fbConfig);
 var _db = firebase.database();
-
-function fbSave(key, val) {
-  return _db.ref('diya_config/' + key).set(val).catch(function(){});
-}
+function fbSave(key, val) { return _db.ref('diya_config/' + key).set(val).catch(function(){}); }
 function fbRead() {
   return _db.ref('diya_config').once('value')
     .then(function(s){ return s.val() || {}; })
@@ -512,7 +751,7 @@ function fbRead() {
 </script>
 
 <script>
-// ── DEFAULTS ────────────────────────────────────────────────────────────────────
+// ── DEFAULTS ──────────────────────────────────────────────────────────────────
 var DEFAULT_GUARDRAILS = [
   { id:'comp',     title:'Block composition questions',    desc:'Never reveal GRC mixture, ratios, fibre %, cement/sand proportions', on:true },
   { id:'price',    title:'No fixed pricing',               desc:'Never quote a fixed price without design files or site visit', on:true },
@@ -525,12 +764,12 @@ var DEFAULT_LANGS = ['Hindi','English','Gujarati','Hinglish'];
 var ALL_LANGS     = ['Hindi','English','Gujarati','Hinglish','Marathi','Tamil','Telugu','Kannada','Bengali','Punjabi'];
 
 var DEFAULT_BUSINESS = {
-  phone:          '+91 77470 02292',
+  phone:            '+91 77470 02292',
   experienceCenter: 'Bhopal, Madhya Pradesh',
-  hours:          'Mon-Sat 9:00 AM – 7:00 PM IST',
-  deliveryDays:   '60',
-  warranty:       '20',
-  expYears:       '25'
+  hours:            'Mon-Sat 9:00 AM – 7:00 PM IST',
+  deliveryDays:     '60',
+  warranty:         '20',
+  expYears:         '25'
 };
 
 var DEFAULT_WA_PROMPT = `You are Diya, a warm GRC sales consultant for Devyora — a GRC (Glass Fibre Reinforced Concrete) manufacturing company based in Bhopal, India.
@@ -550,12 +789,56 @@ Start EVERY call: "Namaskar!" — then WAIT for caller to respond. After they re
 
 Speak in whatever language the caller uses. Switch instantly.`;
 
-// ── STATE ────────────────────────────────────────────────────────────────────────
+var DEFAULT_FOLDER_IDS = {
+  "Pillar Base":          "1ydIqy6xPAODMtfC6PucxQ8i-cWpDNmbn",
+  "Latest Projects":      "1Aq-4aEsQEW7MKmjFNg_u00vuiGLsFJ7I",
+  "Cornice":              "1wnuanIyE-ykZE4eLzAdfoIwa81A4vj54",
+  "Column I Pillar":      "1dGo5kzI-o4HHsS8vDbPQAYJ4AEmwlGwN",
+  "Capitals I Pillar Top":"13Qu_fJ2MnveWlQqvUM1QP-cG_zKnCC0H",
+  "Brackets":             "1lyYNeITv_VYGPvQQWNiB7-Au4jReEHxl",
+  "Borders":              "10BdCUqx_65If42D1Kw1S92gfuZuuw4kK",
+  "Balluster":            "1fX8Szj0R_zVqArnn-CP9nTfwNq06xLI6"
+};
+
+var DEFAULT_PRODUCT_FOLDERS = {
+  "column":       "Column I Pillar",
+  "pillar":       "Column I Pillar",
+  "pillar base":  "Pillar Base",
+  "base":         "Pillar Base",
+  "capital":      "Capitals I Pillar Top",
+  "pillar top":   "Capitals I Pillar Top",
+  "cornice":      "Cornice",
+  "baluster":     "Balluster",
+  "balluster":    "Balluster",
+  "railing":      "Balluster",
+  "bracket":      "Brackets",
+  "border":       "Borders",
+  "jali":         "",
+  "arch":         "",
+  "jharokha":     "",
+  "window":       "",
+  "project":      "Latest Projects",
+  "latest":       "Latest Projects",
+  "portfolio":    "Latest Projects",
+  "catalogue":    "__CATALOGUE_LINK__",
+  "catalog":      "__CATALOGUE_LINK__",
+  "all products": "__CATALOGUE_LINK__"
+};
+
+var DEFAULT_STOP_WORDS = [
+  "not interested","nahi chahiye","nahi khareedna","band karo",
+  "mat bhejo","remove","unsubscribe","block","stop","no thanks","no thank you","nahi","nahin"
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
 var currentPage = 'wa';
 var isDirty     = false;
 var state       = { wa: {}, call: {} };
 
-// ── LOAD FROM APPS SCRIPT ────────────────────────────────────────────────────────
+// Stop words local state
+var stopWords = DEFAULT_STOP_WORDS.slice();
+
+// ── LOAD FROM APPS SCRIPT ─────────────────────────────────────────────────────
 function loadConfigFromScript(silent) {
   var url = (document.getElementById('wa-script-url').value || '').trim()
          || localStorage.getItem('dva_wa_script_url') || '';
@@ -573,7 +856,7 @@ function loadConfigFromScript(silent) {
         var callUrl = state.call.scriptUrl || localStorage.getItem('dva_call_script_url') || '';
         if (result.wa)   { state.wa   = result.wa;   state.wa.scriptUrl   = waUrl; }
         if (result.call) { state.call = result.call; state.call.scriptUrl = callUrl; }
-        if (!silent) showToast('Config load ho gaya Apps Script se', 'ok');
+        if (!silent) showToast('Config load ho gaya Apps Script se ✓', 'ok');
       } else {
         if (!silent) showToast('Apps Script se error aaya', 'err');
       }
@@ -585,34 +868,26 @@ function loadConfigFromScript(silent) {
     });
 }
 
-// ── INIT ────────────────────────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────────────────────
 function init() {
   showLoadingOverlay('Cloud se load ho raha hai…');
   fbRead().then(function(data) {
-    // Firebase → localStorage → empty (priority order)
     var waUrl   = data.wa_script_url   || localStorage.getItem('dva_wa_script_url')   || '';
     var callUrl = data.call_script_url || localStorage.getItem('dva_call_script_url') || '';
-
-    // Sync back to localStorage
     if (waUrl)   localStorage.setItem('dva_wa_script_url',   waUrl);
     if (callUrl) localStorage.setItem('dva_call_script_url', callUrl);
-
     state.wa.scriptUrl   = waUrl;
     state.call.scriptUrl = callUrl;
-    if (waUrl)   { document.getElementById('wa-script-url').value        = waUrl; }
-    if (waUrl)   { document.getElementById('wa-interakt-webhook').value   = waUrl; }
-    if (callUrl) { document.getElementById('call-script-url').value      = callUrl; }
-    if (callUrl) { document.getElementById('call-bolna-webhook').value    = callUrl; }
-
-    if (waUrl) {
-      loadConfigFromScript(true);
-    } else {
-      renderAll(); hideLoading();
-    }
+    if (waUrl)   { document.getElementById('wa-script-url').value      = waUrl; }
+    if (waUrl)   { document.getElementById('wa-interakt-webhook').value = waUrl; }
+    if (callUrl) { document.getElementById('call-script-url').value    = callUrl; }
+    if (callUrl) { document.getElementById('call-bolna-webhook').value  = callUrl; }
+    if (waUrl) { loadConfigFromScript(true); }
+    else        { renderAll(); hideLoading(); }
   });
 }
 
-// ── RENDER ──────────────────────────────────────────────────────────────────────
+// ── RENDER ────────────────────────────────────────────────────────────────────
 function renderAll() {
   ['wa','call'].forEach(function(p) {
     var d = state[p];
@@ -634,12 +909,43 @@ function renderAll() {
     // Business settings (WA only)
     if (p === 'wa') {
       var b = d.business || DEFAULT_BUSINESS;
-      document.getElementById('wa-business-phone').value      = b.phone          || DEFAULT_BUSINESS.phone;
-      document.getElementById('wa-experience-center').value   = b.experienceCenter || DEFAULT_BUSINESS.experienceCenter;
-      document.getElementById('wa-business-hours').value      = b.hours          || DEFAULT_BUSINESS.hours;
-      document.getElementById('wa-delivery-days').value       = b.deliveryDays   || DEFAULT_BUSINESS.deliveryDays;
-      document.getElementById('wa-warranty').value            = b.warranty       || DEFAULT_BUSINESS.warranty;
-      document.getElementById('wa-exp-years').value           = b.expYears       || DEFAULT_BUSINESS.expYears;
+      document.getElementById('wa-business-phone').value      = b.phone             || DEFAULT_BUSINESS.phone;
+      document.getElementById('wa-experience-center').value   = b.experienceCenter  || DEFAULT_BUSINESS.experienceCenter;
+      document.getElementById('wa-business-hours').value      = b.hours             || DEFAULT_BUSINESS.hours;
+      document.getElementById('wa-delivery-days').value       = b.deliveryDays      || DEFAULT_BUSINESS.deliveryDays;
+      document.getElementById('wa-warranty').value            = b.warranty          || DEFAULT_BUSINESS.warranty;
+      document.getElementById('wa-exp-years').value           = b.expYears          || DEFAULT_BUSINESS.expYears;
+
+      // Extended config
+      var cfg = d.cfg || {};
+      if (cfg.anthropicKey || cfg.anthropicKey === '')  document.getElementById('cfg-anthropic-key').value = cfg.anthropicKey;
+      if (cfg.interaktKey  || cfg.interaktKey  === '')  document.getElementById('cfg-interakt-key').value  = cfg.interaktKey;
+      if (cfg.imgbbKey     || cfg.imgbbKey     === '')  document.getElementById('cfg-imgbb-key').value     = cfg.imgbbKey;
+      if (cfg.sheetId      || cfg.sheetId      === '')  document.getElementById('cfg-sheet-id').value      = cfg.sheetId;
+      if (cfg.driveFolderId|| cfg.driveFolderId=== '')  document.getElementById('cfg-drive-folder').value  = cfg.driveFolderId;
+      if (cfg.escPhone     || cfg.escPhone     === '')  document.getElementById('cfg-esc-phone').value     = cfg.escPhone;
+      if (cfg.escEmail     || cfg.escEmail     === '')  document.getElementById('cfg-esc-email').value     = cfg.escEmail;
+      if (cfg.maxImages)    document.getElementById('cfg-max-images').value  = cfg.maxImages;
+      if (cfg.fu1Hrs)       document.getElementById('cfg-fu1-hrs').value     = cfg.fu1Hrs;
+      if (cfg.fu2Hrs)       document.getElementById('cfg-fu2-hrs').value     = cfg.fu2Hrs;
+      if (cfg.fu3Hrs)       document.getElementById('cfg-fu3-hrs').value     = cfg.fu3Hrs;
+      if (cfg.fuStart)      document.getElementById('cfg-fu-start').value    = cfg.fuStart;
+      if (cfg.fuEnd)        document.getElementById('cfg-fu-end').value      = cfg.fuEnd;
+      if (cfg.fuMsg1)       document.getElementById('cfg-fu-msg1').value     = cfg.fuMsg1;
+      if (cfg.fuMsg2)       document.getElementById('cfg-fu-msg2').value     = cfg.fuMsg2;
+      if (cfg.fuMsg3)       document.getElementById('cfg-fu-msg3').value     = cfg.fuMsg3;
+
+      // Stop words
+      stopWords = (cfg.stopWords && cfg.stopWords.length) ? cfg.stopWords : DEFAULT_STOP_WORDS.slice();
+      renderTags();
+
+      // Folder IDs table
+      var folderIds = (cfg.folderIds && Object.keys(cfg.folderIds).length) ? cfg.folderIds : DEFAULT_FOLDER_IDS;
+      renderFolderIdsTable(folderIds);
+
+      // Keyword map table
+      var kwMap = (cfg.productFolders && Object.keys(cfg.productFolders).length) ? cfg.productFolders : DEFAULT_PRODUCT_FOLDERS;
+      renderKeywordMapTable(kwMap);
     }
 
     renderGuardrails(p, (d.guardrails && d.guardrails.length) ? d.guardrails : DEFAULT_GUARDRAILS.map(function(g){ return Object.assign({},g); }));
@@ -652,7 +958,118 @@ function renderAll() {
   markClean();
 }
 
-// ── PAGE / DIRTY / LOADING ───────────────────────────────────────────────────────
+// ── FOLDER IDS TABLE ──────────────────────────────────────────────────────────
+function renderFolderIdsTable(folderIds) {
+  var tbody = document.getElementById('folder-ids-body');
+  tbody.innerHTML = '';
+  var keys = Object.keys(folderIds);
+  keys.forEach(function(name) {
+    appendFolderRow(tbody, name, folderIds[name] || '');
+  });
+}
+function appendFolderRow(tbody, name, id) {
+  var tr = document.createElement('tr');
+  tr.innerHTML = '<td><input class="tbl-input" placeholder="Folder naam..." value="'+esc(name)+'" oninput="markDirty()" /></td>'
+    + '<td><input class="tbl-input" placeholder="1dGo5kzI..." value="'+esc(id)+'" oninput="markDirty()" /></td>'
+    + '<td><button class="btn-icon" onclick="this.closest(\'tr\').remove();markDirty()">✕</button></td>';
+  tbody.appendChild(tr);
+  var sep = document.createElement('tr');
+  sep.className = 'tbl-row-sep'; tbody.appendChild(sep);
+}
+function addFolderRow() {
+  var tbody = document.getElementById('folder-ids-body');
+  appendFolderRow(tbody, '', '');
+  markDirty();
+}
+function collectFolderIds() {
+  var rows = document.querySelectorAll('#folder-ids-body tr:not(.tbl-row-sep)');
+  var obj = {};
+  rows.forEach(function(tr) {
+    var inputs = tr.querySelectorAll('input');
+    var name = (inputs[0] && inputs[0].value.trim()) || '';
+    var id   = (inputs[1] && inputs[1].value.trim()) || '';
+    if (name) obj[name] = id;
+  });
+  return obj;
+}
+
+// ── KEYWORD MAP TABLE ─────────────────────────────────────────────────────────
+function renderKeywordMapTable(kwMap) {
+  var tbody = document.getElementById('keyword-map-body');
+  tbody.innerHTML = '';
+  var keys = Object.keys(kwMap);
+  keys.forEach(function(kw) {
+    appendKeywordRow(tbody, kw, kwMap[kw] || '');
+  });
+}
+function appendKeywordRow(tbody, kw, folder) {
+  var tr = document.createElement('tr');
+  tr.innerHTML = '<td><input class="tbl-input" placeholder="column" value="'+esc(kw)+'" oninput="markDirty()" /></td>'
+    + '<td><input class="tbl-input" placeholder="Column I Pillar" value="'+esc(folder)+'" oninput="markDirty()" /></td>'
+    + '<td><button class="btn-icon" onclick="this.closest(\'tr\').remove();markDirty()">✕</button></td>';
+  tbody.appendChild(tr);
+  var sep = document.createElement('tr');
+  sep.className = 'tbl-row-sep'; tbody.appendChild(sep);
+}
+function addKeywordRow() {
+  var tbody = document.getElementById('keyword-map-body');
+  appendKeywordRow(tbody, '', '');
+  markDirty();
+}
+function collectKeywordMap() {
+  var rows = document.querySelectorAll('#keyword-map-body tr:not(.tbl-row-sep)');
+  var obj = {};
+  rows.forEach(function(tr) {
+    var inputs = tr.querySelectorAll('input');
+    var kw     = (inputs[0] && inputs[0].value.trim().toLowerCase()) || '';
+    var folder = (inputs[1] && inputs[1].value.trim()) || null;
+    if (kw) obj[kw] = folder || null;
+  });
+  return obj;
+}
+
+// ── STOP WORDS (TAGS) ─────────────────────────────────────────────────────────
+function renderTags() {
+  var wrap = document.getElementById('stop-words-wrap');
+  var input = document.getElementById('stop-word-input');
+  // Remove all tags (keep input)
+  Array.from(wrap.children).forEach(function(el) {
+    if (!el.classList.contains('tag-input') && el.id !== 'stop-word-input') el.remove();
+  });
+  // Re-render tags before input
+  stopWords.forEach(function(word, i) {
+    var tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.innerHTML = esc(word) + '<button class="tag-rm" onclick="removeTag('+i+')">✕</button>';
+    wrap.insertBefore(tag, input);
+  });
+}
+function addTag(word) {
+  word = word.trim().toLowerCase();
+  if (!word || stopWords.indexOf(word) !== -1) return;
+  stopWords.push(word);
+  renderTags();
+  markDirty();
+}
+function removeTag(i) {
+  stopWords.splice(i, 1);
+  renderTags();
+  markDirty();
+}
+function handleTagInput(e) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    var val = e.target.value.replace(',','').trim();
+    if (val) addTag(val);
+    e.target.value = '';
+  } else if (e.key === 'Backspace' && e.target.value === '' && stopWords.length) {
+    stopWords.pop();
+    renderTags();
+    markDirty();
+  }
+}
+
+// ── PAGE / DIRTY / LOADING ────────────────────────────────────────────────────
 function switchPage(p) {
   currentPage = p;
   document.querySelectorAll('.page').forEach(function(el){ el.classList.remove('active'); });
@@ -676,13 +1093,12 @@ function hideLoading() {
   el.classList.add('hidden'); setTimeout(function(){ el.style.display='none'; }, 400);
 }
 
-// ── CONNECTION ───────────────────────────────────────────────────────────────────
+// ── CONNECTION ────────────────────────────────────────────────────────────────
 function saveConnection(p) {
   var url = document.getElementById(p+'-script-url').value.trim();
   if (!url) { showToast('URL daalo pehle', 'err'); return; }
   state[p].scriptUrl = url;
   localStorage.setItem('dva_'+p+'_script_url', url);
-  // Save to Firebase so any device gets this URL
   fbSave(p === 'wa' ? 'wa_script_url' : 'call_script_url', url);
   if (p==='wa')   document.getElementById('wa-interakt-webhook').value = url;
   if (p==='call') document.getElementById('call-bolna-webhook').value  = url;
@@ -716,25 +1132,16 @@ function saveBolnaCredentials() {
   state.call.agentId  = document.getElementById('call-agent-id').value;
   showToast('Push Live karo save karne ke liye', 'warn');
 }
-
 function triggerTestBolnaCall() {
   var phone  = document.getElementById('test-bolna-phone').value.trim().replace(/\D/g,'');
   var status = document.getElementById('bolna-test-status');
   var btn    = document.getElementById('bolna-test-btn');
-
-  if (!phone || phone.length < 10) {
-    showToast('Valid phone number daalo (91XXXXXXXXXX)', 'err'); return;
-  }
+  if (!phone || phone.length < 10) { showToast('Valid phone number daalo (91XXXXXXXXXX)', 'err'); return; }
   if (phone.length === 10) phone = '91' + phone;
-
   var scriptUrl = (state.wa && state.wa.scriptUrl) || document.getElementById('wa-script-url').value.trim();
   if (!scriptUrl) { showToast('Apps Script URL save karo pehle', 'err'); return; }
-
-  btn.disabled = true;
-  btn.textContent = 'Calling...';
-  status.textContent = '⏳ Call trigger ho rahi hai...';
-  status.style.color = 'var(--t2)';
-
+  btn.disabled = true; btn.textContent = 'Calling...';
+  status.textContent = '⏳ Call trigger ho rahi hai...'; status.style.color = 'var(--t2)';
   fetch(scriptUrl + '?action=testBolnaCall&phone=' + encodeURIComponent(phone))
     .then(function(r){ return r.json(); })
     .then(function(d){
@@ -747,30 +1154,31 @@ function triggerTestBolnaCall() {
         status.style.color = 'var(--orange)';
       }
     })
-    .catch(function(e){
-      status.textContent = '❌ Error: ' + e.message;
-      status.style.color = '#e74c3c';
-    })
-    .finally(function(){
-      btn.disabled = false;
-      btn.textContent = 'Call Now';
-    });
+    .catch(function(e){ status.textContent = '❌ Error: ' + e.message; status.style.color = '#e74c3c'; })
+    .finally(function(){ btn.disabled = false; btn.textContent = 'Call Now'; });
 }
 function copyField(id) {
   var el=document.getElementById(id);
   if(!el||!el.value){ showToast('Copy karne ke liye kuch nahi','err'); return; }
   navigator.clipboard.writeText(el.value)
-    .then(function(){ showToast('Copied to clipboard','ok'); })
+    .then(function(){ showToast('Copied to clipboard ✓','ok'); })
     .catch(function(){ showToast('Copy: '+el.value.slice(0,40)+'...','warn'); });
 }
 
-// ── SAVE ALL & PUSH LIVE ─────────────────────────────────────────────────────────
+// ── PASSWORD TOGGLE ───────────────────────────────────────────────────────────
+function togglePw(id, btn) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  if (el.type === 'password') { el.type = 'text'; btn.textContent = '🙈'; }
+  else                        { el.type = 'password'; btn.textContent = '👁'; }
+}
+
+// ── SAVE ALL & PUSH LIVE ──────────────────────────────────────────────────────
 function saveAll(p) {
   var d = state[p];
   d.prompt    = document.getElementById(p+'-prompt').value;
   d.scriptUrl = document.getElementById(p+'-script-url').value.trim();
 
-  // Collect business settings (WA only)
   if (p === 'wa') {
     d.business = {
       phone:            document.getElementById('wa-business-phone').value.trim(),
@@ -821,6 +1229,31 @@ function saveAll(p) {
     timestamp: new Date().toISOString()
   };
 
+  // Include extended config keys (WA only)
+  if (p === 'wa') {
+    payload.cfg_keys = {
+      anthropicKey:    document.getElementById('cfg-anthropic-key').value.trim(),
+      interaktKey:     document.getElementById('cfg-interakt-key').value.trim(),
+      imgbbKey:        document.getElementById('cfg-imgbb-key').value.trim(),
+      sheetId:         document.getElementById('cfg-sheet-id').value.trim(),
+      driveFolderId:   document.getElementById('cfg-drive-folder').value.trim(),
+      escPhone:        document.getElementById('cfg-esc-phone').value.trim(),
+      escEmail:        document.getElementById('cfg-esc-email').value.trim(),
+      maxImages:       parseInt(document.getElementById('cfg-max-images').value || '3'),
+      fu1Hrs:          parseInt(document.getElementById('cfg-fu1-hrs').value   || '1'),
+      fu2Hrs:          parseInt(document.getElementById('cfg-fu2-hrs').value   || '48'),
+      fu3Hrs:          parseInt(document.getElementById('cfg-fu3-hrs').value   || '96'),
+      fuStart:         parseInt(document.getElementById('cfg-fu-start').value  || '9'),
+      fuEnd:           parseInt(document.getElementById('cfg-fu-end').value    || '19'),
+      fuMsg1:          document.getElementById('cfg-fu-msg1').value,
+      fuMsg2:          document.getElementById('cfg-fu-msg2').value,
+      fuMsg3:          document.getElementById('cfg-fu-msg3').value,
+      stopWords:       stopWords.slice(),
+      folderIds:       collectFolderIds(),
+      productFolders:  collectKeywordMap()
+    };
+  }
+
   fetch(d.scriptUrl, {
     method:'POST', mode:'no-cors',
     headers:{'Content-Type':'application/json'},
@@ -828,7 +1261,7 @@ function saveAll(p) {
   }).then(function() {
     banner.textContent = '✓ Push ho gaya — ' + new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
     banner.className = 'push-banner show';
-    showToast('Diya update ho gayi!', 'ok');
+    showToast('Diya update ho gayi! ✓', 'ok');
     setTimeout(function(){ banner.className='push-banner'; }, 5000);
   }).catch(function(err) {
     banner.textContent = '✗ Push fail hua — '+err.message;
@@ -837,10 +1270,10 @@ function saveAll(p) {
   });
 }
 
-// ── PROMPT ───────────────────────────────────────────────────────────────────────
+// ── PROMPT ────────────────────────────────────────────────────────────────────
 function copyPrompt(p) {
   navigator.clipboard.writeText(document.getElementById(p+'-prompt').value)
-    .then(function(){ showToast('Prompt copied','ok'); });
+    .then(function(){ showToast('Prompt copied ✓','ok'); });
 }
 function loadDefault(p) {
   if(!confirm('Current prompt replace ho jayega — sure?')) return;
@@ -852,7 +1285,7 @@ function clearPrompt(p) {
   document.getElementById(p+'-prompt').value = ''; updateCount(p); markDirty();
 }
 
-// ── KB ───────────────────────────────────────────────────────────────────────────
+// ── KB ────────────────────────────────────────────────────────────────────────
 function renderKB(p, entries) {
   var list = document.getElementById(p+'-kb-list');
   if (!list) return;
@@ -880,7 +1313,7 @@ function updateKB(p,i,field,val) {
 }
 function removeKB(p,i) { state[p].kb.splice(i,1); renderKB(p,state[p].kb); markDirty(); }
 
-// ── DOCS (catalogue links) ───────────────────────────────────────────────────────
+// ── DOCS ──────────────────────────────────────────────────────────────────────
 function renderDocs(docs) {
   var list = document.getElementById('wa-docs-list');
   if (!list) return;
@@ -908,7 +1341,7 @@ function updateDoc(i,field,val) {
 }
 function removeDoc(i) { state.wa.docs.splice(i,1); renderDocs(state.wa.docs); markDirty(); }
 
-// ── GUARDRAILS ───────────────────────────────────────────────────────────────────
+// ── GUARDRAILS ────────────────────────────────────────────────────────────────
 function renderGuardrails(p, guardrails) {
   var el = document.getElementById(p+'-guardrails');
   if (!el) return;
@@ -927,13 +1360,13 @@ function renderGuardrails(p, guardrails) {
 }
 function toggleGuardrail(p,i,checked){ state[p].guardrails[i].on=checked; markDirty(); }
 
-// ── LANGUAGES ────────────────────────────────────────────────────────────────────
+// ── LANGUAGES ─────────────────────────────────────────────────────────────────
 function renderLangs(p, active) {
   var el=document.getElementById(p+'-langs');
   if(!el) return; el.innerHTML='';
   ALL_LANGS.forEach(function(lang) {
     var btn=document.createElement('button');
-    btn.className='lang-pill'+(active.includes(lang)?' active':'');
+    btn.className='lang-pill'+(active.indexOf(lang)!==-1?' active':'');
     btn.textContent=lang;
     btn.onclick=function(){
       var idx=active.indexOf(lang);
@@ -945,7 +1378,7 @@ function renderLangs(p, active) {
   state[p].langs=active;
 }
 
-// ── HELPERS ──────────────────────────────────────────────────────────────────────
+// ── HELPERS ───────────────────────────────────────────────────────────────────
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function showToast(msg,type){
   var t=document.getElementById('toast');
@@ -953,6 +1386,11 @@ function showToast(msg,type){
   clearTimeout(window._tt); window._tt=setTimeout(function(){ t.className='toast'; },3000);
 }
 
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+// Render defaults first (offline-safe), then load from Apps Script
+renderFolderIdsTable(DEFAULT_FOLDER_IDS);
+renderKeywordMapTable(DEFAULT_PRODUCT_FOLDERS);
+renderTags();
 init();
 </script>
 </body>
