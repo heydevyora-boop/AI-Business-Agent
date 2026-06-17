@@ -413,59 +413,38 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   <!-- ── FOLLOW-UP CONFIG ── -->
   <div class="section">
     <div class="section-label">Follow-up Config</div>
+
+    <!-- Business Hours -->
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">⏰</span>Auto Follow-up Timing</div>
-      <div class="card-subtitle">Pehle reply ke kitne ghante baad follow-up bhejne hain</div>
-      <div class="fu-grid">
-        <div class="settings-row">
-          <div class="settings-label">Follow-up #1 (hours)</div>
-          <input class="settings-input" id="cfg-fu1-hrs" type="number" placeholder="1" oninput="markDirty()" />
-          <div class="settings-hint">Pehla follow-up (default: 1 ghanta)</div>
-        </div>
-        <div class="settings-row">
-          <div class="settings-label">Follow-up #2 (hours)</div>
-          <input class="settings-input" id="cfg-fu2-hrs" type="number" placeholder="48" oninput="markDirty()" />
-          <div class="settings-hint">Doosra follow-up (default: 48 ghante)</div>
-        </div>
-        <div class="settings-row">
-          <div class="settings-label">Follow-up #3 (hours)</div>
-          <input class="settings-input" id="cfg-fu3-hrs" type="number" placeholder="96" oninput="markDirty()" />
-          <div class="settings-hint">Teesra follow-up (default: 96 ghante)</div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title"><span class="card-title-icon">🕐</span>Follow-up Business Hours (IST)</div>
+      <div class="card-title"><span class="card-title-icon">🕐</span>Business Hours (IST)</div>
+      <div class="card-subtitle">Follow-ups sirf is window ke andar bheji jayengi</div>
       <div class="two-col">
         <div class="settings-row">
           <div class="settings-label">Start Hour (24h)</div>
           <input class="settings-input" id="cfg-fu-start" type="number" min="0" max="23" placeholder="9" oninput="markDirty()" />
-          <div class="settings-hint">Is se pehle follow-up nahi jayega (9 = 9 AM)</div>
+          <div class="settings-hint">9 = 9 AM</div>
         </div>
         <div class="settings-row">
           <div class="settings-label">End Hour (24h)</div>
           <input class="settings-input" id="cfg-fu-end" type="number" min="0" max="23" placeholder="19" oninput="markDirty()" />
-          <div class="settings-hint">Is ke baad follow-up nahi jayega (19 = 7 PM)</div>
+          <div class="settings-hint">19 = 7 PM</div>
         </div>
       </div>
     </div>
+
+    <!-- Dynamic Follow-up Steps -->
     <div class="card">
-      <div class="card-title"><span class="card-title-icon">💬</span>Follow-up Fallback Messages</div>
-      <div class="card-subtitle">Claude personalized message banata hai — ye sirf fallback hain agar Claude fail ho</div>
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div class="settings-row">
-          <div class="settings-label" style="display:flex;align-items:center;gap:6px"><span style="background:var(--orange-d);border:1px solid var(--orange-b);color:var(--orange);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">1</span>Follow-up #1 Fallback Message</div>
-          <textarea class="fu-msg-textarea" id="cfg-fu-msg1" oninput="markDirty()" placeholder="Hi! 😊 Aapne GRC products ke baare mein inquiry ki thi..."></textarea>
-        </div>
-        <div class="settings-row">
-          <div class="settings-label" style="display:flex;align-items:center;gap:6px"><span style="background:var(--orange-d);border:1px solid var(--orange-b);color:var(--orange);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">2</span>Follow-up #2 Fallback Message</div>
-          <textarea class="fu-msg-textarea" id="cfg-fu-msg2" oninput="markDirty()" placeholder="Namaste! 🙏 Devyora ki taraf se phir se..."></textarea>
-        </div>
-        <div class="settings-row">
-          <div class="settings-label" style="display:flex;align-items:center;gap:6px"><span style="background:var(--orange-d);border:1px solid var(--orange-b);color:var(--orange);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">3</span>Follow-up #3 Fallback Message</div>
-          <textarea class="fu-msg-textarea" id="cfg-fu-msg3" oninput="markDirty()" placeholder="Hello! Lagta hai aap busy hain..."></textarea>
-        </div>
+      <div class="card-title"><span class="card-title-icon">⏰</span>Follow-up Steps</div>
+      <div class="card-subtitle">
+        Har step mein delay, action (WhatsApp / Bolna Call / Both), aur fallback message set karein.
+        Steps <strong>ascending delay order</strong> mein hone chahiye. Claude conversation padhke AI message banata hai — fallback sirf Claude fail hone par use hota hai.
       </div>
+
+      <div id="followup-steps-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px"></div>
+
+      <button class="btn btn-secondary" onclick="addFollowupStep()" style="width:100%;justify-content:center">
+        <span style="font-size:16px">+</span> Add Step
+      </button>
     </div>
   </div>
 
@@ -521,6 +500,35 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <input class="tag-input" id="stop-word-input" placeholder="Keyword type karo, Enter dabao" onkeydown="handleTagInput(event)" />
       </div>
       <div style="font-size:10px;color:var(--t3);margin-top:6px">Enter ya comma se add karo · ✕ se remove karo</div>
+    </div>
+  </div>
+
+  <!-- ── ADVANCED SETTINGS ── -->
+  <div class="section">
+    <div class="section-label">Advanced Settings</div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">⚙️</span>Claude Model &amp; Sheet Settings</div>
+      <div class="settings-grid">
+        <div class="settings-row">
+          <div class="settings-label">Claude Model</div>
+          <select class="settings-input" id="cfg-claude-model" onchange="markDirty()">
+            <option value="claude-haiku-4-5-20251001">claude-haiku-4-5 (Fast · Cheap)</option>
+            <option value="claude-sonnet-4-6">claude-sonnet-4-6 (Smart · Balanced)</option>
+            <option value="claude-opus-4-8">claude-opus-4-8 (Best · Expensive)</option>
+          </select>
+          <div class="settings-hint">Haiku = 5-10 sec response, cheapest. Sonnet = smarter, slower. Opus = best quality.</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Max Tokens (reply length)</div>
+          <input class="settings-input" id="cfg-max-tokens" type="number" min="100" max="2000" placeholder="500" oninput="markDirty()" />
+          <div class="settings-hint">Longer = more detailed replies, slower + costlier. Default: 500.</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Conversation Sheet Name</div>
+          <input class="settings-input" id="cfg-sheet-name" placeholder="WA Conversations" oninput="markDirty()" />
+          <div class="settings-hint">Google Sheet tab jahan conversations save hoti hain</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -898,8 +906,9 @@ function renderAll() {
 
     // Call settings
     if (p === 'call') {
-      if (d.bolnaKey)      document.getElementById('call-bolna-key').value      = d.bolnaKey;
-      if (d.agentId)       document.getElementById('call-agent-id').value       = d.agentId;
+      // bolnaKey and agentId come directly from getConfig (call level)
+      if (d.bolnaKey !== undefined) document.getElementById('call-bolna-key').value = d.bolnaKey;
+      if (d.agentId  !== undefined) document.getElementById('call-agent-id').value  = d.agentId;
       if (d.maxDuration)   document.getElementById('call-max-duration').value   = d.maxDuration;
       if (d.silenceHangup) document.getElementById('call-silence-hangup').value = d.silenceHangup;
       if (d.welcomeDelay)  document.getElementById('call-welcome-delay').value  = d.welcomeDelay;
@@ -926,14 +935,17 @@ function renderAll() {
       if (cfg.escPhone     || cfg.escPhone     === '')  document.getElementById('cfg-esc-phone').value     = cfg.escPhone;
       if (cfg.escEmail     || cfg.escEmail     === '')  document.getElementById('cfg-esc-email').value     = cfg.escEmail;
       if (cfg.maxImages)    document.getElementById('cfg-max-images').value  = cfg.maxImages;
-      if (cfg.fu1Hrs)       document.getElementById('cfg-fu1-hrs').value     = cfg.fu1Hrs;
-      if (cfg.fu2Hrs)       document.getElementById('cfg-fu2-hrs').value     = cfg.fu2Hrs;
-      if (cfg.fu3Hrs)       document.getElementById('cfg-fu3-hrs').value     = cfg.fu3Hrs;
       if (cfg.fuStart)      document.getElementById('cfg-fu-start').value    = cfg.fuStart;
       if (cfg.fuEnd)        document.getElementById('cfg-fu-end').value      = cfg.fuEnd;
-      if (cfg.fuMsg1)       document.getElementById('cfg-fu-msg1').value     = cfg.fuMsg1;
-      if (cfg.fuMsg2)       document.getElementById('cfg-fu-msg2').value     = cfg.fuMsg2;
-      if (cfg.fuMsg3)       document.getElementById('cfg-fu-msg3').value     = cfg.fuMsg3;
+      renderFollowupSteps(cfg.followupSteps || []);
+      if (cfg.sheetName)    document.getElementById('cfg-sheet-name').value  = cfg.sheetName;
+      if (cfg.maxTokens)    document.getElementById('cfg-max-tokens').value  = cfg.maxTokens;
+      if (cfg.claudeModel) {
+        var sel = document.getElementById('cfg-claude-model');
+        for (var oi = 0; oi < sel.options.length; oi++) {
+          if (sel.options[oi].value === cfg.claudeModel) { sel.selectedIndex = oi; break; }
+        }
+      }
 
       // Stop words
       stopWords = (cfg.stopWords && cfg.stopWords.length) ? cfg.stopWords : DEFAULT_STOP_WORDS.slice();
@@ -956,6 +968,87 @@ function renderAll() {
     if (d.scriptUrl) setStatus(p, 'saved', 'URL saved');
   });
   markClean();
+}
+
+// ── DYNAMIC FOLLOW-UP STEPS ───────────────────────────────────────────────────
+var _followupSteps = [];
+
+var _FU_DEFAULTS = [
+  { delayHrs: 1,   action: "wa",   message: "Hi! 😊 Aapne GRC products ke baare mein inquiry ki thi. Kya koi sawaal hai jisme hum help kar sakein?\n\n*Diya — Devyora*" },
+  { delayHrs: 48,  action: "wa",   message: "Namaste! 🙏 Devyora ki taraf se phir se — aapka GRC project kaisa chal raha hai? Design files ready hain to bhej dijiye, hum quotation bana denge. 📐\n\n*Diya — Devyora*" },
+  { delayHrs: 96,  action: "wa",   message: "Hello! Lagta hai aap busy hain. Kya hum ek quick call arrange kar sakein? 📞\n\n*Diya — Devyora*" },
+  { delayHrs: 100, action: "call", message: "" }
+];
+
+function renderFollowupSteps(steps) {
+  _followupSteps = (steps && steps.length > 0) ? steps : _FU_DEFAULTS.map(function(s){ return Object.assign({}, s); });
+  _drawFollowupSteps();
+}
+
+function _drawFollowupSteps() {
+  var list = document.getElementById('followup-steps-list');
+  list.innerHTML = '';
+  _followupSteps.forEach(function(step, idx) {
+    var isCall = step.action === 'call';
+    var isBoth = step.action === 'both';
+    var showMsg = step.action === 'wa' || step.action === 'both';
+    var num = idx + 1;
+    var card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg-d);border:1px solid var(--border);border-radius:10px;padding:14px 16px;position:relative';
+    card.innerHTML =
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
+        '<span style="background:var(--orange-d);border:1px solid var(--orange-b);color:var(--orange);border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">' + num + '</span>' +
+        '<span style="font-size:12px;font-weight:600;color:var(--fg-s)">Step ' + num + '</span>' +
+        (num > 1 ? '<button onclick="removeFollowupStep(' + idx + ')" style="margin-left:auto;background:none;border:none;color:var(--fg-s);cursor:pointer;font-size:15px;padding:0 4px;line-height:1" title="Remove step">✕</button>' : '') +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:' + (showMsg ? '10px' : '0') + '">' +
+        '<div>' +
+          '<div style="font-size:11px;color:var(--fg-s);margin-bottom:4px">Delay (hours after last reply)</div>' +
+          '<input type="number" min="1" value="' + (step.delayHrs || 1) + '" ' +
+            'style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--fg);font-size:13px" ' +
+            'oninput="_followupSteps[' + idx + '].delayHrs=parseInt(this.value)||1;markDirty()" />' +
+        '</div>' +
+        '<div>' +
+          '<div style="font-size:11px;color:var(--fg-s);margin-bottom:4px">Action</div>' +
+          '<select style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--fg);font-size:13px" ' +
+            'onchange="_followupSteps[' + idx + '].action=this.value;markDirty();_drawFollowupSteps()">' +
+            '<option value="wa"'   + (step.action==='wa'   ? ' selected' : '') + '>💬 WhatsApp Message</option>' +
+            '<option value="call"' + (step.action==='call' ? ' selected' : '') + '>📞 Bolna Voice Call</option>' +
+            '<option value="both"' + (step.action==='both' ? ' selected' : '') + '>💬📞 WhatsApp + Call</option>' +
+          '</select>' +
+        '</div>' +
+      '</div>' +
+      (showMsg
+        ? '<div>' +
+            '<div style="font-size:11px;color:var(--fg-s);margin-bottom:4px">Fallback Message (used if Claude AI fails)</div>' +
+            '<textarea rows="3" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--fg);font-size:12px;resize:vertical;box-sizing:border-box" ' +
+              'oninput="_followupSteps[' + idx + '].message=this.value;markDirty()">' + _escHtml(step.message || '') + '</textarea>' +
+          '</div>'
+        : '<div style="font-size:11px;color:var(--orange);background:var(--orange-d);border:1px solid var(--orange-b);border-radius:6px;padding:6px 10px">📞 Bolna AI will place a voice call — no WhatsApp message</div>');
+    list.appendChild(card);
+  });
+}
+
+function _escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function addFollowupStep() {
+  var lastDelay = _followupSteps.length > 0 ? (_followupSteps[_followupSteps.length-1].delayHrs || 1) : 0;
+  _followupSteps.push({ delayHrs: lastDelay + 24, action: 'wa', message: '' });
+  _drawFollowupSteps();
+  markDirty();
+}
+
+function removeFollowupStep(idx) {
+  if (_followupSteps.length <= 1) return;
+  _followupSteps.splice(idx, 1);
+  _drawFollowupSteps();
+  markDirty();
+}
+
+function collectFollowupSteps() {
+  return _followupSteps.map(function(s){ return { delayHrs: s.delayHrs || 1, action: s.action || 'wa', message: s.message || '' }; });
 }
 
 // ── FOLDER IDS TABLE ──────────────────────────────────────────────────────────
@@ -1229,7 +1322,7 @@ function saveAll(p) {
     timestamp: new Date().toISOString()
   };
 
-  // Include extended config keys (WA only)
+  // Include extended config keys (WA page)
   if (p === 'wa') {
     payload.cfg_keys = {
       anthropicKey:    document.getElementById('cfg-anthropic-key').value.trim(),
@@ -1240,17 +1333,23 @@ function saveAll(p) {
       escPhone:        document.getElementById('cfg-esc-phone').value.trim(),
       escEmail:        document.getElementById('cfg-esc-email').value.trim(),
       maxImages:       parseInt(document.getElementById('cfg-max-images').value || '3'),
-      fu1Hrs:          parseInt(document.getElementById('cfg-fu1-hrs').value   || '1'),
-      fu2Hrs:          parseInt(document.getElementById('cfg-fu2-hrs').value   || '48'),
-      fu3Hrs:          parseInt(document.getElementById('cfg-fu3-hrs').value   || '96'),
       fuStart:         parseInt(document.getElementById('cfg-fu-start').value  || '9'),
       fuEnd:           parseInt(document.getElementById('cfg-fu-end').value    || '19'),
-      fuMsg1:          document.getElementById('cfg-fu-msg1').value,
-      fuMsg2:          document.getElementById('cfg-fu-msg2').value,
-      fuMsg3:          document.getElementById('cfg-fu-msg3').value,
+      followupSteps:   collectFollowupSteps(),
       stopWords:       stopWords.slice(),
       folderIds:       collectFolderIds(),
-      productFolders:  collectKeywordMap()
+      productFolders:  collectKeywordMap(),
+      sheetName:       (document.getElementById('cfg-sheet-name').value.trim() || 'WA Conversations'),
+      claudeModel:     document.getElementById('cfg-claude-model').value,
+      maxTokens:       parseInt(document.getElementById('cfg-max-tokens').value || '500')
+    };
+  }
+
+  // Include Bolna credentials (Calling page)
+  if (p === 'call') {
+    payload.cfg_keys = {
+      bolnaKey:   document.getElementById('call-bolna-key').value.trim(),
+      bolnaAgent: document.getElementById('call-agent-id').value.trim()
     };
   }
 
@@ -1391,6 +1490,7 @@ function showToast(msg,type){
 renderFolderIdsTable(DEFAULT_FOLDER_IDS);
 renderKeywordMapTable(DEFAULT_PRODUCT_FOLDERS);
 renderTags();
+renderFollowupSteps([]);  // render defaults
 init();
 </script>
 </body>
