@@ -410,6 +410,40 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     </div>
   </div>
 
+  <!-- ── SITE VISIT MANAGER ── -->
+  <div class="section">
+    <div class="section-label">Site Visit Manager</div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🏠</span>Site Visit Alert — jab customer site visit confirm kare tab yahan notify hoga</div>
+      <div class="card-subtitle">Escalation se alag — site visits ke liye dedicated field manager set karo</div>
+      <div class="settings-grid">
+        <div class="settings-row">
+          <div class="settings-label">Manager WhatsApp Number</div>
+          <input class="settings-input" id="cfg-sv-phone" placeholder="917000464412" oninput="markDirty()" />
+          <div class="settings-hint">91XXXXXXXXXX format — site visit alert yahan aayega</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Manager Email</div>
+          <input class="settings-input" id="cfg-sv-email" placeholder="sitevisit@devyora.com" type="email" oninput="markDirty()" />
+          <div class="settings-hint">Site visit email yahan aayegi</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">📋</span>Site Visit Alert Template</div>
+      <div class="card-subtitle">
+        Placeholders jo use kar sakte ho: <code style="background:var(--bg-d);padding:2px 6px;border-radius:4px;font-size:11px">{phone}</code>
+        <code style="background:var(--bg-d);padding:2px 6px;border-radius:4px;font-size:11px">{city}</code>
+        <code style="background:var(--bg-d);padding:2px 6px;border-radius:4px;font-size:11px">{message}</code>
+        <code style="background:var(--bg-d);padding:2px 6px;border-radius:4px;font-size:11px">{time}</code>
+      </div>
+      <textarea id="cfg-sv-template" rows="8" oninput="markDirty()"
+        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--fg);font-size:13px;resize:vertical;box-sizing:border-box;font-family:monospace;line-height:1.6"
+        placeholder="🏠 *SITE VISIT REQUEST*&#10;&#10;📱 Customer: +{phone}&#10;📍 Pincode: {pincode}&#10;💬 Message: {message}&#10;🕐 Time: {time}&#10;&#10;👉 Field rep assign karo aur conveyance charges confirm karo!&#10;&#10;— Diya, Devyora AI Agent"></textarea>
+      <button class="btn btn-secondary" onclick="resetSvTemplate()" style="margin-top:8px;font-size:12px">↺ Reset to Default</button>
+    </div>
+  </div>
+
   <!-- ── FOLLOW-UP CONFIG ── -->
   <div class="section">
     <div class="section-label">Follow-up Config</div>
@@ -934,6 +968,9 @@ function renderAll() {
       if (cfg.driveFolderId|| cfg.driveFolderId=== '')  document.getElementById('cfg-drive-folder').value  = cfg.driveFolderId;
       if (cfg.escPhone     || cfg.escPhone     === '')  document.getElementById('cfg-esc-phone').value     = cfg.escPhone;
       if (cfg.escEmail     || cfg.escEmail     === '')  document.getElementById('cfg-esc-email').value     = cfg.escEmail;
+      if (cfg.svPhone      || cfg.svPhone      === '')  document.getElementById('cfg-sv-phone').value      = cfg.svPhone;
+      if (cfg.svEmail      || cfg.svEmail      === '')  document.getElementById('cfg-sv-email').value      = cfg.svEmail;
+      if (cfg.svTemplate)   document.getElementById('cfg-sv-template').value  = cfg.svTemplate;
       if (cfg.maxImages)    document.getElementById('cfg-max-images').value  = cfg.maxImages;
       if (cfg.fuStart)      document.getElementById('cfg-fu-start').value    = cfg.fuStart;
       if (cfg.fuEnd)        document.getElementById('cfg-fu-end').value      = cfg.fuEnd;
@@ -979,6 +1016,13 @@ var _FU_DEFAULTS = [
   { delayHrs: 96,  action: "wa",   message: "Hello! Lagta hai aap busy hain. Kya hum ek quick call arrange kar sakein? 📞\n\n*Diya — Devyora*" },
   { delayHrs: 100, action: "call", message: "" }
 ];
+
+var _SV_DEFAULT_TEMPLATE = "🏠 *SITE VISIT REQUEST*\n\n📱 Customer: +{phone}\n🏙️ City: {city}\n💬 Message: {message}\n🕐 Time: {time}\n\n👉 Field rep assign karo aur visit schedule karo!\n\n— Diya, Devyora AI Agent";
+
+function resetSvTemplate() {
+  document.getElementById('cfg-sv-template').value = _SV_DEFAULT_TEMPLATE;
+  markDirty();
+}
 
 function renderFollowupSteps(steps) {
   _followupSteps = (steps && steps.length > 0) ? steps : _FU_DEFAULTS.map(function(s){ return Object.assign({}, s); });
@@ -1332,6 +1376,9 @@ function saveAll(p) {
       driveFolderId:   document.getElementById('cfg-drive-folder').value.trim(),
       escPhone:        document.getElementById('cfg-esc-phone').value.trim(),
       escEmail:        document.getElementById('cfg-esc-email').value.trim(),
+      svPhone:         document.getElementById('cfg-sv-phone').value.trim(),
+      svEmail:         document.getElementById('cfg-sv-email').value.trim(),
+      svTemplate:      document.getElementById('cfg-sv-template').value,
       maxImages:       parseInt(document.getElementById('cfg-max-images').value || '3'),
       fuStart:         parseInt(document.getElementById('cfg-fu-start').value  || '9'),
       fuEnd:           parseInt(document.getElementById('cfg-fu-end').value    || '19'),
