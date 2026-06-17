@@ -520,8 +520,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         </div>
         <div class="settings-row">
           <div class="settings-label">Max Tokens (reply length)</div>
-          <input class="settings-input" id="cfg-max-tokens" type="number" min="100" max="2000" placeholder="500" oninput="markDirty()" />
-          <div class="settings-hint">Longer = more detailed replies, slower + costlier. Default: 500.</div>
+          <input class="settings-input" id="cfg-max-tokens" type="number" min="100" max="4000" placeholder="1000" oninput="markDirty()" />
+          <div class="settings-hint">500 = short replies | 1000 = detailed (recommended) | 2000+ = very long. Default: 1000.</div>
         </div>
         <div class="settings-row">
           <div class="settings-label">Conversation Sheet Name</div>
@@ -1341,7 +1341,7 @@ function saveAll(p) {
       productFolders:  collectKeywordMap(),
       sheetName:       (document.getElementById('cfg-sheet-name').value.trim() || 'WA Conversations'),
       claudeModel:     document.getElementById('cfg-claude-model').value,
-      maxTokens:       parseInt(document.getElementById('cfg-max-tokens').value || '500')
+      maxTokens:       parseInt(document.getElementById('cfg-max-tokens').value || '1000')
     };
   }
 
