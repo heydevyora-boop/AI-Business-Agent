@@ -444,6 +444,47 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     </div>
   </div>
 
+  <!-- ── MEDIA & FALLBACK TEMPLATES ── -->
+  <div class="section">
+    <div class="section-label">Media &amp; Fallback Templates</div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🎙️</span>Voice Note Reply</div>
+      <div class="card-subtitle">Jab customer voice note bheje — Diya yeh message bhejti hai</div>
+      <textarea id="cfg-tpl-voice" rows="4" oninput="markDirty()"
+        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--fg);font-size:13px;resize:vertical;box-sizing:border-box;font-family:monospace;line-height:1.6"></textarea>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">📸</span>Image Reply (fallback)</div>
+      <div class="card-subtitle">Jab Claude image properly process na kar sake</div>
+      <textarea id="cfg-tpl-image" rows="4" oninput="markDirty()"
+        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--fg);font-size:13px;resize:vertical;box-sizing:border-box;font-family:monospace;line-height:1.6"></textarea>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🎥</span>Video Reply (fallback)</div>
+      <div class="card-subtitle">Jab customer video ya reel share kare</div>
+      <textarea id="cfg-tpl-video" rows="4" oninput="markDirty()"
+        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--fg);font-size:13px;resize:vertical;box-sizing:border-box;font-family:monospace;line-height:1.6"></textarea>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">📄</span>Document Reply (fallback)</div>
+      <div class="card-subtitle">Jab customer PDF ya document bheje</div>
+      <textarea id="cfg-tpl-document" rows="4" oninput="markDirty()"
+        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--fg);font-size:13px;resize:vertical;box-sizing:border-box;font-family:monospace;line-height:1.6"></textarea>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">⚠️</span>Claude API Fallback</div>
+      <div class="card-subtitle">Jab Claude respond na kare — yeh message jaata hai</div>
+      <textarea id="cfg-tpl-fallback" rows="4" oninput="markDirty()"
+        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--fg);font-size:13px;resize:vertical;box-sizing:border-box;font-family:monospace;line-height:1.6"></textarea>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🔴</span>Error Fallback</div>
+      <div class="card-subtitle">Jab koi bhi unexpected error aaye</div>
+      <textarea id="cfg-tpl-error" rows="4" oninput="markDirty()"
+        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--fg);font-size:13px;resize:vertical;box-sizing:border-box;font-family:monospace;line-height:1.6"></textarea>
+    </div>
+  </div>
+
   <!-- ── FOLLOW-UP CONFIG ── -->
   <div class="section">
     <div class="section-label">Follow-up Config</div>
@@ -971,6 +1012,12 @@ function renderAll() {
       if (cfg.svPhone      || cfg.svPhone      === '')  document.getElementById('cfg-sv-phone').value      = cfg.svPhone;
       if (cfg.svEmail      || cfg.svEmail      === '')  document.getElementById('cfg-sv-email').value      = cfg.svEmail;
       if (cfg.svTemplate)   document.getElementById('cfg-sv-template').value  = cfg.svTemplate;
+      if (cfg.tplVoice    !== undefined) document.getElementById('cfg-tpl-voice').value    = cfg.tplVoice;
+      if (cfg.tplImage    !== undefined) document.getElementById('cfg-tpl-image').value    = cfg.tplImage;
+      if (cfg.tplVideo    !== undefined) document.getElementById('cfg-tpl-video').value    = cfg.tplVideo;
+      if (cfg.tplDocument !== undefined) document.getElementById('cfg-tpl-document').value = cfg.tplDocument;
+      if (cfg.tplFallback !== undefined) document.getElementById('cfg-tpl-fallback').value = cfg.tplFallback;
+      if (cfg.tplError    !== undefined) document.getElementById('cfg-tpl-error').value    = cfg.tplError;
       if (cfg.maxImages)    document.getElementById('cfg-max-images').value  = cfg.maxImages;
       if (cfg.fuStart)      document.getElementById('cfg-fu-start').value    = cfg.fuStart;
       if (cfg.fuEnd)        document.getElementById('cfg-fu-end').value      = cfg.fuEnd;
@@ -1379,6 +1426,12 @@ function saveAll(p) {
       svPhone:         document.getElementById('cfg-sv-phone').value.trim(),
       svEmail:         document.getElementById('cfg-sv-email').value.trim(),
       svTemplate:      document.getElementById('cfg-sv-template').value,
+      tplVoice:        document.getElementById('cfg-tpl-voice').value,
+      tplImage:        document.getElementById('cfg-tpl-image').value,
+      tplVideo:        document.getElementById('cfg-tpl-video').value,
+      tplDocument:     document.getElementById('cfg-tpl-document').value,
+      tplFallback:     document.getElementById('cfg-tpl-fallback').value,
+      tplError:        document.getElementById('cfg-tpl-error').value,
       maxImages:       parseInt(document.getElementById('cfg-max-images').value || '3'),
       fuStart:         parseInt(document.getElementById('cfg-fu-start').value  || '9'),
       fuEnd:           parseInt(document.getElementById('cfg-fu-end').value    || '19'),
