@@ -579,6 +579,39 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <span style="font-size:16px">+</span> Add Step
       </button>
     </div>
+
+    <!-- Follow-up Fallback Messages -->
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🔄</span>Follow-up Fallback Messages</div>
+      <div class="card-subtitle">
+        Sirf tab use hote hain jab Claude follow-up generate karne mein fail ho jaaye (retry ke baad bhi).
+        Step 1 mein <code>{topic}</code> automatically replace hoga last discussed product/intent se.
+      </div>
+
+      <div class="settings-row" style="margin-bottom:10px">
+        <div class="settings-label">Step 1 — Topic Mila (e.g. cornice, pillar)</div>
+        <div class="settings-hint" style="margin-bottom:6px">
+          <code>{topic}</code> = last discussed product/intent (e.g. "cornice", "site visit")
+        </div>
+        <textarea id="cfg-fu-step1-topic" rows="3" oninput="markDirty()"
+          style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--fg);font-size:13px;resize:vertical;box-sizing:border-box;font-family:monospace;line-height:1.6"
+          placeholder="Maine dekha aapne {topic} ke baare mein poocha tha — kya abhi bhi interested hain? Main turant help kar sakti hoon. 🙏&#10;&#10;*Diya — Devyora*"></textarea>
+      </div>
+
+      <div class="settings-row" style="margin-bottom:10px">
+        <div class="settings-label">Step 1 — Topic Nahi Mila (generic)</div>
+        <textarea id="cfg-fu-step1-notopic" rows="3" oninput="markDirty()"
+          style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--fg);font-size:13px;resize:vertical;box-sizing:border-box;font-family:monospace;line-height:1.6"
+          placeholder="Maine dekha aapka message aaya tha, lekin main turant reply nahi de paayi 🙏 Aap kya jaanna chahte the?&#10;&#10;*Diya — Devyora*"></textarea>
+      </div>
+
+      <div class="settings-row">
+        <div class="settings-label">Steps 2 & 3 — Generic Fallback</div>
+        <textarea id="cfg-fu-generic-fallback" rows="3" oninput="markDirty()"
+          style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--fg);font-size:13px;resize:vertical;box-sizing:border-box;font-family:monospace;line-height:1.6"
+          placeholder="Namaste! Kya hum aapki kuch madad kar sakte hain? — Diya, Devyora"></textarea>
+      </div>
+    </div>
   </div>
 
   <!-- ── PRODUCT FOLDERS ── -->
@@ -1021,8 +1054,9 @@ function init() {
     state.call.scriptUrl = callUrl;
     if (waUrl)   { document.getElementById('wa-script-url').value      = waUrl; }
     if (waUrl)   { document.getElementById('wa-interakt-webhook').value = waUrl; }
+    // Bolna webhook = WA Agent URL (transcript handler lives in WhatsAppAgent.gs)
+    if (waUrl)   { document.getElementById('call-bolna-webhook').value  = waUrl; }
     if (callUrl) { document.getElementById('call-script-url').value    = callUrl; }
-    if (callUrl) { document.getElementById('call-bolna-webhook').value  = callUrl; }
     if (waUrl) { loadConfigFromScript(true); }
     else        { renderAll(); hideLoading(); }
   });
@@ -1076,6 +1110,9 @@ function renderAll() {
       if (cfg.tplDocument !== undefined) document.getElementById('cfg-tpl-document').value = cfg.tplDocument;
       if (cfg.tplFallback !== undefined) document.getElementById('cfg-tpl-fallback').value = cfg.tplFallback;
       if (cfg.tplError    !== undefined) document.getElementById('cfg-tpl-error').value    = cfg.tplError;
+      if (cfg.fuStep1TopicMsg    !== undefined) document.getElementById('cfg-fu-step1-topic').value        = cfg.fuStep1TopicMsg;
+      if (cfg.fuStep1NoTopicMsg  !== undefined) document.getElementById('cfg-fu-step1-notopic').value      = cfg.fuStep1NoTopicMsg;
+      if (cfg.fuGenericFallback  !== undefined) document.getElementById('cfg-fu-generic-fallback').value   = cfg.fuGenericFallback;
       if (cfg.maxImages)    document.getElementById('cfg-max-images').value  = cfg.maxImages;
       if (cfg.fuStart)      document.getElementById('cfg-fu-start').value    = cfg.fuStart;
       if (cfg.fuEnd)        document.getElementById('cfg-fu-end').value      = cfg.fuEnd;
@@ -1383,7 +1420,8 @@ function saveConnection(p) {
   localStorage.setItem('dva_'+p+'_script_url', url);
   fbSave(p === 'wa' ? 'wa_script_url' : 'call_script_url', url);
   if (p==='wa')   document.getElementById('wa-interakt-webhook').value = url;
-  if (p==='call') document.getElementById('call-bolna-webhook').value  = url;
+  // Bolna webhook always points to WA Agent URL (transcript handler is there)
+  if (p==='wa')   document.getElementById('call-bolna-webhook').value  = url;
   showToast('URL cloud mein save ho gaya ✓', 'ok');
   setStatus(p, 'saved', 'URL saved (cloud) — Load karo');
 }
@@ -1528,8 +1566,12 @@ function saveAll(p) {
       tplImage:        document.getElementById('cfg-tpl-image').value,
       tplVideo:        document.getElementById('cfg-tpl-video').value,
       tplDocument:     document.getElementById('cfg-tpl-document').value,
-      tplFallback:     document.getElementById('cfg-tpl-fallback').value,
-      tplError:        document.getElementById('cfg-tpl-error').value,
+      webappUrl:          document.getElementById('wa-script-url').value.trim(),
+      tplFallback:        document.getElementById('cfg-tpl-fallback').value,
+      tplError:           document.getElementById('cfg-tpl-error').value,
+      fuStep1TopicMsg:    document.getElementById('cfg-fu-step1-topic').value,
+      fuStep1NoTopicMsg:  document.getElementById('cfg-fu-step1-notopic').value,
+      fuGenericFallback:  document.getElementById('cfg-fu-generic-fallback').value,
       maxImages:       parseInt(document.getElementById('cfg-max-images').value || '3'),
       fuStart:         parseInt(document.getElementById('cfg-fu-start').value  || '9'),
       fuEnd:           parseInt(document.getElementById('cfg-fu-end').value    || '19'),
