@@ -387,12 +387,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         </div>
         <div class="settings-row">
           <div class="settings-label">Cloudinary Cloud Name</div>
-          <input class="settings-input" id="cfg-cloudinary-cloud" placeholder="my-cloud-name" oninput="markDirty()" />
+          <input class="settings-input" id="cfg-cloudinary-cloud" placeholder="my-cloud-name" oninput="markDirty();fbSave('cld_cloud',this.value)" />
           <div class="settings-hint">cloudinary.com → Dashboard → Cloud Name (PDF upload ke liye)</div>
         </div>
         <div class="settings-row">
           <div class="settings-label">Cloudinary Upload Preset</div>
-          <input class="settings-input" id="cfg-cloudinary-preset" placeholder="my_unsigned_preset" oninput="markDirty()" />
+          <input class="settings-input" id="cfg-cloudinary-preset" placeholder="my_unsigned_preset" oninput="markDirty();fbSave('cld_preset',this.value)" />
           <div class="settings-hint">Settings → Upload → Add upload preset → Signing mode: <b>Unsigned</b></div>
         </div>
       </div>
@@ -1108,8 +1108,10 @@ function renderAll() {
       if (cfg.anthropicKey || cfg.anthropicKey === '')  document.getElementById('cfg-anthropic-key').value = cfg.anthropicKey;
       if (cfg.interaktKey  || cfg.interaktKey  === '')  document.getElementById('cfg-interakt-key').value  = cfg.interaktKey;
       if (cfg.imgbbKey          || cfg.imgbbKey          === '')  document.getElementById('cfg-imgbb-key').value          = cfg.imgbbKey;
-      if (cfg.cloudinaryCloud  || cfg.cloudinaryCloud  === '')  document.getElementById('cfg-cloudinary-cloud').value  = cfg.cloudinaryCloud;
-      if (cfg.cloudinaryPreset || cfg.cloudinaryPreset === '')  document.getElementById('cfg-cloudinary-preset').value = cfg.cloudinaryPreset;
+      var cldCloud  = cfg.cloudinaryCloud  || d.cld_cloud  || '';
+      var cldPreset = cfg.cloudinaryPreset || d.cld_preset || '';
+      document.getElementById('cfg-cloudinary-cloud').value  = cldCloud;
+      document.getElementById('cfg-cloudinary-preset').value = cldPreset;
       if (cfg.sheetId      || cfg.sheetId      === '')  document.getElementById('cfg-sheet-id').value      = cfg.sheetId;
       if (cfg.driveFolderId|| cfg.driveFolderId=== '')  document.getElementById('cfg-drive-folder').value  = cfg.driveFolderId;
       if (cfg.escPhone     || cfg.escPhone     === '')  document.getElementById('cfg-esc-phone').value     = cfg.escPhone;
@@ -1679,7 +1681,7 @@ function renderDocs(docs) {
       + '<input class="doc-name" placeholder="Document naam (e.g. GRC Catalogue)" value="'+esc(doc.name||'')+'" oninput="updateDoc('+i+',\'name\',this.value)" style="flex:1.2">'
       + '<div style="flex:2;display:flex;gap:6px;align-items:center;">'
       +   '<input class="doc-url" id="doc-url-'+i+'" placeholder="PDF URL (ya neeche se upload karo)" value="'+esc(doc.url||'')+'" oninput="updateDoc('+i+',\'url\',this.value)" style="flex:1;min-width:0">'
-      +   '<label style="cursor:pointer;white-space:nowrap;font-size:12px;padding:6px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);color:var(--color-text-secondary);background:var(--color-background-secondary)" title="Firebase Storage mein upload karo">'
+      +   '<label style="cursor:pointer;white-space:nowrap;font-size:12px;padding:6px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);color:var(--color-text-secondary);background:var(--color-background-secondary)" title="Cloudinary mein upload karo (API Keys section mein Cloud Name + Preset daalo pehle)">'
       +     '⬆ Upload PDF'
       +     '<input type="file" accept="application/pdf" style="display:none" onchange="uploadDocPDF(event,'+i+')">'
       +   '</label>'
@@ -1726,8 +1728,6 @@ function uploadDocPDF(event, index) {
   var formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', uploadPreset);
-  formData.append('resource_type', 'raw');
-  formData.append('public_id', docName);
 
   fetch('https://api.cloudinary.com/v1_1/' + cloudName + '/raw/upload', {
     method: 'POST',
