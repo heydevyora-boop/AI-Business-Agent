@@ -405,6 +405,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
           <input class="settings-input" id="cfg-drive-folder" placeholder="1a46QydMAEcrrxLu..." oninput="markDirty()" />
           <div class="settings-hint">drive.google.com/drive/folders/ ke baad ki ID</div>
         </div>
+        <div class="settings-row">
+          <div class="settings-label">Catalogue PDF URL</div>
+          <input class="settings-input" id="cfg-catalogue-pdf" placeholder="https://drive.google.com/uc?export=download&id=..." oninput="markDirty()" />
+          <div class="settings-hint">Customer ke WhatsApp pe PDF document aayega. Drive file → Share → Anyone with link → Copy ID → <b>https://drive.google.com/uc?export=download&amp;id=FILE_ID</b></div>
+        </div>
       </div>
     </div>
   </div>
@@ -733,7 +738,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div id="wa-docs-list"></div>
       <button class="btn-add" onclick="addDocEntry()">+ Document Link Add Karo</button>
       <div style="font-size:10px;color:var(--t3);margin-top:10px;line-height:1.6">
-        💡 PDF Google Drive mein upload karo → Share → Anyone with link → woh link yahan paste karo
+        💡 <b>PDF URL format:</b> Drive file → Share → Anyone with link → File ID copy karo → <code style="background:var(--bg2);padding:1px 4px;border-radius:3px">https://drive.google.com/uc?export=download&amp;id=FILE_ID</code><br>
+        💡 <b>Keywords:</b> Comma se alag karo — customer inhe likhega to yeh PDF automatically WhatsApp pe bheja jaayega (e.g. <i>catalogue, brochure, price list</i>)
       </div>
     </div>
   </div>
@@ -1099,6 +1105,7 @@ function renderAll() {
       if (cfg.imgbbKey     || cfg.imgbbKey     === '')  document.getElementById('cfg-imgbb-key').value     = cfg.imgbbKey;
       if (cfg.sheetId      || cfg.sheetId      === '')  document.getElementById('cfg-sheet-id').value      = cfg.sheetId;
       if (cfg.driveFolderId|| cfg.driveFolderId=== '')  document.getElementById('cfg-drive-folder').value  = cfg.driveFolderId;
+      if (cfg.cataloguePdf || cfg.cataloguePdf === '')  document.getElementById('cfg-catalogue-pdf').value = cfg.cataloguePdf;
       if (cfg.escPhone     || cfg.escPhone     === '')  document.getElementById('cfg-esc-phone').value     = cfg.escPhone;
       if (cfg.escEmail     || cfg.escEmail     === '')  document.getElementById('cfg-esc-email').value     = cfg.escEmail;
       if (cfg.svPhone      || cfg.svPhone      === '')  document.getElementById('cfg-sv-phone').value      = cfg.svPhone;
@@ -1557,6 +1564,7 @@ function saveAll(p) {
       imgbbKey:        document.getElementById('cfg-imgbb-key').value.trim(),
       sheetId:         document.getElementById('cfg-sheet-id').value.trim(),
       driveFolderId:   document.getElementById('cfg-drive-folder').value.trim(),
+      cataloguePdf:    document.getElementById('cfg-catalogue-pdf').value.trim(),
       escPhone:        document.getElementById('cfg-esc-phone').value.trim(),
       escEmail:        document.getElementById('cfg-esc-email').value.trim(),
       svPhone:         document.getElementById('cfg-sv-phone').value.trim(),
@@ -1661,8 +1669,9 @@ function renderDocs(docs) {
     var div = document.createElement('div');
     div.className = 'doc-entry';
     div.innerHTML = '<div class="doc-fields">'
-      + '<input class="doc-name" placeholder="Document naam (e.g. GRC Catalogue)" value="'+esc(doc.name||'')+'" oninput="updateDoc('+i+',\'name\',this.value)">'
-      + '<input class="doc-url" placeholder="Google Drive / direct link (https://...)" value="'+esc(doc.url||'')+'" oninput="updateDoc('+i+',\'url\',this.value)">'
+      + '<input class="doc-name" placeholder="Document naam (e.g. GRC Catalogue)" value="'+esc(doc.name||'')+'" oninput="updateDoc('+i+',\'name\',this.value)" style="flex:1.2">'
+      + '<input class="doc-url" placeholder="Direct PDF URL — https://drive.google.com/uc?export=download&id=..." value="'+esc(doc.url||'')+'" oninput="updateDoc('+i+',\'url\',this.value)" style="flex:2">'
+      + '<input class="doc-name" placeholder="Keywords (comma-separated): catalogue, brochure, price list" value="'+esc(doc.keywords||'')+'" oninput="updateDoc('+i+',\'keywords\',this.value)" style="flex:1.5" title="Customer yeh words likhega to yeh PDF automatically bheja jaayega">'
       + '</div>'
       + '<button class="entry-remove" onclick="removeDoc('+i+')" style="margin-top:2px">✕</button>';
     list.appendChild(div);
@@ -1671,7 +1680,7 @@ function renderDocs(docs) {
 }
 function addDocEntry() {
   if(!state.wa.docs) state.wa.docs=[];
-  state.wa.docs.push({name:'',url:''}); renderDocs(state.wa.docs); markDirty();
+  state.wa.docs.push({name:'',url:'',keywords:''}); renderDocs(state.wa.docs); markDirty();
 }
 function updateDoc(i,field,val) {
   if(!state.wa.docs) state.wa.docs=[];
