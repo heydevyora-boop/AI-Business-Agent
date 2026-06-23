@@ -385,16 +385,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
           </div>
           <div class="settings-hint">api.imgbb.com → free key (product images ke liye)</div>
         </div>
-        <div class="settings-row">
-          <div class="settings-label">Cloudinary Cloud Name</div>
-          <input class="settings-input" id="cfg-cloudinary-cloud" placeholder="my-cloud-name" oninput="markDirty();fbSave('cld_cloud',this.value)" />
-          <div class="settings-hint">cloudinary.com → Dashboard → Cloud Name (PDF upload ke liye)</div>
-        </div>
-        <div class="settings-row">
-          <div class="settings-label">Cloudinary Upload Preset</div>
-          <input class="settings-input" id="cfg-cloudinary-preset" placeholder="my_unsigned_preset" oninput="markDirty();fbSave('cld_preset',this.value)" />
-          <div class="settings-hint">Settings → Upload → Add upload preset → Signing mode: <b>Unsigned</b></div>
-        </div>
       </div>
     </div>
   </div>
@@ -1108,10 +1098,6 @@ function renderAll() {
       if (cfg.anthropicKey || cfg.anthropicKey === '')  document.getElementById('cfg-anthropic-key').value = cfg.anthropicKey;
       if (cfg.interaktKey  || cfg.interaktKey  === '')  document.getElementById('cfg-interakt-key').value  = cfg.interaktKey;
       if (cfg.imgbbKey          || cfg.imgbbKey          === '')  document.getElementById('cfg-imgbb-key').value          = cfg.imgbbKey;
-      var cldCloud  = cfg.cloudinaryCloud  || d.cld_cloud  || '';
-      var cldPreset = cfg.cloudinaryPreset || d.cld_preset || '';
-      document.getElementById('cfg-cloudinary-cloud').value  = cldCloud;
-      document.getElementById('cfg-cloudinary-preset').value = cldPreset;
       if (cfg.sheetId      || cfg.sheetId      === '')  document.getElementById('cfg-sheet-id').value      = cfg.sheetId;
       if (cfg.driveFolderId|| cfg.driveFolderId=== '')  document.getElementById('cfg-drive-folder').value  = cfg.driveFolderId;
       if (cfg.escPhone     || cfg.escPhone     === '')  document.getElementById('cfg-esc-phone').value     = cfg.escPhone;
@@ -1581,8 +1567,6 @@ function saveAll(p) {
       imgbbKey:        document.getElementById('cfg-imgbb-key').value.trim(),
       sheetId:         document.getElementById('cfg-sheet-id').value.trim(),
       driveFolderId:     document.getElementById('cfg-drive-folder').value.trim(),
-      cloudinaryCloud:   document.getElementById('cfg-cloudinary-cloud').value.trim(),
-      cloudinaryPreset:  document.getElementById('cfg-cloudinary-preset').value.trim(),
       escPhone:        document.getElementById('cfg-esc-phone').value.trim(),
       escEmail:        document.getElementById('cfg-esc-email').value.trim(),
       svPhone:         document.getElementById('cfg-sv-phone').value.trim(),
