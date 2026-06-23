@@ -1707,30 +1707,61 @@ function uploadDocPDF(event, index) {
   var origText = label.childNodes[0].textContent;
   label.childNodes[0].textContent = '⏳ Uploading...';
 
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var base64 = e.target.result.split(',')[1];
-    google.script.run
-      .withSuccessHandler(function(result) {
-        if (result && result.success) {
-          urlInput.value = result.url;
-          updateDoc(index, 'url', result.url);
-          label.childNodes[0].textContent = '✅ Uploaded';
-          showToast('PDF Google Drive mein save ho gaya ✓', 'ok');
-          markDirty();
-          setTimeout(function() { label.childNodes[0].textContent = origText; }, 3000);
-        } else {
-          label.childNodes[0].textContent = origText;
-          showToast('Upload failed: ' + (result && result.error || 'Unknown error'), 'err');
-        }
+  // Step 1: Get OAuth token from Apps Script
+  google.script.run
+    .withSuccessHandler(function(tokenResult) {
+      var token = tokenResult && tokenResult.token;
+      if (!token) { label.childNodes[0].textContent = origText; showToast('Token error', 'err'); return; }
+
+      // Step 2: Upload directly to Drive API (fast, no size limit)
+      var metadata = { name: file.name, mimeType: 'application/pdf' };
+      var form = new FormData();
+      form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+      form.append('file', file);
+
+      fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token },
+        body: form
       })
-      .withFailureHandler(function(err) {
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.id) {
+          label.childNodes[0].textContent = origText;
+          showToast('Drive upload failed: ' + JSON.stringify(data.error || data), 'err');
+          return;
+        }
+        // Step 3: Make file public via Apps Script
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (res && res.success) {
+              urlInput.value = res.url;
+              updateDoc(index, 'url', res.url);
+              label.childNodes[0].textContent = '✅ Uploaded';
+              showToast('PDF Drive mein save ho gaya ✓', 'ok');
+              markDirty();
+              setTimeout(function() { label.childNodes[0].textContent = origText; }, 3000);
+            } else {
+              label.childNodes[0].textContent = origText;
+              showToast('Sharing set nahi hua: ' + (res && res.error || ''), 'err');
+            }
+          })
+          .withFailureHandler(function(err) {
+            label.childNodes[0].textContent = origText;
+            showToast('Sharing error: ' + err, 'err');
+          })
+          .makeDocFilePublic(data.id);
+      })
+      .catch(function(err) {
         label.childNodes[0].textContent = origText;
         showToast('Upload failed: ' + err, 'err');
-      })
-      .saveDocToDrive(base64, file.name);
-  };
-  reader.readAsDataURL(file);
+      });
+    })
+    .withFailureHandler(function(err) {
+      label.childNodes[0].textContent = origText;
+      showToast('Token fetch failed: ' + err, 'err');
+    })
+    .getDriveUploadToken();
 }
 
 // ── GUARDRAILS ────────────────────────────────────────────────────────────────
