@@ -1157,7 +1157,16 @@ function renderAll() {
     renderGuardrails(p, (d.guardrails && d.guardrails.length) ? d.guardrails : DEFAULT_GUARDRAILS.map(function(g){ return Object.assign({},g); }));
     renderLangs(p, (d.langs && d.langs.length) ? d.langs : DEFAULT_LANGS.slice());
     renderKB(p, d.kb || []);
-    if (p === 'wa') renderDocs(d.docs || []);
+    if (p === 'wa') {
+      // Strip fl_attachment from any saved Cloudinary URLs (legacy fix)
+      var fixedDocs = (d.docs || []).map(function(doc) {
+        if (doc.url && doc.url.indexOf('/fl_attachment/') !== -1) {
+          doc.url = doc.url.replace('/fl_attachment/', '/');
+        }
+        return doc;
+      });
+      renderDocs(fixedDocs);
+    }
 
     if (d.scriptUrl) setStatus(p, 'saved', 'URL saved');
   });
@@ -1681,7 +1690,7 @@ function renderDocs(docs) {
       + '<input class="doc-name" placeholder="Document naam (e.g. GRC Catalogue)" value="'+esc(doc.name||'')+'" oninput="updateDoc('+i+',\'name\',this.value)" style="flex:1.2">'
       + '<div style="flex:2;display:flex;gap:6px;align-items:center;">'
       +   '<input class="doc-url" id="doc-url-'+i+'" placeholder="PDF URL (ya neeche se upload karo)" value="'+esc(doc.url||'')+'" oninput="updateDoc('+i+',\'url\',this.value)" style="flex:1;min-width:0">'
-      +   '<label style="cursor:pointer;white-space:nowrap;font-size:12px;padding:6px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);color:var(--color-text-secondary);background:var(--color-background-secondary)" title="Cloudinary mein upload karo (API Keys section mein Cloud Name + Preset daalo pehle)">'
+      +   '<label style="cursor:pointer;white-space:nowrap;font-size:12px;padding:6px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);color:var(--color-text-secondary);background:var(--color-background-secondary)" title="Google Drive mein upload karo — automatic public URL milegi">'
       +     '⬆ Upload PDF'
       +     '<input type="file" accept="application/pdf" style="display:none" onchange="uploadDocPDF(event,'+i+')">'
       +   '</label>'
@@ -1709,50 +1718,35 @@ function uploadDocPDF(event, index) {
   if (!file) return;
   if (file.type !== 'application/pdf') { showToast('Sirf PDF files allowed hain', 'err'); return; }
 
-  var cloudName   = document.getElementById('cfg-cloudinary-cloud').value.trim();
-  var uploadPreset = document.getElementById('cfg-cloudinary-preset').value.trim();
-  if (!cloudName || !uploadPreset) {
-    showToast('Pehle Cloudinary Cloud Name aur Upload Preset daalo (API Keys section mein)', 'err');
-    return;
-  }
-
   var urlInput = document.getElementById('doc-url-' + index);
   var label    = event.target.parentElement;
   var origText = label.childNodes[0].textContent;
   label.childNodes[0].textContent = '⏳ Uploading...';
 
-  var docName = (state.wa.docs[index] && state.wa.docs[index].name)
-    ? state.wa.docs[index].name.replace(/[^a-zA-Z0-9_-]/g, '_')
-    : file.name.replace(/[^a-zA-Z0-9_-]/g, '_').replace(/\.pdf$/i, '');
-
-  var formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', uploadPreset);
-
-  fetch('https://api.cloudinary.com/v1_1/' + cloudName + '/raw/upload', {
-    method: 'POST',
-    body: formData
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    if (data.secure_url) {
-      // fl_attachment flag add karo — WhatsApp ko PDF properly serve hoga
-      var finalUrl = data.secure_url.replace('/raw/upload/', '/raw/upload/fl_attachment/');
-      urlInput.value = finalUrl;
-      updateDoc(index, 'url', finalUrl);
-      label.childNodes[0].textContent = '✅ Uploaded';
-      showToast('PDF upload ho gaya ✓', 'ok');
-      markDirty();
-      setTimeout(function() { label.childNodes[0].textContent = '⬆ Upload PDF'; }, 3000);
-    } else {
-      label.childNodes[0].textContent = origText;
-      showToast('Cloudinary error: ' + (data.error && data.error.message || 'Unknown error'), 'err');
-    }
-  })
-  .catch(function(err) {
-    label.childNodes[0].textContent = origText;
-    showToast('Upload failed: ' + err.message, 'err');
-  });
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var base64 = e.target.result.split(',')[1];
+    google.script.run
+      .withSuccessHandler(function(result) {
+        if (result && result.success) {
+          urlInput.value = result.url;
+          updateDoc(index, 'url', result.url);
+          label.childNodes[0].textContent = '✅ Uploaded';
+          showToast('PDF Google Drive mein save ho gaya ✓', 'ok');
+          markDirty();
+          setTimeout(function() { label.childNodes[0].textContent = origText; }, 3000);
+        } else {
+          label.childNodes[0].textContent = origText;
+          showToast('Upload failed: ' + (result && result.error || 'Unknown error'), 'err');
+        }
+      })
+      .withFailureHandler(function(err) {
+        label.childNodes[0].textContent = origText;
+        showToast('Upload failed: ' + err, 'err');
+      })
+      .saveDocToDrive(base64, file.name);
+  };
+  reader.readAsDataURL(file);
 }
 
 // ── GUARDRAILS ────────────────────────────────────────────────────────────────
