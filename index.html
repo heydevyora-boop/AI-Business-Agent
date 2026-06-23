@@ -405,11 +405,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
           <input class="settings-input" id="cfg-drive-folder" placeholder="1a46QydMAEcrrxLu..." oninput="markDirty()" />
           <div class="settings-hint">drive.google.com/drive/folders/ ke baad ki ID</div>
         </div>
-        <div class="settings-row">
-          <div class="settings-label">Catalogue PDF URL</div>
-          <input class="settings-input" id="cfg-catalogue-pdf" placeholder="https://drive.google.com/uc?export=download&id=..." oninput="markDirty()" />
-          <div class="settings-hint">Customer ke WhatsApp pe PDF document aayega. Drive file → Share → Anyone with link → Copy ID → <b>https://drive.google.com/uc?export=download&amp;id=FILE_ID</b></div>
-        </div>
       </div>
     </div>
   </div>
@@ -1105,7 +1100,6 @@ function renderAll() {
       if (cfg.imgbbKey     || cfg.imgbbKey     === '')  document.getElementById('cfg-imgbb-key').value     = cfg.imgbbKey;
       if (cfg.sheetId      || cfg.sheetId      === '')  document.getElementById('cfg-sheet-id').value      = cfg.sheetId;
       if (cfg.driveFolderId|| cfg.driveFolderId=== '')  document.getElementById('cfg-drive-folder').value  = cfg.driveFolderId;
-      if (cfg.cataloguePdf || cfg.cataloguePdf === '')  document.getElementById('cfg-catalogue-pdf').value = cfg.cataloguePdf;
       if (cfg.escPhone     || cfg.escPhone     === '')  document.getElementById('cfg-esc-phone').value     = cfg.escPhone;
       if (cfg.escEmail     || cfg.escEmail     === '')  document.getElementById('cfg-esc-email').value     = cfg.escEmail;
       if (cfg.svPhone      || cfg.svPhone      === '')  document.getElementById('cfg-sv-phone').value      = cfg.svPhone;
@@ -1564,7 +1558,6 @@ function saveAll(p) {
       imgbbKey:        document.getElementById('cfg-imgbb-key').value.trim(),
       sheetId:         document.getElementById('cfg-sheet-id').value.trim(),
       driveFolderId:   document.getElementById('cfg-drive-folder').value.trim(),
-      cataloguePdf:    document.getElementById('cfg-catalogue-pdf').value.trim(),
       escPhone:        document.getElementById('cfg-esc-phone').value.trim(),
       escEmail:        document.getElementById('cfg-esc-email').value.trim(),
       svPhone:         document.getElementById('cfg-sv-phone').value.trim(),
