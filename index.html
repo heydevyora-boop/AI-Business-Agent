@@ -385,6 +385,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
           </div>
           <div class="settings-hint">api.imgbb.com → free key (product images ke liye)</div>
         </div>
+        <div class="settings-row">
+          <div class="settings-label">Cloudinary Cloud Name</div>
+          <input class="settings-input" id="cfg-cloudinary-cloud" placeholder="my-cloud-name" oninput="markDirty();fbSave('cld_cloud',this.value)" />
+          <div class="settings-hint">cloudinary.com → Dashboard → Cloud Name (PDF upload ke liye)</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Cloudinary Upload Preset</div>
+          <input class="settings-input" id="cfg-cloudinary-preset" placeholder="my_unsigned_preset" oninput="markDirty();fbSave('cld_preset',this.value)" />
+          <div class="settings-hint">Settings → Upload → Upload preset → Signing mode: <b>Unsigned</b></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1098,6 +1108,10 @@ function renderAll() {
       if (cfg.anthropicKey || cfg.anthropicKey === '')  document.getElementById('cfg-anthropic-key').value = cfg.anthropicKey;
       if (cfg.interaktKey  || cfg.interaktKey  === '')  document.getElementById('cfg-interakt-key').value  = cfg.interaktKey;
       if (cfg.imgbbKey          || cfg.imgbbKey          === '')  document.getElementById('cfg-imgbb-key').value          = cfg.imgbbKey;
+      var cldCloud  = cfg.cloudinaryCloud  || d.cld_cloud  || '';
+      var cldPreset = cfg.cloudinaryPreset || d.cld_preset || '';
+      if (cldCloud)  document.getElementById('cfg-cloudinary-cloud').value  = cldCloud;
+      if (cldPreset) document.getElementById('cfg-cloudinary-preset').value = cldPreset;
       if (cfg.sheetId      || cfg.sheetId      === '')  document.getElementById('cfg-sheet-id').value      = cfg.sheetId;
       if (cfg.driveFolderId|| cfg.driveFolderId=== '')  document.getElementById('cfg-drive-folder').value  = cfg.driveFolderId;
       if (cfg.escPhone     || cfg.escPhone     === '')  document.getElementById('cfg-esc-phone').value     = cfg.escPhone;
@@ -1564,7 +1578,9 @@ function saveAll(p) {
     payload.cfg_keys = {
       anthropicKey:    document.getElementById('cfg-anthropic-key').value.trim(),
       interaktKey:     document.getElementById('cfg-interakt-key').value.trim(),
-      imgbbKey:        document.getElementById('cfg-imgbb-key').value.trim(),
+      imgbbKey:          document.getElementById('cfg-imgbb-key').value.trim(),
+      cloudinaryCloud:   document.getElementById('cfg-cloudinary-cloud').value.trim(),
+      cloudinaryPreset:  document.getElementById('cfg-cloudinary-preset').value.trim(),
       sheetId:         document.getElementById('cfg-sheet-id').value.trim(),
       driveFolderId:     document.getElementById('cfg-drive-folder').value.trim(),
       escPhone:        document.getElementById('cfg-esc-phone').value.trim(),
@@ -1702,6 +1718,13 @@ function uploadDocPDF(event, index) {
   if (!file) return;
   if (file.type !== 'application/pdf') { showToast('Sirf PDF files allowed hain', 'err'); return; }
 
+  var cloudName    = document.getElementById('cfg-cloudinary-cloud').value.trim();
+  var uploadPreset = document.getElementById('cfg-cloudinary-preset').value.trim();
+  if (!cloudName || !uploadPreset) {
+    showToast('API Keys section mein Cloudinary Cloud Name aur Upload Preset daalo', 'err');
+    return;
+  }
+
   var urlInput = document.getElementById('doc-url-' + index);
   var label    = event.target.parentElement;
   var origText = label.childNodes[0].textContent;
@@ -1709,70 +1732,34 @@ function uploadDocPDF(event, index) {
   function setStatus(msg) { label.childNodes[0].textContent = msg; }
   function resetLabel() { setTimeout(function() { label.childNodes[0].textContent = origText; }, 3000); }
 
-  setStatus('⏳ Session bana raha...');
+  setStatus('⏳ Uploading...');
 
-  // Step 1: Apps Script creates resumable upload session
-  google.script.run
-    .withSuccessHandler(function(result) {
-      if (!result || !result.success) {
-        setStatus(origText);
-        showToast('Session error: ' + (result && result.error || 'unknown'), 'err');
-        return;
-      }
+  var formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', uploadPreset);
 
-      setStatus('⏳ Drive pe upload ho raha...');
-
-      // Step 2: Browser uploads directly to Drive resumable URL
-      var xhr = new XMLHttpRequest();
-      xhr.open('PUT', result.uploadUrl, true);
-      xhr.setRequestHeader('Content-Type', 'application/pdf');
-
-      xhr.upload.onprogress = function(e) {
-        if (e.lengthComputable) {
-          var pct = Math.round((e.loaded / e.total) * 100);
-          setStatus('⏳ ' + pct + '% upload...');
-        }
-      };
-
-      xhr.onload = function() {
-        if (xhr.status !== 200 && xhr.status !== 201) {
-          setStatus(origText);
-          showToast('Upload failed: HTTP ' + xhr.status, 'err');
-          return;
-        }
-        var data;
-        try { data = JSON.parse(xhr.responseText); } catch(e) { setStatus(origText); showToast('Response parse error', 'err'); return; }
-        if (!data.id) { setStatus(origText); showToast('File ID nahi mila', 'err'); return; }
-
-        setStatus('⏳ Public URL set ho rahi...');
-
-        // Step 3: Make file public
-        google.script.run
-          .withSuccessHandler(function(res) {
-            if (res && res.success) {
-              urlInput.value = res.url;
-              updateDoc(index, 'url', res.url);
-              setStatus('✅ Uploaded!');
-              showToast('PDF Drive mein save ho gaya ✓', 'ok');
-              markDirty();
-              resetLabel();
-            } else {
-              setStatus(origText);
-              showToast('Sharing error: ' + (res && res.error || ''), 'err');
-            }
-          })
-          .withFailureHandler(function(err) { setStatus(origText); showToast('Sharing failed: ' + err, 'err'); })
-          .makeDocFilePublic(data.id);
-      };
-
-      xhr.onerror = function() { setStatus(origText); showToast('Network error during upload', 'err'); };
-      xhr.send(file);
-    })
-    .withFailureHandler(function(err) {
+  fetch('https://api.cloudinary.com/v1_1/' + cloudName + '/raw/upload', {
+    method: 'POST',
+    body: formData
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.secure_url) {
+      urlInput.value = data.secure_url;
+      updateDoc(index, 'url', data.secure_url);
+      setStatus('✅ Uploaded!');
+      showToast('PDF upload ho gaya ✓', 'ok');
+      markDirty();
+      resetLabel();
+    } else {
       setStatus(origText);
-      showToast('Script error: ' + err, 'err');
-    })
-    .createDriveUploadSession(file.name, file.size);
+      showToast('Upload error: ' + (data.error && data.error.message || JSON.stringify(data)), 'err');
+    }
+  })
+  .catch(function(err) {
+    setStatus(origText);
+    showToast('Upload failed: ' + err.message, 'err');
+  });
 }
 
 // ── GUARDRAILS ────────────────────────────────────────────────────────────────
