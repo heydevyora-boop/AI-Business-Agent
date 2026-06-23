@@ -1719,10 +1719,15 @@ function uploadDocPDF(event, index) {
   var origText = label.childNodes[0].textContent;
   label.childNodes[0].textContent = '⏳ Uploading...';
 
+  var docName = (state.wa.docs[index] && state.wa.docs[index].name)
+    ? state.wa.docs[index].name.replace(/[^a-zA-Z0-9_-]/g, '_')
+    : file.name.replace(/[^a-zA-Z0-9_-]/g, '_').replace(/\.pdf$/i, '');
+
   var formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', uploadPreset);
   formData.append('resource_type', 'raw');
+  formData.append('public_id', docName);
 
   fetch('https://api.cloudinary.com/v1_1/' + cloudName + '/raw/upload', {
     method: 'POST',
@@ -1731,8 +1736,10 @@ function uploadDocPDF(event, index) {
   .then(function(r) { return r.json(); })
   .then(function(data) {
     if (data.secure_url) {
-      urlInput.value = data.secure_url;
-      updateDoc(index, 'url', data.secure_url);
+      // fl_attachment flag add karo — WhatsApp ko PDF properly serve hoga
+      var finalUrl = data.secure_url.replace('/raw/upload/', '/raw/upload/fl_attachment/');
+      urlInput.value = finalUrl;
+      updateDoc(index, 'url', finalUrl);
       label.childNodes[0].textContent = '✅ Uploaded';
       showToast('PDF upload ho gaya ✓', 'ok');
       markDirty();
