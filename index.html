@@ -1705,63 +1705,74 @@ function uploadDocPDF(event, index) {
   var urlInput = document.getElementById('doc-url-' + index);
   var label    = event.target.parentElement;
   var origText = label.childNodes[0].textContent;
-  label.childNodes[0].textContent = '⏳ Uploading...';
 
-  // Step 1: Get OAuth token from Apps Script
+  function setStatus(msg) { label.childNodes[0].textContent = msg; }
+  function resetLabel() { setTimeout(function() { label.childNodes[0].textContent = origText; }, 3000); }
+
+  setStatus('⏳ Session bana raha...');
+
+  // Step 1: Apps Script creates resumable upload session
   google.script.run
-    .withSuccessHandler(function(tokenResult) {
-      var token = tokenResult && tokenResult.token;
-      if (!token) { label.childNodes[0].textContent = origText; showToast('Token error', 'err'); return; }
+    .withSuccessHandler(function(result) {
+      if (!result || !result.success) {
+        setStatus(origText);
+        showToast('Session error: ' + (result && result.error || 'unknown'), 'err');
+        return;
+      }
 
-      // Step 2: Upload directly to Drive API (fast, no size limit)
-      var metadata = { name: file.name, mimeType: 'application/pdf' };
-      var form = new FormData();
-      form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-      form.append('file', file);
+      setStatus('⏳ Drive pe upload ho raha...');
 
-      fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + token },
-        body: form
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (!data.id) {
-          label.childNodes[0].textContent = origText;
-          showToast('Drive upload failed: ' + JSON.stringify(data.error || data), 'err');
+      // Step 2: Browser uploads directly to Drive resumable URL
+      var xhr = new XMLHttpRequest();
+      xhr.open('PUT', result.uploadUrl, true);
+      xhr.setRequestHeader('Content-Type', 'application/pdf');
+
+      xhr.upload.onprogress = function(e) {
+        if (e.lengthComputable) {
+          var pct = Math.round((e.loaded / e.total) * 100);
+          setStatus('⏳ ' + pct + '% upload...');
+        }
+      };
+
+      xhr.onload = function() {
+        if (xhr.status !== 200 && xhr.status !== 201) {
+          setStatus(origText);
+          showToast('Upload failed: HTTP ' + xhr.status, 'err');
           return;
         }
-        // Step 3: Make file public via Apps Script
+        var data;
+        try { data = JSON.parse(xhr.responseText); } catch(e) { setStatus(origText); showToast('Response parse error', 'err'); return; }
+        if (!data.id) { setStatus(origText); showToast('File ID nahi mila', 'err'); return; }
+
+        setStatus('⏳ Public URL set ho rahi...');
+
+        // Step 3: Make file public
         google.script.run
           .withSuccessHandler(function(res) {
             if (res && res.success) {
               urlInput.value = res.url;
               updateDoc(index, 'url', res.url);
-              label.childNodes[0].textContent = '✅ Uploaded';
+              setStatus('✅ Uploaded!');
               showToast('PDF Drive mein save ho gaya ✓', 'ok');
               markDirty();
-              setTimeout(function() { label.childNodes[0].textContent = origText; }, 3000);
+              resetLabel();
             } else {
-              label.childNodes[0].textContent = origText;
-              showToast('Sharing set nahi hua: ' + (res && res.error || ''), 'err');
+              setStatus(origText);
+              showToast('Sharing error: ' + (res && res.error || ''), 'err');
             }
           })
-          .withFailureHandler(function(err) {
-            label.childNodes[0].textContent = origText;
-            showToast('Sharing error: ' + err, 'err');
-          })
+          .withFailureHandler(function(err) { setStatus(origText); showToast('Sharing failed: ' + err, 'err'); })
           .makeDocFilePublic(data.id);
-      })
-      .catch(function(err) {
-        label.childNodes[0].textContent = origText;
-        showToast('Upload failed: ' + err, 'err');
-      });
+      };
+
+      xhr.onerror = function() { setStatus(origText); showToast('Network error during upload', 'err'); };
+      xhr.send(file);
     })
     .withFailureHandler(function(err) {
-      label.childNodes[0].textContent = origText;
-      showToast('Token fetch failed: ' + err, 'err');
+      setStatus(origText);
+      showToast('Script error: ' + err, 'err');
     })
-    .getDriveUploadToken();
+    .createDriveUploadSession(file.name, file.size);
 }
 
 // ── GUARDRAILS ────────────────────────────────────────────────────────────────
