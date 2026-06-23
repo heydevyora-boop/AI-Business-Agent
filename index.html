@@ -385,6 +385,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
           </div>
           <div class="settings-hint">api.imgbb.com → free key (product images ke liye)</div>
         </div>
+        <div class="settings-row">
+          <div class="settings-label">Cloudinary Cloud Name</div>
+          <input class="settings-input" id="cfg-cloudinary-cloud" placeholder="my-cloud-name" oninput="markDirty()" />
+          <div class="settings-hint">cloudinary.com → Dashboard → Cloud Name (PDF upload ke liye)</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label">Cloudinary Upload Preset</div>
+          <input class="settings-input" id="cfg-cloudinary-preset" placeholder="my_unsigned_preset" oninput="markDirty()" />
+          <div class="settings-hint">Settings → Upload → Add upload preset → Signing mode: <b>Unsigned</b></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1097,7 +1107,9 @@ function renderAll() {
       var cfg = d.cfg || {};
       if (cfg.anthropicKey || cfg.anthropicKey === '')  document.getElementById('cfg-anthropic-key').value = cfg.anthropicKey;
       if (cfg.interaktKey  || cfg.interaktKey  === '')  document.getElementById('cfg-interakt-key').value  = cfg.interaktKey;
-      if (cfg.imgbbKey     || cfg.imgbbKey     === '')  document.getElementById('cfg-imgbb-key').value     = cfg.imgbbKey;
+      if (cfg.imgbbKey          || cfg.imgbbKey          === '')  document.getElementById('cfg-imgbb-key').value          = cfg.imgbbKey;
+      if (cfg.cloudinaryCloud  || cfg.cloudinaryCloud  === '')  document.getElementById('cfg-cloudinary-cloud').value  = cfg.cloudinaryCloud;
+      if (cfg.cloudinaryPreset || cfg.cloudinaryPreset === '')  document.getElementById('cfg-cloudinary-preset').value = cfg.cloudinaryPreset;
       if (cfg.sheetId      || cfg.sheetId      === '')  document.getElementById('cfg-sheet-id').value      = cfg.sheetId;
       if (cfg.driveFolderId|| cfg.driveFolderId=== '')  document.getElementById('cfg-drive-folder').value  = cfg.driveFolderId;
       if (cfg.escPhone     || cfg.escPhone     === '')  document.getElementById('cfg-esc-phone').value     = cfg.escPhone;
@@ -1557,7 +1569,9 @@ function saveAll(p) {
       interaktKey:     document.getElementById('cfg-interakt-key').value.trim(),
       imgbbKey:        document.getElementById('cfg-imgbb-key').value.trim(),
       sheetId:         document.getElementById('cfg-sheet-id').value.trim(),
-      driveFolderId:   document.getElementById('cfg-drive-folder').value.trim(),
+      driveFolderId:     document.getElementById('cfg-drive-folder').value.trim(),
+      cloudinaryCloud:   document.getElementById('cfg-cloudinary-cloud').value.trim(),
+      cloudinaryPreset:  document.getElementById('cfg-cloudinary-preset').value.trim(),
       escPhone:        document.getElementById('cfg-esc-phone').value.trim(),
       escEmail:        document.getElementById('cfg-esc-email').value.trim(),
       svPhone:         document.getElementById('cfg-sv-phone').value.trim(),
@@ -1663,8 +1677,14 @@ function renderDocs(docs) {
     div.className = 'doc-entry';
     div.innerHTML = '<div class="doc-fields">'
       + '<input class="doc-name" placeholder="Document naam (e.g. GRC Catalogue)" value="'+esc(doc.name||'')+'" oninput="updateDoc('+i+',\'name\',this.value)" style="flex:1.2">'
-      + '<input class="doc-url" placeholder="Direct PDF URL — https://drive.google.com/uc?export=download&id=..." value="'+esc(doc.url||'')+'" oninput="updateDoc('+i+',\'url\',this.value)" style="flex:2">'
-      + '<input class="doc-name" placeholder="Keywords (comma-separated): catalogue, brochure, price list" value="'+esc(doc.keywords||'')+'" oninput="updateDoc('+i+',\'keywords\',this.value)" style="flex:1.5" title="Customer yeh words likhega to yeh PDF automatically bheja jaayega">'
+      + '<div style="flex:2;display:flex;gap:6px;align-items:center;">'
+      +   '<input class="doc-url" id="doc-url-'+i+'" placeholder="PDF URL (ya neeche se upload karo)" value="'+esc(doc.url||'')+'" oninput="updateDoc('+i+',\'url\',this.value)" style="flex:1;min-width:0">'
+      +   '<label style="cursor:pointer;white-space:nowrap;font-size:12px;padding:6px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);color:var(--color-text-secondary);background:var(--color-background-secondary)" title="Firebase Storage mein upload karo">'
+      +     '⬆ Upload PDF'
+      +     '<input type="file" accept="application/pdf" style="display:none" onchange="uploadDocPDF(event,'+i+')">'
+      +   '</label>'
+      + '</div>'
+      + '<input class="doc-name" placeholder="Keywords: catalogue, brochure, price list" value="'+esc(doc.keywords||'')+'" oninput="updateDoc('+i+',\'keywords\',this.value)" style="flex:1.5" title="Customer yeh words likhega to yeh PDF automatically bheja jaayega">'
       + '</div>'
       + '<button class="entry-remove" onclick="removeDoc('+i+')" style="margin-top:2px">✕</button>';
     list.appendChild(div);
@@ -1681,6 +1701,52 @@ function updateDoc(i,field,val) {
   state.wa.docs[i][field]=val; markDirty();
 }
 function removeDoc(i) { state.wa.docs.splice(i,1); renderDocs(state.wa.docs); markDirty(); }
+
+function uploadDocPDF(event, index) {
+  var file = event.target.files[0];
+  if (!file) return;
+  if (file.type !== 'application/pdf') { showToast('Sirf PDF files allowed hain', 'err'); return; }
+
+  var cloudName   = document.getElementById('cfg-cloudinary-cloud').value.trim();
+  var uploadPreset = document.getElementById('cfg-cloudinary-preset').value.trim();
+  if (!cloudName || !uploadPreset) {
+    showToast('Pehle Cloudinary Cloud Name aur Upload Preset daalo (API Keys section mein)', 'err');
+    return;
+  }
+
+  var urlInput = document.getElementById('doc-url-' + index);
+  var label    = event.target.parentElement;
+  var origText = label.childNodes[0].textContent;
+  label.childNodes[0].textContent = '⏳ Uploading...';
+
+  var formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', uploadPreset);
+  formData.append('resource_type', 'raw');
+
+  fetch('https://api.cloudinary.com/v1_1/' + cloudName + '/raw/upload', {
+    method: 'POST',
+    body: formData
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.secure_url) {
+      urlInput.value = data.secure_url;
+      updateDoc(index, 'url', data.secure_url);
+      label.childNodes[0].textContent = '✅ Uploaded';
+      showToast('PDF upload ho gaya ✓', 'ok');
+      markDirty();
+      setTimeout(function() { label.childNodes[0].textContent = '⬆ Upload PDF'; }, 3000);
+    } else {
+      label.childNodes[0].textContent = origText;
+      showToast('Cloudinary error: ' + (data.error && data.error.message || 'Unknown error'), 'err');
+    }
+  })
+  .catch(function(err) {
+    label.childNodes[0].textContent = origText;
+    showToast('Upload failed: ' + err.message, 'err');
+  });
+}
 
 // ── GUARDRAILS ────────────────────────────────────────────────────────────────
 function renderGuardrails(p, guardrails) {
